@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:include schemaLocation="syndication-common.xsd"/>
+  <xs:include schemaLocation="syndication-content.xsd"/>
+  <xs:include schemaLocation="syndication-link.xsd"/>
+  <xs:include schemaLocation="syndication-person.xsd"/>
+  <xs:include schemaLocation="syndication-acl.xsd"/>
+  <xs:include schemaLocation="syndication-section.xsd"/>
+  <xs:include schemaLocation="syndication-section-page.xsd"/>
+  <xs:include schemaLocation="syndication-list-inbox.xsd"/>
+  <!-- Include all the files -->
+  <!-- End of Include directives -->
+  <xs:element name="escenic">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:acl-global"/>
+        <xs:element ref="import:acl-section"/>
+        <xs:element ref="import:content"/>
+        <xs:element ref="import:person"/>
+        <xs:element ref="import:section"/>
+        <xs:element ref="import:list"/>
+        <xs:element ref="import:inbox"/>
+        <xs:element ref="import:section-page"/>
+        <xs:element ref="import:user"/>
+        <xs:element ref="import:user-group"/>
+      </xs:choice>
+      <xs:attribute name="version" use="required">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="2.0"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+
+  <include href="interface-hints-body.rng"/>
+  
+  <start>
+    <element name="dummy-root" ns="http://xmlns.escenic.com/2008/interface-hints">
+    <zeroOrMore>
+      <element>
+        <anyName/>
+
+        <ref name="anything"/>
+      </element>
+    </zeroOrMore>
+    </element>
+  </start>
+
+  <define name="anything">
+    <zeroOrMore>
+      <attribute>
+        <doc:user-doc>
+          <db:para>Any attribute can be used here.</db:para>
+        </doc:user-doc>
+
+        <anyName/>
+      </attribute>
+    </zeroOrMore>
+
+    <zeroOrMore>
+      <choice>
+        <element>
+          <doc:user-doc>
+            <db:para>Any XML markup can be used here.</db:para>
+          </doc:user-doc>
+
+          <anyName/>
+
+          <ref name="anything"/>
+        </element>
+
+        <text/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+</grammar>

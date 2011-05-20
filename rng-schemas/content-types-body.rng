@@ -1,0 +1,1081 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/content-type"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns6="http://www.w3.org/2000/svg"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+  <doc:schema-name>content-type-body</doc:schema-name>
+
+  <doc:namespace-prefix>ct</doc:namespace-prefix>
+
+  <doc:omit-doc-in>http://xmlns.escenic.com/2008/layout-group</doc:omit-doc-in>
+
+
+  <define name="field-group">
+    <element name="field-group">
+      <doc:user-doc>
+        <db:para>Defines a field group. A field group is a convenience element
+        that enables you to:</db:para>
+
+        <db:variablelist>
+          <db:varlistentry>
+            <db:term>Re-use field definitions</db:term>
+
+            <db:listitem>
+              <db:para>Instead of adding many identical field definitions
+              (<doc:element name="field"/> elements) to different panels you
+              can create a field group containing the field definition, and
+              then just add references (<doc:element name="ref-field-group"/>
+              elements) to panels.</db:para>
+            </db:listitem>
+          </db:varlistentry>
+
+          <db:varlistentry>
+            <db:term>Group related field definitions</db:term>
+
+            <db:listitem>
+              <db:para>You can then add whole sets of related field
+              definitions to a panel with a single <doc:element
+              name="ref-field-group"/> element.</db:para>
+            </db:listitem>
+          </db:varlistentry>
+        </db:variablelist>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <doc:annotation>There can be field-groups without
+      fields.</doc:annotation>
+
+      <zeroOrMore>
+        <ref name="field-with-inheritance"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="field-with-inheritance">
+    <element name="field">
+      <doc:clone id="field"/>
+
+      <ref name="attribute-name"/>
+
+      <choice>
+        <ref name="complex-field-content"/>
+
+        <doc:clone base-element="field" title-start="Complex"
+                   variants="complex-field">
+          <doc:user-doc>
+            <db:para>Defines a <db:literal>complex</db:literal> field. A
+            complex field is composed of one or more simple fields.</db:para>
+          </doc:user-doc>
+        </doc:clone>
+
+        <ref name="simple-field-content-with-array"/>
+
+        <doc:clone base-element="field"
+                   variants="basic-field boolean-field uri-field schedule-field number-field link-field enumeration-field"/>
+
+        <ref name="inheritance"/>
+
+        <doc:clone base-element="field" title-start="Inherited"
+                   variants="inherited-field">
+          <doc:user-doc insert="after">
+            <db:para>Defines an <db:emphasis>inherited</db:emphasis>
+            <db:literal>field</db:literal>. An inherited field inherits all
+            its characteristics (type, constraints, default value and so on)
+            from another named <db:literal>field</db:literal>. In addition, if
+            the field is left empty, then the Content Engine will try to
+            retrieve a value from the <db:literal>field</db:literal> it
+            inherits from.</db:para>
+          </doc:user-doc>
+        </doc:clone>
+      </choice>
+    </element>
+  </define>
+
+  <define name="simple-field-content-with-array">
+    <interleave>
+      <optional>
+        <ref name="array"/>
+      </optional>
+
+      <ref name="simple-field-content-with-options"/>
+
+      <doc:clone base-element="field"
+                 variants="basic-field boolean-field uri-field schedule-field number-field link-field enumeration-field"/>
+    </interleave>
+  </define>
+
+  <define name="simple-field-content-with-options">
+    <ref name="simple-field-content"/>
+
+    <doc:clone base-element="field"
+               variants="basic-field boolean-field uri-field schedule-field number-field link-field enumeration-field"/>
+
+    <optional>
+      <ref name="simple-options"/>
+    </optional>
+  </define>
+
+  <define name="simple-field">
+    <element name="field">
+      <doc:clone id="simple-field"/>
+
+      <doc:user-doc>
+        <db:para>Defines a content type field. A
+        <db:literal>field</db:literal> element defines:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>The type of data a field can contain.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>The appearance and behavior of the field in Content
+            Studio.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>Constraints that limit the values the field can
+            contain.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <ref name="simple-field-content"/>
+
+      <doc:clone base-element="field simple-field" id-suffix="simplified"
+                 title-suffix="(Simplified)"
+                 variants="basic-field boolean-field uri-field schedule-field number-field link-field enumeration-field"/>
+    </element>
+  </define>
+
+  <define name="complex-field-content">
+    <group>
+      <attribute name="type">
+        <doc:user-doc>
+          <db:para>Specifies that this field is a complex field.</db:para>
+        </doc:user-doc>
+
+        <value>complex</value>
+      </attribute>
+
+      <interleave>
+        <optional>
+          <ref name="array"/>
+        </optional>
+
+        <element name="complex">
+          <doc:user-doc>
+            <db:para>Provides a wrapper for the members of a complex
+            field.</db:para>
+          </doc:user-doc>
+
+          <oneOrMore>
+            <choice>
+              <ref name="ref-field-group"/>
+
+              <ref name="simple-field"/>
+            </choice>
+          </oneOrMore>
+        </element>
+
+        <ref name="required-constraint"/>
+
+        <ref name="foreign-elements"/>
+      </interleave>
+    </group>
+  </define>
+
+  <define name="simple-field-content">
+    <choice>
+      <group>
+        <doc:clone base-element="field simple-field" title-start="Basic"
+                   variants="basic-field">
+          <doc:user-doc insert="after">
+            <db:para>Defines a <db:emphasis>basic</db:emphasis> field. A basic
+            field can contain text of any kind. You can, however, use the
+            mime-type attribute to specify the allowed content more
+            narrowly.</db:para>
+          </doc:user-doc>
+        </doc:clone>
+
+        <attribute name="type">
+          <doc:user-doc>
+            <db:para>Specifies that this field is a basic field.</db:para>
+          </doc:user-doc>
+
+          <value>basic</value>
+        </attribute>
+
+        <attribute name="mime-type">
+          <doc:user-doc>
+            <db:para>The MIME type of the field. Two values are supported by
+            default:</db:para>
+
+            <db:variablelist>
+              <db:varlistentry>
+                <db:term><db:literal>text/plain</db:literal>
+                (default)</db:term>
+
+                <db:listitem>
+                  <db:para>A simple text editing field is displayed in Content
+                  Studio for this MIME type.</db:para>
+                </db:listitem>
+              </db:varlistentry>
+
+              <db:varlistentry>
+                <db:term><db:literal>application/xhmtl+xml</db:literal></db:term>
+
+                <db:listitem>
+                  <db:para>A rich text editing field is displayed in Content
+                  Studio for this MIME type.</db:para>
+                </db:listitem>
+              </db:varlistentry>
+
+              <db:varlistentry>
+                <db:term><db:literal>application/json</db:literal></db:term>
+
+                <db:listitem>
+                  <db:para>If the field also has a child
+                  <db:literal>rep:representations</db:literal> element, then
+                  an image cropping field is displayed in Content Studio for
+                  this MIME type.</db:para>
+                </db:listitem>
+              </db:varlistentry>
+            </db:variablelist>
+
+            <db:para>You can, however, define MIME types of your own and write
+            corresponding field editor plug-ins.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <interleave>
+          <ref name="text-constraints"/>
+
+          <ref name="optional-field-elements"/>
+
+          <optional>
+            <ref name="representations"/>
+          </optional>
+        </interleave>
+      </group>
+
+      <group>
+        <doc:clone base-element="field simple-field"
+                   variants="boolean-field uri-field schedule-field"/>
+
+        <attribute name="type">
+          <doc:user-doc insert="after">
+            <db:para>Defines the type of the field.</db:para>
+          </doc:user-doc>
+
+          <choice>
+            <value>boolean</value>
+
+            <doc:clone base-element="field simple-field" title-start="Boolean"
+                       variants="boolean-field">
+              <doc:user-doc insert="after">
+                <db:para>Defines a boolean field that can hold only one of two
+                values (<db:literal>true</db:literal> or
+                <db:literal>false</db:literal>) but may also be left
+                unspecified. A boolean field is displayed as a check box in
+                Content Studio.</db:para>
+              </doc:user-doc>
+            </doc:clone>
+
+            <doc:annotation>A field representing a boolean
+            value</doc:annotation>
+
+            <value>uri</value>
+
+            <doc:clone base-element="field simple-field" title-start="URI"
+                       variants="uri-field">
+              <doc:user-doc insert="after">
+                <db:para>Defines a URI field that may contain any valid URI.
+                URI syntax is defined by RFC 2396 and RFC 2732.</db:para>
+              </doc:user-doc>
+            </doc:clone>
+
+            <doc:annotation>A field representing a URI</doc:annotation>
+
+            <value>schedule</value>
+
+            <doc:clone base-element="field simple-field"
+                       title-start="Schedule" variants="schedule-field">
+              <doc:user-doc insert="after">
+                <db:note>
+                  <db:para>Not yet implemented.</db:para>
+                </db:note>
+              </doc:user-doc>
+            </doc:clone>
+
+            <doc:annotation>A field which allows the schedule information,
+            such as recurring dates.</doc:annotation>
+          </choice>
+        </attribute>
+
+        <interleave>
+          <ref name="simple-constraints"/>
+
+          <ref name="optional-field-elements"/>
+        </interleave>
+      </group>
+
+      <group>
+        <doc:clone base-element="field simple-field" title-start="Number"
+                   variants="number-field">
+          <doc:user-doc insert="after">
+            <db:para>Defines a number field, which may contain any numeric
+            value (including decimals).</db:para>
+          </doc:user-doc>
+        </doc:clone>
+
+        <attribute name="type">
+          <doc:user-doc>
+            <db:para>Specifies that this field is a number field.</db:para>
+          </doc:user-doc>
+
+          <value>number</value>
+
+          <doc:annotation>A field representing a number.</doc:annotation>
+        </attribute>
+
+        <interleave>
+          <ref name="format-element"/>
+
+          <ref name="number-constraints"/>
+
+          <ref name="optional-field-elements"/>
+        </interleave>
+      </group>
+
+      <group>
+        <doc:clone base-element="field simple-field" title-start="Link"
+                   variants="link-field">
+          <doc:user-doc insert="after">
+            <db:para>Defines a link field. A link field is intended to contain
+            the URI of some resource you want to make use of in some way. Link
+            fields are most commonly used to contain references to binary
+            objects such as images and media files; all binary objects in
+            content items are referenced in this way.</db:para>
+
+            <db:note>
+              <db:para>Note that a <db:literal>content-type</db:literal>
+              element may only contain <db:emphasis>one</db:emphasis> link
+              field.</db:para>
+            </db:note>
+          </doc:user-doc>
+        </doc:clone>
+
+        <attribute name="type">
+          <doc:user-doc>
+            <db:para>Specifies that this field is a link field.</db:para>
+          </doc:user-doc>
+
+          <value>link</value>
+
+          <doc:annotation>A field representing a link</doc:annotation>
+        </attribute>
+
+        <interleave>
+          <ref name="link-constraints"/>
+
+          <ref name="optional-field-elements"/>
+
+          <element name="relation">
+            <doc:user-doc>
+              <db:para>Defines the relationship between the resource
+              referenced by a link <db:literal>field</db:literal> and the
+              content item it contains. The only
+              <db:literal>relation</db:literal> value supported by the Content
+              Engine core is <db:literal>com.escenic.edit-media</db:literal>.
+              This indicates that the resource referenced in the link field is
+              a binary object of some kind (an image, movie, sound file, PDF
+              or Word document, etc.).</db:para>
+
+              <db:para>Content Engine plug-ins may define other values for
+              this element.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </element>
+        </interleave>
+      </group>
+
+      <group>
+        <doc:clone base-element="field simple-field" title-start="Enumeration"
+                   variants="enumeration-field">
+          <doc:user-doc insert="after">
+            <db:para>Defines an enumeration field. An enumeration field has a
+            number of predefined values from which the user can choose. It can
+            be configured to accept either a single choice or multiple choices
+            using the <db:literal>multiple</db:literal> attribute.</db:para>
+          </doc:user-doc>
+        </doc:clone>
+
+        <attribute name="type">
+          <doc:user-doc insert="after">
+            <db:para>Specifies that this field is an enumeration
+            field.</db:para>
+          </doc:user-doc>
+
+          <value>enumeration</value>
+
+          <doc:annotation>An enumeration field, which allows one of several
+          predefined values to be selected from a list.</doc:annotation>
+        </attribute>
+
+        <optional>
+          <attribute name="multiple">
+            <doc:user-doc>
+              <db:para>If set to <db:literal>true</db:literal> then the field
+              will accept multiple user choices; it is displayed as a
+              multiple-choice list in Content Studio. If set to
+              <db:literal>false</db:literal> or unspecified then the field
+              will only accept a single choice; it is displayed as a combo box
+              in Content Studio.</db:para>
+            </doc:user-doc>
+
+            <doc:annotation>Multiselect enumeration.</doc:annotation>
+
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+
+        <interleave>
+          <oneOrMore>
+            <ref name="enum"/>
+          </oneOrMore>
+
+          <ref name="simple-constraints"/>
+
+          <ref name="optional-field-elements"/>
+        </interleave>
+      </group>
+    </choice>
+  </define>
+
+  <define name="inheritance">
+    <group>
+      <attribute name="inherits-from">
+        <doc:user-doc>
+          <db:para>Specifies the <db:literal>field</db:literal> element from
+          which this field is to inherit its characteristics. Enter the name
+          of another field in the same <doc:element name="content-type"/>. The
+          field you specify may not itself be an inherited field.</db:para>
+
+          <db:note>
+            <db:para>If the field you specify contains any elements from
+            foreign namespaces (such as a <db:literal>label</db:literal>
+            element from the <db:literal>interface-hints</db:literal>
+            namespace), then these will be inherited along with the field's
+            other characteristics. However, you can override these inherited
+            foreign elements by adding the same elements to this
+            <db:literal>field</db:literal>.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+
+      <interleave>
+        <ref name="foreign-elements"/>
+      </interleave>
+    </group>
+  </define>
+
+  <define name="simple-options">
+    <element name="options">
+      <doc:user-doc>
+        <db:para>Contains <doc:element name="field"/> elements that can be
+        used to set options governing attributes of the owning <doc:element
+        name="field"/> element. An option might, for example, be used to allow
+        Content Studio users to specify a color to be associated with a
+        particular field. The template developer can then use this color in
+        rendering the content of the field. Option fields defined in this way
+        are displayed on the <db:guilabel>Options</db:guilabel> tab in Content
+        Studio's content item editor.</db:para>
+
+        <db:para>This element can also appear as a child of <db:literal>group</db:literal>
+        and <db:literal>area</db:literal> elements in a <db:literal>layout-group</db:literal>
+        resource file and has the same function, allowing you to associate formatting
+        options with section page groups and areas. 
+        </db:para>
+        
+        
+      </doc:user-doc>
+
+      <zeroOrMore>
+        <ref name="simple-field"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="optional-field-elements">
+    <interleave>
+      <ref name="foreign-elements"/>
+
+      <zeroOrMore>
+        <ref name="parameter"/>
+      </zeroOrMore>
+    </interleave>
+  </define>
+
+  <define name="format-element">
+    <optional>
+      <element name="format">
+        <doc:user-doc>
+          <db:para>Specifies a number format defining how the field contents
+          are to be formated. You may enter any valid <db:link
+          ns8:href="http://java.sun.com/j2se/1.4.2/docs/api/java/text/DecimalFormat.html">java.text.DecimalFormat</db:link>
+          format specification.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </element>
+    </optional>
+  </define>
+
+  <define name="attribute-name">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of the <doc:element/> element.</db:para>
+      </doc:user-doc>
+
+      <data type="NCName"/>
+    </attribute>
+  </define>
+
+  <define name="array">
+    <element name="array">
+      <doc:user-doc>
+        <db:para>Specifies that this is an array
+        <db:literal>field</db:literal>. An array
+        <db:literal>field</db:literal> may contain more than one value. Any
+        field type may be an array.</db:para>
+      </doc:user-doc>
+
+      <attribute name="default">
+        <doc:user-doc>
+          <db:para>The default number of elements in this array field. This
+          determines how many data entry controls are initially displayed in
+          Content Studio.</db:para>
+        </doc:user-doc>
+
+        <data type="integer"/>
+      </attribute>
+
+      <optional>
+        <attribute name="max">
+          <doc:user-doc>
+            <db:para>The maximum number of elements allowed in this array
+            field.</db:para>
+          </doc:user-doc>
+
+          <data type="integer"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <define name="required-constraint">
+    <optional>
+      <element name="required">
+        <doc:user-doc>
+          <db:para>If set to <db:literal>true</db:literal> then the Content
+          Studio user is required to enter a value in this <doc:element
+          name="field"/>.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </element>
+    </optional>
+  </define>
+
+  <define name="text-constraints">
+    <optional>
+      <element name="constraints">
+        <doc:clone title-start="Text" variants="text-constraints"/>
+
+        <doc:user-doc>
+          <db:para>Sets constraints on the values that can be entered in a
+          basic <doc:element name="field"/>.</db:para>
+        </doc:user-doc>
+
+        <interleave>
+          <ref name="required-constraint"/>
+
+          <optional>
+            <element name="maxchars">
+              <doc:user-doc>
+                <db:para>Specifies the maximum number of characters a basic
+                <doc:element name="field"/> is allowed to contain. A negative
+                or zero value represents no maxchars constraint for the
+                <doc:element name="field"/></db:para>
+              </doc:user-doc>
+
+              <data type="integer"/>
+            </element>
+          </optional>
+
+          <optional>
+            <element name="well-formed">
+              <doc:user-doc>
+                <db:para>If set to <db:literal>true</db:literal> then the
+                content of this <doc:element name="field"/> must be
+                <db:literal>well-formed</db:literal> XML. This means
+                that:</db:para>
+
+                <db:itemizedlist>
+                  <db:listitem>
+                    <db:para>There must only be one root node.</db:para>
+                  </db:listitem>
+
+                  <db:listitem>
+                    <db:para>All start tags must be matched by corresponding
+                    end tags.</db:para>
+                  </db:listitem>
+
+                  <db:listitem>
+                    <db:para>All elements must be perfectly nested, with no
+                    overlapping.</db:para>
+                  </db:listitem>
+                </db:itemizedlist>
+              </doc:user-doc>
+
+              <data type="boolean"/>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+    </optional>
+  </define>
+
+  <define name="simple-constraints">
+    <optional>
+      <element name="constraints">
+        <doc:clone title-start="Boolean" variants="simple-constraints"/>
+
+        <doc:user-doc>
+          <db:para>Sets constraints on the values that can be entered in a
+          boolean, enumeration or schedule <doc:element name="field"/>.</db:para>
+        </doc:user-doc>
+
+        <interleave>
+          <ref name="required-constraint"/>
+        </interleave>
+      </element>
+    </optional>
+  </define>
+
+  <define name="number-constraints">
+    <optional>
+      <element name="constraints">
+        <doc:clone title-start="Number" variants="number-constraints"/>
+
+        <doc:user-doc>
+          <db:para>Sets constraints on the values that can be entered in a
+          numeric <doc:element name="field"/>.</db:para>
+        </doc:user-doc>
+
+        <interleave>
+          <ref name="required-constraint"/>
+
+          <optional>
+            <element name="minimum">
+              <doc:user-doc>
+                <db:para>The minimum value that may be entered in a numeric
+                <doc:element name="field"/>.</db:para>
+              </doc:user-doc>
+
+              <data type="integer"/>
+            </element>
+          </optional>
+
+          <optional>
+            <element name="maximum">
+              <doc:user-doc>
+                <db:para>The maximum value that may be entered in a numeric
+                <doc:element name="field"/>.</db:para>
+              </doc:user-doc>
+
+              <data type="integer"/>
+            </element>
+          </optional>
+        </interleave>
+      </element>
+    </optional>
+  </define>
+
+  <define name="link-constraints">
+    <optional>
+      <element name="constraints">
+        <doc:clone title-start="Link" variants="link-constraints"/>
+
+        <doc:user-doc>
+          <db:para>Sets constraints on the values that can be entered in a
+          link <doc:element name="field"/>. Since link fields are used to hold
+          references to binary data, the constraints actually apply to the
+          referenced binary data rather than the reference itself.</db:para>
+        </doc:user-doc>
+
+        <interleave>
+          <ref name="required-constraint"/>
+
+          <zeroOrMore>
+            <element name="mime-type">
+              <doc:user-doc>
+                <db:para>An allowed MIME type for the binary data referenced
+                in a link <doc:element name="field"/>.</db:para>
+              </doc:user-doc>
+
+              <data type="string"/>
+            </element>
+          </zeroOrMore>
+        </interleave>
+      </element>
+    </optional>
+  </define>
+
+  <define name="enum">
+    <element name="enumeration">
+      <doc:user-doc>
+        <db:para>Defines an enumeration <doc:element name="field"/>
+        option.</db:para>
+
+        <db:para>An enumeration element can have a child
+        <db:literal>label</db:literal> element from the
+        <db:literal>http://xmlns.escenic.com/2008/interface-hints</db:literal>
+        namespace. This label is then displayed instead of the
+        <db:literal>value</db:literal> attribute in the Content Studio user
+        interface.</db:para>
+
+        <db:para>The following <db:literal>field</db:literal> definition, for
+        example:</db:para>
+
+        <db:programlisting>&lt;field type="enumeration"&gt;
+ &lt;enumeration value="1"&gt;
+  &lt;label xmlns="http://xmlns.escenic.com/2008/interface-hints"&gt;One&lt;/label&gt;
+ &lt;/enumeration&gt;
+ &lt;enumeration value="2"&gt;
+  &lt;label xmlns="http://xmlns.escenic.com/2008/interface-hints"&gt;Two&lt;/label&gt;
+ &lt;/enumeration&gt;
+&lt;/field&gt;</db:programlisting>
+
+        <db:para>will result in a field that can hold the value "1" or "2". It
+        will be displayed in Content Studio, however, as a combo box with the
+        options "One" and "Two".</db:para>
+      </doc:user-doc>
+
+      <attribute name="value">
+        <doc:user-doc>
+          <db:para>The value of an enumeration field option.</db:para>
+        </doc:user-doc>
+
+        <data type="string"/>
+      </attribute>
+
+      <ref name="foreign-elements"/>
+    </element>
+  </define>
+
+  <define name="panel">
+    <element name="panel">
+      <doc:user-doc>
+        <db:para>eDefines a panel. A panel is a set of fields that are grouped
+        together and displayed on a single tab in a Content Studio content
+        editor.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+
+        <ref name="foreign-elements"/>
+
+        <zeroOrMore>
+          <ref name="field-with-inheritance"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="ref-field-group"/>
+        </zeroOrMore>
+      </interleave>
+
+    </element>
+  </define>
+
+  <define name="content-type">
+    <element name="content-type">
+      <doc:user-doc>
+        <db:para>Defines an Escenic <db:emphasis>content type</db:emphasis>. A
+        content type defines a particular type of content item. It
+        defines:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>The <doc:element name="field"/>s a content item is
+            composed of.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>The <doc:element name="relation-type"/>s a content item
+            may have.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>How the content item is presented in Content
+            Studio.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+
+        <db:para>The <db:literal>field</db:literal>s in the content type are
+        defined indirectly: a <db:literal>content-type</db:literal> element
+        contains <doc:element name="panel"/> elements, which in turn contain
+        <db:literal>field</db:literal> elements. This allows the fields to be
+        grouped together in panels, which correspond to tabs in Content Studio
+        content item editors.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+        <ref name="foreign-elements"/>
+
+        <zeroOrMore>
+          <ref name="ref-relation-type-group"/>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <ref name="panel"/>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <ref name="parameter"/>
+        </zeroOrMore>
+
+        <optional>
+          <ref name="summary"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="summary">
+    <element name="summary">
+      <doc:user-doc>
+        <db:para>Defines a <db:literal>content-type</db:literal>'s summary. A
+        summary is a set of <doc:element name="field"/>s intended to be used
+        when content items appear as:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>Relations in other content items</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>Teasers on section pages</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+
+        <db:para>A <db:literal>summary</db:literal> usually contains a subset
+        of the <db:literal>content-type</db:literal>'s ordinary fields. It
+        can, however, also contain fields that are specifically intended for
+        use on the summary.</db:para>
+
+        <db:para>The content of summary fields can be locally overridden in
+        the relations/teasers that use the content item. That is, when a
+        Content Studio user adds a content item to a section page (for
+        example), she can modify the fields in the teaser without affecting
+        the source content item's fields.</db:para>
+      </doc:user-doc>
+
+      <interleave>
+        <ref name="foreign-elements"/>
+
+        <zeroOrMore>
+          <ref name="field-with-inheritance"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="ref-relation-type-group"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="ref-field-group">
+    <element name="ref-field-group">
+      <doc:user-doc>
+        <db:para>Defines a reference to a <doc:element name="field-group"/>.
+        <doc:element/> lets you re-use <db:literal>field-group</db:literal>
+        definitions.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+    </element>
+  </define>
+
+  <define name="ref-relation-type-group">
+    <element name="ref-relation-type-group">
+      <doc:user-doc>
+        <db:para>Defines a reference to a <doc:element
+        name="relation-type-group"/>. <doc:element/> lets you re-use
+        <db:literal>relation-type-group</db:literal> definitions.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+    </element>
+  </define>
+
+  <define name="parameter">
+    <element name="parameter">
+      <doc:user-doc>
+        <db:para>Defines a parameter to be associated with a
+        <db:literal>content-type</db:literal>, <db:literal>panel</db:literal>
+        or <doc:element name="field"/>. The parameter has a fixed value
+        defined in the resource file. It is not displayed in Content Studio or
+        used by Content Studio in any way. It can, however be retrieved by
+        template developers and used for a variety of purposes.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <attribute name="value">
+        <doc:user-doc>
+          <db:para>The value of this <doc:element/>.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </element>
+  </define>
+
+  <define name="relation-type-group">
+    <element name="relation-type-group">
+      <doc:user-doc>
+        <db:para>Defines a relation type group. A relation type group is a
+        convenience element that enables you to:</db:para>
+
+        <db:variablelist>
+          <db:varlistentry>
+            <db:term>Re-use relation type definitions</db:term>
+
+            <db:listitem>
+              <db:para>Instead of adding many identical relation type
+              definitions ( <doc:element name="relation-type"/> elements) to
+              different panels you can create a relation type group containing
+              the relation type definition, and then just add references (
+              <doc:element name="relation-type-group"/> elements) to
+              panels.</db:para>
+            </db:listitem>
+          </db:varlistentry>
+
+          <db:varlistentry>
+            <db:term>Group related relation type definitions</db:term>
+
+            <db:listitem>
+              <db:para>You can then add whole sets of relevant relation type
+              definitions to a panel with a single <doc:element
+              name="ref-relation-type-group"/> element.</db:para>
+            </db:listitem>
+          </db:varlistentry>
+        </db:variablelist>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <oneOrMore>
+        <ref name="relation-type"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="relation-type">
+    <element name="relation-type">
+      <doc:user-doc>
+        <db:para>Defines a named relation type. Relation types allow you to
+        classify relations between content items. You might, for example,
+        define a <db:literal>content-type</db:literal> with the
+        <db:literal>relation</db:literal>s "article-image" (intended for an
+        image to be displayed with a content item's body) and "teaser-image"
+        (intended for an image to be displayed in a content item's teaser). In
+        Content Studio content item editors these relation types will appear
+        as two <db:emphasis>drop zones</db:emphasis> labelled "article-image"
+        and "teaser-image". A drop zone is an area in which the Content Studio
+        user can drop content items (in this case the images he wants to
+        appear in these locations).</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+        <ref name="foreign-elements"/>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="foreign-elements">
+    <zeroOrMore>
+      <element>
+        <anyName>
+          <except>
+            <nsName ns=""/>
+
+            <nsName ns="http://xmlns.escenic.com/2008/content-type"/>
+
+            <nsName ns="http://xmlns.escenic.com/2009/representations"/>
+          </except>
+
+          <doc:user-doc>
+            <db:para>Defines a foreign element. Content studio uses some of
+            the foreign elements, especially the ones from the
+            <db:literal>interface-hints</db:literal> namespace.</db:para>
+          </doc:user-doc>
+        </anyName>
+
+        <ref name="anything"/>
+      </element>
+    </zeroOrMore>
+  </define>
+
+  <define name="anything">
+    <zeroOrMore>
+      <attribute>
+        <doc:user-doc>
+          <db:para>Any attribute can be used here.</db:para>
+        </doc:user-doc>
+
+        <anyName/>
+      </attribute>
+    </zeroOrMore>
+
+    <zeroOrMore>
+      <choice>
+        <element>
+          <doc:user-doc>
+            <db:para>Any XML markup can be used here.</db:para>
+          </doc:user-doc>
+
+          <anyName/>
+
+          <ref name="anything"/>
+        </element>
+
+        <text/>
+      </choice>
+    </zeroOrMore>
+  </define>
+</grammar>

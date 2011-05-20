@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="section-page">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element maxOccurs="unbounded" ref="import:area"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="import:section-page-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="section-page-attributes">
+    <xs:attribute name="name"/>
+    <xs:attributeGroup ref="import:attribute-unique-section-reference"/>
+    <xs:attribute name="action" default="replace">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="remove"/>
+          <xs:enumeration value="replace"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="layout-name"/>
+  </xs:attributeGroup>
+  <xs:group name="content-ref">
+    <xs:sequence>
+      <xs:element name="content-ref">
+        <xs:complexType>
+          <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element ref="import:field"/>
+            <xs:element ref="import:options"/>
+          </xs:choice>
+          <xs:attributeGroup ref="import:content-ref-attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="content-ref-attributes">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="publication-name"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+  </xs:attributeGroup>
+  <xs:element name="area">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="import:content-ref"/>
+        <xs:element ref="import:list-ref"/>
+        <xs:element ref="import:group"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="list-ref">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" ref="import:options"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="import:list-ref-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="list-ref-attributes">
+    <xs:attribute name="name" use="required"/>
+    <xs:attributeGroup ref="import:attribute-unique-section-reference"/>
+    <xs:attribute name="number-of-items" type="xs:int"/>
+    <xs:attribute name="publication-name"/>
+  </xs:attributeGroup>
+  <xs:element name="group">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:options"/>
+        <xs:element ref="import:area"/>
+      </xs:choice>
+      <xs:attribute name="name" use="required"/>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

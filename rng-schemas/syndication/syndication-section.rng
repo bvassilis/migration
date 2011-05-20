@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns72="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns7="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="section">
+    <element name="section">
+      <doc:user-doc>
+        <db:para>Represents a section of an Escenic publication. Section tree relationships are created using this element's child <doc:element name="parent"/> element, which references the section to which this section belongs. Note that the Content Engine's import subsystem does not tolerate unusually deep section hierarchies. Section trees that are more than 40 sections deep cannot be guaranteed to import successfully.</db:para>
+      </doc:user-doc>
+
+      <ref name="section-attributes"/>
+
+      <interleave>
+        <optional>
+          <ref name="delete"/>
+        </optional>
+
+        <optional>
+          <ref name="parent"/>
+        </optional>
+
+        <optional>
+          <ref name="mirror-source"/>
+        </optional>
+
+        <optional>
+          <element name="unique-name">
+            <doc:user-doc>
+              <db:para>A unique name to be assigned to the section created or
+              updated by this element's parent <doc:element name="section"/>
+              element.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </element>
+        </optional>
+
+        <optional>
+          <ref name="directory"/>
+        </optional>
+
+        <optional>
+          <element name="section-layout">
+            <doc:user-doc>
+              <db:para>The name of the section layout to use for the section.</db:para>
+            </doc:user-doc>
+            <text/>
+          </element>
+        </optional>
+
+        <optional>
+          <element name="article-layout">
+            <doc:user-doc>
+              <db:para>The name of the article layout to use for the section.</db:para>
+            </doc:user-doc>
+            <text/>
+          </element>
+        </optional>
+
+        <!--
+        <optional>
+          <element name="pool-limit">
+            <doc:user-doc>
+              <db:para>To be supplied.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </element>
+        </optional>
+
+        <optional>
+          <ref name="html-cache"/>
+        </optional>
+-->
+
+        <optional>
+          <ref name="priority"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="section-attributes">
+    <ref name="attribute-unique-identifier"/>
+
+    <optional>
+      <ref name="attribute-name"/>
+    </optional>
+
+    <optional>
+      <attribute name="unique-name">
+        <doc:user-doc>
+          <db:para>The <db:literal>unique-name</db:literal> or
+          <db:literal>name</db:literal> of an existing section to be updated.
+          You can only use this attribute for look-up purposes, not for
+          setting a section's unique name. To set the unique name of a section
+          you are creating or updating, use the child <doc:element
+          name="unique-name"/> element.</db:para>
+
+          <db:para>If this attribute is specified, then one of the following
+          conditions must be satisified:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>uniquename</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>unique-name</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If this is not the case, or if there is a matching
+          <db:literal>name</db:literal> attribute but it is not unique, then
+          import will fail.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id</db:literal> are
+          specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="mirror-source" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>If <db:literal>true</db:literal>, then this section may be
+          mirrored. This attribute may not be set to true if the section has a
+          child <doc:element name="mirror-source"/>
+          element.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <!--
+    <optional>
+      <attribute name="type" a:defaultValue="normal">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <choice>
+          <value>normal</value>
+          <value>hidden</value>
+          <value>temporary</value>
+        </choice>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="category" a:defaultValue="permanent">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <choice>
+          <value>temporary</value>
+
+          <value>permanent</value>
+        </choice>
+      </attribute>
+    </optional>
+-->
+  </define>
+
+  <define name="parent">
+    <element name="parent">
+      <doc:user-doc>
+        <db:para>A reference to this section's parent section. This element makes it possible to establish section tree relationships during import. Note that the Content Engine's import subsystem does not tolerate unusually deep section hierarchies. Section trees that are more than 40 sections deep cannot be guaranteed to import successfully.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="id-ref">
+          <doc:user-doc>
+            <db:para>The <db:literal>id</db:literal> of the parent section. If
+            this attribute is specified, a <doc:element name="section"/>
+            element with an <db:literal>id</db:literal> attribute that matches
+            this attribute must appear somewhere
+            <db:emphasis>before</db:emphasis> this <doc:element/> element in
+            the syndication file. The referenced
+            <db:literal>section</db:literal> element must have its
+            <db:literal>mirror-source</db:literal> attribute set to
+            <db:literal>true</db:literal>.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> or
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are specified, then this
+            attribute is ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <group>
+          <attribute name="source">
+            <doc:user-doc>
+              <db:para>The <db:literal>source</db:literal> of the parent
+              section. If this attribute is specified, then
+              <db:literal>sourceid</db:literal> must also be specified. One of
+              the following two conditions must be satisfied:</db:para>
+
+              <db:itemizedlist>
+                <db:listitem>
+                  <db:para>The target publication must already contain a
+                  mirrorable section with <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal>,
+                  <db:emphasis>or</db:emphasis></db:para>
+                </db:listitem>
+
+                <db:listitem>
+                  <db:para>A <doc:element name="section"/> element with
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> must appear somewhere
+                  <db:emphasis>before</db:emphasis> this <doc:element/>
+                  element in the syndication file. The referenced
+                  <db:literal>section</db:literal> element must have its
+                  <db:literal>mirror-source</db:literal> attribute set to
+                  <db:literal>true</db:literal>.</db:para>
+                </db:listitem>
+              </db:itemizedlist>
+
+              <db:para>If <db:literal>dbid</db:literal> is specified, then
+              <db:literal>source</db:literal> and
+              <db:literal>sourceid</db:literal> are ignored.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </attribute>
+
+          <attribute name="sourceid">
+            <doc:user-doc>
+              <db:para>The <db:literal>sourceid</db:literal> of the parent
+              section. If this attribute is specified, then
+              <db:literal>source</db:literal> must also be specified. One of
+              the following two conditions must be satisfied:</db:para>
+
+              <db:itemizedlist>
+                <db:listitem>
+                  <db:para>The target publication must already contain a
+                  mirrorable section with <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal>,
+                  <db:emphasis>or</db:emphasis></db:para>
+                </db:listitem>
+
+                <db:listitem>
+                  <db:para>A <doc:element name="section"/> element with
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> must appear somewhere
+                  <db:emphasis>before</db:emphasis> this <doc:element/>
+                  element in the syndication file. The referenced
+                  <db:literal>section</db:literal> element must have its
+                  <db:literal>mirror-source</db:literal> attribute set to
+                  <db:literal>true</db:literal>.</db:para>
+                </db:listitem>
+              </db:itemizedlist>
+
+              <db:para>If <db:literal>dbid</db:literal> is specified, then
+              <db:literal>source</db:literal> and
+              <db:literal>sourceid</db:literal> are ignored.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </attribute>
+        </group>
+      </optional>
+
+      <optional>
+        <attribute name="dbid">
+          <doc:user-doc>
+            <db:para>The <db:literal>dbid</db:literal> of the parent section.
+            If this attribute is specified then one of the following two
+            conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                mirrorable section with a <db:literal>dbid</db:literal>
+                attribute that matches this attribute,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with a
+                <db:literal>dbid</db:literal> attribute that matches this
+                attribute must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file. The referenced
+                <db:literal>section</db:literal> element must have its
+                <db:literal>mirror-source</db:literal> attribute set to
+                <db:literal>true</db:literal>.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+            <db:note>
+              <db:para>This attribute is never present in syndication files that
+              have been exported from a <xi:include
+              href="ece-global:global-variables.ebk" xpointer="g-engine"/>
+              database. <xi:include href="ece-global:global-variables.ebk"
+              xpointer="g-engine"/> IDs are always written to
+              <db:literal>exported-dbid</db:literal> attributes in exported
+              syndication files.</db:para>
+            </db:note>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="exported-dbid">
+          <doc:user-doc>
+            <db:para>The <db:literal>dbid</db:literal> of the parent section.</db:para>
+
+            <db:note>
+              <db:para>This attribute is generated during export from the
+              <xi:include href="ece-global:global-variables.ebk"
+              xpointer="g-engine"/>, but ignored during import. It is provided
+              mainly for information and debugging purposes.</db:para>
+            </db:note>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="unique-name">
+          <doc:user-doc>
+            <db:para>The <db:literal>unique-name</db:literal> or
+            <db:literal>name</db:literal> of the parent section. If this
+            attribute is specified, then one of the following conditions must
+            be satisified:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                mirrorable section with a <db:literal>uniquename</db:literal>
+                or <db:literal>name</db:literal> attribute that matches this
+                attribute, <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with a
+                <db:literal>unique-name</db:literal> or
+                <db:literal>name</db:literal> attribute that matches this
+                attribute must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file. The referenced
+                <db:literal>section</db:literal> element must have its
+                <db:literal>mirror-source</db:literal> attribute set to
+                <db:literal>true</db:literal>.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If this is not the case, or if there is a matching
+            <db:literal>name</db:literal> attribute but it is not unique, then
+            import will fail.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> or
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> or <db:literal>id</db:literal>
+            are specified, then this attribute is ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="inherit-access-control-list" a:defaultValue="true">
+          <doc:user-doc>
+            <db:para>If set to <db:literal>false</db:literal> then the section
+            will not inherit the access control list of the parent section, and
+            the section will maintain its own access control list.</db:para>
+
+            <db:para>Most sections should inherit the access control list of the
+            parent. In a large section tree it is recommended that only a few
+            of the sections have their own access control lists, since a large
+            number of access control lists may impede search performance.
+            </db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <define name="mirror-source">
+    <element name="mirror-source">
+      <doc:user-doc>
+        <db:para>A reference to a section that this element's owning section
+        is to mirror. The owning section has no content of its own, but just
+        mirrors the content of the section referenced here. The owning
+        section's <db:literal>mirror-source</db:literal> attribute may
+        <db:emphasis>not</db:emphasis> be set to
+        <db:literal>true</db:literal>.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="id-ref">
+          <doc:user-doc>
+            <db:para>The <db:literal>id</db:literal> of the section this
+            section is to mirror. If this attribute is specified, a
+            <doc:element name="section"/> element with an
+            <db:literal>id</db:literal> attribute that matches this attribute
+            must appear somewhere <db:emphasis>before</db:emphasis> this
+            <doc:element/> element in the syndication file. The referenced
+            <db:literal>section</db:literal> element must have its
+            <db:literal>mirror-source</db:literal> attribute set to
+            <db:literal>true</db:literal>.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> or
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are specified, then this
+            attribute is ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+	
+      <optional>
+        <group>
+          <attribute name="source">
+            <doc:user-doc>
+              <db:para>The <db:literal>source</db:literal> of the section this
+              section is to mirror. If this attribute is specified, then
+              <db:literal>sourceid</db:literal> must also be specified. One of
+              the following two conditions must be satisfied:</db:para>
+
+              <db:itemizedlist>
+                <db:listitem>
+                  <db:para>The target publication must already contain a
+                  mirrorable section with <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal>,
+                  <db:emphasis>or</db:emphasis></db:para>
+                </db:listitem>
+
+                <db:listitem>
+                  <db:para>A <doc:element name="section"/> element with
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> must appear somewhere
+                  <db:emphasis>before</db:emphasis> this <doc:element/>
+                  element in the syndication file. The referenced
+                  <db:literal>section</db:literal> element must have its
+                  <db:literal>mirror-source</db:literal> attribute set to
+                  <db:literal>true</db:literal>.</db:para>
+                </db:listitem>
+              </db:itemizedlist>
+
+              <db:para>If <db:literal>dbid</db:literal> is specified, then
+              <db:literal>source</db:literal> and
+              <db:literal>sourceid</db:literal> are ignored.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </attribute>
+
+          <attribute name="sourceid">
+            <doc:user-doc>
+              <db:para>The <db:literal>sourceid</db:literal> of the section
+              this section is to mirror. If this attribute is specified, then
+              <db:literal>source</db:literal> must also be specified. One of
+              the following two conditions must be satisfied:</db:para>
+
+              <db:itemizedlist>
+                <db:listitem>
+                  <db:para>The target publication must already contain a
+                  mirrorable section with <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal>,
+                  <db:emphasis>or</db:emphasis></db:para>
+                </db:listitem>
+
+                <db:listitem>
+                  <db:para>A <doc:element name="section"/> element with
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> attributes that match
+                  <db:literal>source</db:literal> and
+                  <db:literal>sourceid</db:literal> must appear somewhere
+                  <db:emphasis>before</db:emphasis> this <doc:element/>
+                  element in the syndication file. The referenced
+                  <db:literal>section</db:literal> element must have its
+                  <db:literal>mirror-source</db:literal> attribute set to
+                  <db:literal>true</db:literal>.</db:para>
+                </db:listitem>
+              </db:itemizedlist>
+
+              <db:para>If <db:literal>dbid</db:literal> is specified, then
+              <db:literal>source</db:literal> and
+              <db:literal>sourceid</db:literal> are ignored.</db:para>
+            </doc:user-doc>
+
+            <text/>
+          </attribute>
+          
+        </group>
+      </optional>
+
+      <optional>
+        <attribute name="dbid">
+          <doc:user-doc>
+            <db:para>The <db:literal>dbid</db:literal> of the section this
+            section is to mirror. If this attribute is specified then one of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                mirrorable section with a <db:literal>dbid</db:literal>
+                attribute that matches this attribute,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with a
+                <db:literal>dbid</db:literal> attribute that matches this
+                attribute must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file. The referenced
+                <db:literal>section</db:literal> element must have its
+                <db:literal>mirror-source</db:literal> attribute set to
+                <db:literal>true</db:literal>.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="exported-dbid">
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+       <group>
+        <attribute name="unique-name">
+          <doc:user-doc>
+            <db:para>The <db:literal>unique-name</db:literal> or
+            <db:literal>name</db:literal> of the section this section is to
+            mirror. If this attribute is specified, then one of the following
+            conditions must be satisified:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                mirrorable section with a <db:literal>uniquename</db:literal>
+                or <db:literal>name</db:literal> attribute that matches this
+                attribute, <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with a
+                <db:literal>unique-name</db:literal> or
+                <db:literal>name</db:literal> attribute that matches this
+                attribute must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file. The referenced
+                <db:literal>section</db:literal> element must have its
+                <db:literal>mirror-source</db:literal> attribute set to
+                <db:literal>true</db:literal>.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If this is not the case, or if there is a matching
+            <db:literal>name</db:literal> attribute but it is not unique, then
+            import will fail.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> or
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> or <db:literal>id</db:literal>
+            are specified, then this attribute is ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+        </group>
+      </optional>
+      <optional>
+         <ref name="attribute-publication-name"/>
+      </optional>
+    </element>
+  </define>
+  
+  <!--
+  <define name="html-cache">
+    <element name="html-cache">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="enabled" a:defaultValue="false">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+-->
+</grammar>

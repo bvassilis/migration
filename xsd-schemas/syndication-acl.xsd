@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="acl-section">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:user-ref"/>
+        <xs:element ref="import:user-group-ref"/>
+      </xs:choice>
+      <xs:attributeGroup ref="import:acl-name"/>
+      <xs:attributeGroup ref="import:attribute-unique-section-reference-acl"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="acl-global">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:user-ref"/>
+        <xs:element ref="import:user-group-ref"/>
+      </xs:choice>
+      <xs:attributeGroup ref="import:acl-name"/>
+      <xs:attributeGroup ref="import:publication-id-attribute"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="user-group">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:user-ref"/>
+        <xs:element ref="import:user-group-ref"/>
+      </xs:choice>
+      <xs:attribute name="id"/>
+      <xs:attributeGroup ref="import:attribute-name"/>
+      <xs:attribute name="publication-id" type="xs:integer"/>
+      <xs:attribute name="publication-name"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="acl-name">
+    <xs:attribute name="name" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="reader"/>
+          <xs:enumeration value="administrator"/>
+          <xs:enumeration value="useradmin"/>
+          <xs:enumeration value="editor"/>
+          <xs:enumeration value="journalist"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="user-group-ref">
+    <xs:complexType>
+      <xs:attribute name="id-ref"/>
+      <xs:attribute name="name"/>
+      <xs:attribute name="publication-id" type="xs:integer"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="user-ref">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:user-ref-attributes_list"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="publication-id-attribute">
+    <xs:attribute name="publication-id" use="required" type="xs:integer"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="publication-name-attribute">
+    <xs:attribute name="publication-name" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="user-ref-attributes_list">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="username"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-unique-section-reference-acl">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+    <xs:attribute name="unique-name"/>
+  </xs:attributeGroup>
+</xs:schema>

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="content">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:section-ref"/>
+        <xs:group ref="import:relation"/>
+        <xs:element ref="import:reference"/>
+        <xs:element ref="import:field"/>
+        <xs:element ref="import:tag"/>
+        <xs:element ref="import:update"/>
+        <xs:element ref="import:uri"/>
+        <xs:element ref="import:author"/>
+        <xs:element ref="import:creator"/>
+        <xs:element ref="import:priority"/>
+      </xs:choice>
+      <xs:attributeGroup ref="import:content-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="content-attributes">
+    <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    <xs:attribute name="state">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="draft"/>
+          <xs:enumeration value="submitted"/>
+          <xs:enumeration value="approved"/>
+          <xs:enumeration value="published"/>
+          <xs:enumeration value="deleted"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="type"/>
+    <xs:attribute name="publishdate"/>
+    <xs:attribute name="delete-relations"/>
+    <xs:attribute name="activatedate"/>
+    <xs:attribute name="expiredate"/>
+    <xs:attribute name="creationdate"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-state">
+    <xs:attribute name="state" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="draft"/>
+          <xs:enumeration value="submitted"/>
+          <xs:enumeration value="approved"/>
+          <xs:enumeration value="published"/>
+          <xs:enumeration value="deleted"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="section-ref">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:section-ref-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="section-ref-attributes">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="publication-name"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="unique-name"/>
+    <xs:attribute name="todesk" default="false" type="xs:boolean"/>
+    <xs:attribute name="home-section" default="false" type="xs:boolean"/>
+  </xs:attributeGroup>
+  <!--
+    <define name="category">
+      <element name="category">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="category-attributes"/>
+    
+        <empty/>
+      </element>
+    </define>
+    
+    <define name="category-attributes">
+      <ref name="attribute-unique-reference"/>
+    
+      <optional>
+        <attribute name="field">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    
+      <optional>
+        <attribute name="path">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    
+      <optional>
+        <attribute name="separator">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    </define>
+  -->
+  <xs:group name="relation">
+    <xs:sequence>
+      <xs:element name="relation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="import:field"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="import:common-relation-attributes"/>
+          <xs:attribute name="publication-name"/>
+          <xs:attributeGroup ref="import:relation-attributes"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="relation_inline">
+    <xs:sequence>
+      <xs:element name="relation">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" ref="import:field"/>
+          </xs:sequence>
+          <xs:attributeGroup ref="import:common-relation-attributes"/>
+          <xs:attribute name="publication-name"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="relation-attributes">
+    <xs:attribute name="type" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="common-relation-attributes">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+  </xs:attributeGroup>
+  <xs:element name="reference">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:reference-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="reference-attributes">
+    <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    <xs:attribute name="type" default="image">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="person"/>
+          <xs:enumeration value="link.relatedArticle"/>
+          <xs:enumeration value="link.relatedSite"/>
+          <xs:enumeration value="image"/>
+          <xs:enumeration value="media"/>
+          <xs:enumeration value="profile"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="duplicates" default="false" type="xs:boolean"/>
+    <xs:attribute name="element"/>
+    <xs:attribute name="align"/>
+    <xs:attribute name="alttext"/>
+    <xs:attribute name="caption"/>
+    <xs:attribute name="version"/>
+  </xs:attributeGroup>
+  <!--
+    <define name="event-instance">
+      <element name="event-instance">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="event-instance-attributes"/>
+    
+        <zeroOrMore>
+          <element name="instance-note">
+            <doc:user-doc>
+              <db:para>To be supplied.</db:para>
+            </doc:user-doc>
+    
+            <text/>
+          </element>
+        </zeroOrMore>
+      </element>
+    </define>
+    
+    <define name="event-instance-attributes">
+      <attribute name="starttime">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </attribute>
+    
+      <attribute name="endtime">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </attribute>
+    
+      <attribute name="status">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </attribute>
+    
+      <optional>
+        <attribute name="externalid">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    
+      <optional>
+        <attribute name="scheduleid">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    </define>
+  -->
+  <xs:element name="update">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:update-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="update-attributes">
+    <xs:attribute name="new-source"/>
+    <xs:attribute name="new-sourceid"/>
+  </xs:attributeGroup>
+  <xs:element name="uri">
+    <xs:complexType mixed="true">
+      <xs:attribute name="use-as-default"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="author">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:author-creator-attributes"/>
+      <xs:attribute name="publication-name"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="creator">
+    <xs:complexType>
+      <xs:attributeGroup ref="import:author-creator-attributes"/>
+      <xs:attribute name="publication-name"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="author-creator-attributes">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="first-name"/>
+    <xs:attribute name="last-name"/>
+    <xs:attribute name="username"/>
+    <xs:attribute name="email-address"/>
+  </xs:attributeGroup>
+  <xs:element name="tag">
+    <xs:complexType mixed="true">
+      <xs:group ref="import:any-text"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    <define name="origin">
+      <element name="origin">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="origin-attributes"/>
+    
+        <empty/>
+      </element>
+    </define>
+    
+    <define name="origin-attributes">
+      <attribute name="url">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </attribute>
+    
+      <optional>
+        <attribute name="text">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <text/>
+        </attribute>
+      </optional>
+    
+      <optional>
+        <attribute name="contents">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+    
+          <choice>
+            <value>text</value>
+    
+            <value>audio</value>
+    
+            <value>video</value>
+    
+            <value>all</value>
+          </choice>
+        </attribute>
+      </optional>
+    
+      <optional>
+        <ref name="attribute-source"/>
+      </optional>
+    </define>
+    
+    <define name="slug-name">
+      <element name="slug-name">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </element>
+    </define>
+    
+    <define name="running-head">
+      <element name="running-head">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <text/>
+      </element>
+    </define>
+    
+    <define name="title">
+      <element name="title">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="subtitle">
+      <element name="subtitle">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="page-title">
+      <element name="frontpage-title">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="section-title">
+      <element name="section-title">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="section-subtitle">
+      <element name="section-subtitle">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="ingress">
+      <element name="ingress">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="page-ingress">
+      <element name="frontpage-ingress">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="section-ingress">
+      <element name="section-ingress">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+    <define name="body">
+      <element name="body">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <ref name="any-text"/>
+      </element>
+    </define>
+    
+  -->
+</xs:schema>

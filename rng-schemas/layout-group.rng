@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/layout-group"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+  <doc:schema-name>layout-group</doc:schema-name>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>layout-group</db:literal> schema defines the
+    structure of the allowed Escenic <db:literal>layout-group</db:literal>
+    publication resource. The purpose of the
+    <db:literal>layout-group</db:literal> resource is to define a set of
+    layouts for use on Escenic section pages. These layouts are composed of
+    <doc:element name="group"/> and <doc:element name="area"/> elements, and
+    include external references to <db:literal>teaser-type</db:literal>s
+    (defined in the <db:literal>teaser-type</db:literal> resource) and
+    <db:literal>content-type</db:literal>s (defined in the
+    <db:literal>content-type</db:literal> resource).</db:para>
+
+    <db:para>An <db:literal>area</db:literal> is a named location on a section
+    page in which a sequence of teasers can be displayed. The actual size and
+    location of an <db:literal>area</db:literal> is not specified in the
+    <db:literal>layout-group</db:literal> resource. Physical layout is defined
+    in the publication templates and the <db:literal>layout-group</db:literal>
+    resource is only responsible for the logical structure of section
+    pages.</db:para>
+
+    <db:para>Areas can contain <doc:element name="group"/> elements. A
+    <db:literal>group</db:literal> element contains a series of one or more
+    <db:literal>area</db:literal>s. These containment rules mean that you can
+    use the <db:literal>group</db:literal> and <db:literal>area</db:literal>
+    elements to create complex multi-column page structures (although the
+    actual positioning of the columns is carried out by the publication
+    templates).</db:para>
+
+    <db:para><db:literal>group</db:literal> elements have a
+    <db:literal>root</db:literal> attribute that specifies whether or not they
+    can form the root element of a section page. A section page's layout is
+    determined by assigning one of these "root"
+    <db:literal>group</db:literal>s to it.</db:para>
+  </doc:user-doc>
+
+  <include href="no-representations.rng"/>
+  <include href="content-types-body.rng"
+           ns="http://xmlns.escenic.com/2008/content-type"/>
+
+  <start>
+    <element name="groups">
+      <doc:user-doc>
+        <db:para>The root element of a <db:literal>layout-group</db:literal>
+        publication resource. It contains a sequence of <doc:element
+        name="group"/> elements defining all the groups that are to be
+        available for a publication's section pages.</db:para>
+      </doc:user-doc>
+
+      <oneOrMore>
+        <ref name="group"/>
+      </oneOrMore>
+    </element>
+  </start>
+
+  <define name="group">
+    <element name="group">
+      <doc:user-doc>
+        <db:para>Defines a section page group. A
+        <db:literal>group</db:literal> is a series of one or more <doc:element
+        name="area"/>s.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <optional>
+        <attribute name="root">
+          <doc:user-doc>
+            <db:para>If set to <db:literal>true</db:literal>, then this
+            <db:literal>group</db:literal> can be used as the root
+            <db:literal>group</db:literal> of a section page.</db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+
+      <interleave>
+        <ref name="layout-group-foreign-elements"/>
+
+        <optional>
+          <ref name="simple-options"/>
+        </optional>
+
+        <oneOrMore>
+          <ref name="area"/>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="area">
+    <element name="area">
+      <doc:user-doc>
+        <db:para>Defines an area. An area is a series of <doc:element
+        name="ref-group"/> elements in any order.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+        <ref name="layout-group-foreign-elements"/>
+
+        <optional>
+          <ref name="simple-options"/>
+        </optional>
+
+        <!--
+        <zeroOrMore>
+          <element name="ref-teaser">
+            <doc:user-doc>
+              <db:para>A reference to one of the
+              <db:literal>teaser-type</db:literal>s defined in the
+              <db:literal>teaser-type</db:literal> publication
+              resource.</db:para>
+            </doc:user-doc>
+
+            <attribute name="name">
+              <doc:user-doc>
+                <db:para>The name of the <db:literal>teaser-type</db:literal>
+                referenced by this <doc:element/> element. The name you enter
+                must exactly match the name of a
+                <db:literal>teaser-type</db:literal> defined in the
+                <db:literal>teaser-type</db:literal> publication resource. If
+                this is not the case then an error will be reported when you
+                upload the <db:literal>layout-group</db:literal> resource to
+                the Content Engine.</db:para>
+              </doc:user-doc>
+
+              <text/>
+            </attribute>
+          </element>
+        </zeroOrMore>
+        -->
+
+        <zeroOrMore>
+          <element name="ref-group">
+            <doc:user-doc>
+              <db:para>A reference to a <doc:element name="group"/>.</db:para>
+            </doc:user-doc>
+
+            <attribute name="name">
+              <doc:user-doc>
+                <db:para>The name of the <doc:element name="group"/>
+                referenced by this <doc:element/> element. The name you enter
+                must exactly match the name of a
+                <db:literal>group</db:literal> defined elsewhere in the
+                resource file. If this is not the case then an error will be
+                reported when you upload the
+                <db:literal>layout-group</db:literal> resource to the Content
+                Engine.</db:para>
+              </doc:user-doc>
+
+              <text/>
+            </attribute>
+          </element>
+        </zeroOrMore>
+        
+        <optional>
+          <element name="allow-content-types">
+            <doc:user-doc>
+              <db:para>Defines the content types that are allowed in this
+              element's owning <doc:element name="area"/>. Any teaser added to
+              this <db:literal>area</db:literal> must belong to a content item
+              of of one of these types. The allowed content types are defined
+              by a series of <doc:element name="ref-content-type"/>
+              elements.</db:para>
+            </doc:user-doc>
+
+            <oneOrMore>
+              <element name="ref-content-type">
+                <doc:user-doc>
+                  <db:para>A reference to one of the
+                  <db:literal>content-type</db:literal>s defined in the
+                  <db:literal>content-type</db:literal> publication
+                  resource.</db:para>
+                </doc:user-doc>
+
+                <attribute name="name">
+                  <doc:user-doc>
+                    <db:para>The name of the
+                    <db:literal>content-type</db:literal> referenced by this
+                    <doc:element/> element. The name you enter must exactly
+                    match the name of a <db:literal>content-type</db:literal>
+                    defined in the <db:literal>content-type</db:literal>
+                    publication resource. If this is not the case then an
+                    error will be reported when you upload the
+                    <db:literal>layout-group</db:literal> resource to the
+                    Content Engine.</db:para>
+                  </doc:user-doc>
+
+                  <text/>
+                </attribute>
+              </element>
+            </oneOrMore>
+          </element>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="layout-group-foreign-elements">
+    <zeroOrMore>
+      <element>
+        <doc:user-doc>
+          <db:para>Defines foreign elements. Any valid XML markup can be used
+          here. ECE does not interpret these values in any way. However,
+          different components might use these markups in different
+          ways.</db:para>
+        </doc:user-doc>
+
+        <anyName>
+          <except>
+            <nsName ns=""/>
+
+            <nsName ns="http://xmlns.escenic.com/2008/layout-group"/>
+
+            <nsName ns="http://xmlns.escenic.com/2008/content-type"/>
+          </except>
+        </anyName>
+
+        <ref name="anything"/>
+      </element>
+    </zeroOrMore>
+  </define>
+</grammar>

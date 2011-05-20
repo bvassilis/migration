@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/content-type"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xhtml"
+         xmlns:ns2="http://www.w3.org/1999/xlink"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+  <doc:schema-name>teaser-type</doc:schema-name>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>teaser-type</db:literal> schema defines the
+    content of the Escenic <db:literal>teaser-type</db:literal> publication
+    resource. The purpose of the <db:literal>teaser-type</db:literal> resource
+    is to specify:</db:para>
+
+    <db:itemizedlist>
+      <db:listitem>
+        <db:para>All the teaser types allowed in a particular Escenic
+        publication.</db:para>
+      </db:listitem>
+
+      <db:listitem>
+        <db:para>How those teaser types are organized and presented in Content
+        Studio.</db:para>
+      </db:listitem>
+    </db:itemizedlist>
+
+    <db:note>
+      <db:para>The<db:literal> teaser-type</db:literal> schema is in fact
+      almost identical to the <db:literal>content-type</db:literal> schema.
+      The main differences are:</db:para>
+
+      <db:itemizedlist>
+        <db:listitem>
+          <db:para>It has a different root element: <doc:element
+          name="teaser-types"/> instead of
+          <db:literal>content-types</db:literal>.</db:para>
+        </db:listitem>
+
+        <db:listitem>
+          <db:para>It has a <doc:element name="teaser-type"/> element instead
+          of a <db:literal>content-type</db:literal> element.</db:para>
+        </db:listitem>
+
+        <db:listitem>
+          <db:para>The <db:literal>teaser-type</db:literal> elements have
+          slightly more restricted contents than the corresponding
+          <db:literal>content-type</db:literal> elements.</db:para>
+        </db:listitem>
+      </db:itemizedlist>
+
+      <db:para>Otherwise, most of the elements in the two schemas are
+      identical. They are described separately for convenience, not because
+      there are many differences. What you learn about one schema is most
+      likely to be true of the other one as well.</db:para>
+    </db:note>
+  </doc:user-doc>
+
+  <include href="no-representations.rng"/>
+
+  <start>
+    <element name="teaser-types">
+      <doc:user-doc>
+        <db:para>The root element of a <db:literal>teaser-types</db:literal>
+        publication resource. It contains a sequence of <doc:element
+        name="field-group"/>, <doc:element name="relation-type-group"/> and
+        <doc:element name="teaser-type"/> elements that together define all
+        the field and relation types that are available for use in a
+        publication's teasers.</db:para>
+      </doc:user-doc>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="field-group"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="relation-type-group"/>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <ref name="teaser-type"/>
+        </oneOrMore>
+
+        <zeroOrMore>
+          <ref name="foreign-elements"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </start>
+
+  <!-- Include the content-types schema, and override field-groups and optional-fields-->
+  <include href="content-types-body.rng">
+    <define name="field-group">
+      <element name="field-group">
+        <doc:user-doc>
+          <db:para>Defines a field group. A field group is a convenience
+          element that enables you to:</db:para>
+
+          <db:variablelist>
+            <db:varlistentry>
+              <db:term>Re-use field definitions</db:term>
+
+              <db:listitem>
+                <db:para>Instead of adding many identical field definitions
+                (<doc:element name="field"/> elements) to different panels you
+                can create a field group containing the field definition, and
+                then just add references (<doc:element
+                name="ref-field-group"/> elements) to your panels.</db:para>
+              </db:listitem>
+            </db:varlistentry>
+
+            <db:varlistentry>
+              <db:term>Group related field definitions</db:term>
+
+              <db:listitem>
+                <db:para>You can then add whole sets of related field
+                definitions to a panel with a single <doc:element
+                name="ref-field-group"/> element.</db:para>
+              </db:listitem>
+            </db:varlistentry>
+          </db:variablelist>
+
+          <db:para>Note that a field group may contain no fields.</db:para>
+        </doc:user-doc>
+
+        <ref name="attribute-name"/>
+
+        <doc:annotation>There can be field-groups without
+        fields.</doc:annotation>
+
+        <zeroOrMore>
+          <ref name="simple-field"/>
+        </zeroOrMore>
+      </element>
+    </define>
+
+    <define name="optional-field-elements">
+      <interleave>
+        <optional>
+          <ref name="foreign-elements"/>
+        </optional>
+
+      </interleave>
+    </define>
+  </include>
+
+  <define name="teaser-type">
+    <element name="teaser-type">
+      <doc:user-doc>
+        <db:para>Defines an Escenic teaser type. A teaser type defines a
+        particular type of <db:emphasis>teaser</db:emphasis>: a teaser is a
+        kind of "extended headline" that appears a publication's section
+        pages. It usually consists of something like a title, some kind of
+        summary text and possibly a thumbnail image.</db:para>
+
+        <db:para>A <db:literal>teaser-type</db:literal> defines this content
+        for a particular type of teaser. It defines:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>The fields a content item is composed of.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>The relation-types a content item may have.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+        <ref name="foreign-elements"/>
+
+        <zeroOrMore>
+          <ref name="ref-relation-type-group"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="ref-field-group"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="simple-field"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+  
+</grammar>

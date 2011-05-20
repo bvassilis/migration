@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/content-type"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+  <doc:schema-name>content-type</doc:schema-name>
+  <doc:namespace-prefix>ct</doc:namespace-prefix>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>content-type</db:literal> schema defines the
+    content of the Escenic <db:literal>content-type</db:literal> publication
+    resource. The purpose of the <db:literal>content-type</db:literal>
+    resource is to specify:</db:para>
+
+    <db:itemizedlist>
+      <db:listitem>
+        <db:para>All the content types and relations allowed in a particular
+        Escenic publication.</db:para>
+      </db:listitem>
+
+      <db:listitem>
+        <db:para>How those content types are organized and presented in
+        Content Studio.</db:para>
+      </db:listitem>
+    </db:itemizedlist>
+  </doc:user-doc>
+
+  <include href="representations.rng"/>
+  <include href="content-types-body.rng"/>
+  
+  <start>
+    <element name="content-types" ns="http://xmlns.escenic.com/2008/content-type">
+      <doc:annotation>We only support version 4 of the
+      Schema.</doc:annotation>
+
+      <doc:user-doc>
+        <db:para>The root element of a <db:literal>content-type</db:literal>
+        publication resource. It contains a sequence of <doc:element
+        name="field-group"/>, <doc:element name="relation-type-group"/> and
+        <doc:element name="content-type"/> elements that together define all
+        the field and relation types that are to be available in a
+        publication.</db:para>
+      </doc:user-doc>
+
+      <attribute name="version">
+        <doc:user-doc>
+          <db:para>The version of the <db:literal>content-types</db:literal>
+          schema. It must be set to <db:literal>4</db:literal>.</db:para>
+        </doc:user-doc>
+        <value>4</value>
+      </attribute>
+
+      <interleave>
+        <doc:annotation>We don't care about the order.</doc:annotation>
+
+        <zeroOrMore>
+          <ref name="field-group"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="relation-type-group"/>
+        </zeroOrMore>
+
+        <oneOrMore>
+          <ref name="content-type"/>
+        </oneOrMore>
+
+        <ref name="foreign-elements"/>
+      </interleave>
+    </element>
+  </start>
+</grammar>

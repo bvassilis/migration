@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/1999/xhtml"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="acl-section">
+    <element name="acl-section">
+      <doc:user-doc>
+        <db:para>Represents an Escenic <db:emphasis>access control list
+        (ACL)</db:emphasis>, which assigns a specified
+        <db:emphasis>role</db:emphasis> to one or more users or user groups. A
+        role implies a defined set of access rights. This element represents a
+        <db:emphasis>section</db:emphasis> ACL, so the access rights only
+        applies to a specified section of the publication.</db:para>
+      </doc:user-doc>
+
+      <ref name="acl-name"/>
+
+      <ref name="attribute-unique-section-reference-acl"/>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="user-ref"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="user-group-ref"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="acl-global">
+    <element name="acl-global">
+      <doc:user-doc>
+        <db:para>Represents an Escenic <db:emphasis>access control list
+        (ACL)</db:emphasis>, which assigns a specified
+        <db:emphasis>role</db:emphasis> to one or more users or user groups. A
+        role implies a defined set of access rights. This element represents a
+        <db:emphasis>global</db:emphasis> ACL, so the access rights apply to
+        the publication as a whole.</db:para>
+      </doc:user-doc>
+
+      <ref name="acl-name"/>
+
+      <ref name="publication-id-attribute"/>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="user-ref"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="user-group-ref"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="user-group">
+    <element name="user-group">
+      <doc:user-doc>
+        <db:para>Represents an Escenic user group. User groups are a
+        convenient means of managing access rights: roles can be assigned to
+        whole groups of users rather than to individuals.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <ref name="attribute-id"/>
+      </optional>
+
+      <ref name="attribute-name"/>
+
+      <optional>
+        <ref name="publication-id-attribute"/>
+      </optional>
+
+      <optional>
+        <ref name="publication-name-attribute"/>
+      </optional>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="user-ref"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="user-group-ref"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="acl-name">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of the <db:emphasis>role</db:emphasis> represented
+        by this ACL.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <value>reader</value>
+
+        <value>administrator</value>
+
+        <value>useradmin</value>
+
+        <value>editor</value>
+
+        <value>journalist</value>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="user-group-ref">
+    <element name="user-group-ref">
+      <doc:user-doc>
+        <db:para>References a user group to which the role represented by this element's owning
+        ACL is to be assigned.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="id-ref">
+          <doc:user-doc>
+            <db:para>The <db:literal>id</db:literal> of the referenced user
+            group. If this attribute is specified, a <doc:element
+            name="user-group"/> element with an <db:literal>id</db:literal>
+            attribute that matches this attribute must appear somewhere
+            <db:emphasis>before</db:emphasis> this <doc:element/> element in
+            the syndication file.</db:para>
+
+            <db:para>If <db:literal>name</db:literal> and
+            <db:literal>publication-id</db:literal> are specified, then this
+            attribute is ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="name">
+          <doc:user-doc>
+            <db:para>The name of the referenced user group. If this attribute
+            is specified, then <db:literal>publication-id</db:literal> must
+            also be specified. One of the following two conditions must be
+            satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The publication specified with
+                <db:literal>publication-id</db:literal> must contain a user
+                group with this name.</db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="user-group"/> element with
+                matching <db:literal>publication-id</db:literal> and
+                <db:literal>name</db:literal> attributes must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="publication-id">
+          <doc:user-doc>
+            <db:para>The ID of the publication containing the referenced user
+            group. If this attribute is specified, then
+            <db:literal>name</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The specified publication must contain a user group
+                with the name specified with the <db:literal>name</db:literal>
+                attribute.</db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="user-group"/> element with
+                matching <db:literal>publication-id</db:literal> and
+                <db:literal>name</db:literal> attributes must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+          </doc:user-doc>
+
+          <data type="integer"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <define name="user-ref">
+    <element name="user-ref">
+      <doc:user-doc>
+        <db:para>References a user to which the role represented by this element's owning ACL
+        is to be assigned.</db:para>
+      </doc:user-doc>
+
+      <ref name="user-ref-attributes_list"/>
+    </element>
+  </define>
+
+  <define name="publication-id-attribute">
+    <attribute name="publication-id">
+      <doc:user-doc>
+        <db:para>The ID of the publication to which this <doc:element/>
+        belongs.</db:para>
+      </doc:user-doc>
+
+      <data type="integer"/>
+    </attribute>
+  </define>
+
+  <define name="publication-name-attribute">
+    <attribute name="publication-name">
+      <doc:user-doc>
+        <db:para>The name of the publication to which this <doc:element/>
+        belongs.</db:para>
+      </doc:user-doc>
+    </attribute>
+  </define>
+
+  <define name="user-ref-attributes_list">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the referenced user. If
+          this attribute is specified, a <doc:element name="user"/> element
+          with an <db:literal>id</db:literal> attribute that matches this
+          attribute must appear somewhere <db:emphasis>before</db:emphasis>
+          this <doc:element/> element in the syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>publication-id</db:literal> are specified, then this
+          attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the referenced
+            user. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The database must already contain a user with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="user"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the referenced
+            user. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The database must already contain a user with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="user"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="username">
+        <doc:user-doc>
+          <db:para>The username of the referenced user. If this attribute is
+          specified then one of the following two conditions must be
+          satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with a <db:literal>username</db:literal>
+              field that matches this attribute,
+              <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="user"/> element with a field
+              called <db:literal>username</db:literal> that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced user.
+          If this attribute is specified then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a user with
+              a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="user"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="exported-dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced
+          user.</db:para>
+
+          <db:note>
+            <db:para>This attribute is generated during export from the
+            Content Engine, but ignored during import. It is provided mainly
+            for information and debugging purposes.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="attribute-unique-section-reference-acl">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the section to which
+          this ACL is to apply. If this attribute is specified, a <doc:element
+          name="section"/> element with an <db:literal>id</db:literal>
+          attribute that matches this attribute must appear somewhere
+          <db:emphasis>before</db:emphasis> this <doc:element/> element in the
+          syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the section to
+            which this ACL is to apply. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the section to
+            which this ACL is to apply. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the section to which
+          this ACL is to apply. If this attribute is specified then one of the
+          following two conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="exported-dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the section to which
+          this ACL is to apply.</db:para>
+
+          <db:note>
+            <db:para>This attribute is generated during export from the
+            <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/>, but ignored during import. It is provided
+            mainly for information and debugging purposes.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="unique-name">
+        <doc:user-doc>
+          <db:para>The <db:literal>unique-name</db:literal> or
+          <db:literal>name</db:literal> of the section to which this ACL is to
+          apply. If this attribute is specified, then one of the following
+          conditions must be satisified:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>uniquename</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>unique-name</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If this is not the case, or if there is a matching
+          <db:literal>name</db:literal> attribute but it is not unique, then
+          import will fail.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id</db:literal> are
+          specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+</grammar>

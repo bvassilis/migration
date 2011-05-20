@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:attributeGroup name="attribute-id">
+    <xs:attribute name="id" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-name">
+    <xs:attribute name="name" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-sourceid">
+    <xs:attribute name="sourceid" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-source">
+    <xs:attribute name="source" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-dbid">
+    <xs:attribute name="dbid" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-exported-dbid">
+    <xs:attribute name="exported-dbid" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-description">
+    <xs:attribute name="description" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-unique-name">
+    <xs:attribute name="unique-name" use="required"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-action">
+    <xs:attribute name="action" use="required">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="remove"/>
+          <xs:enumeration value="insert"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-unique-identifier">
+    <xs:attribute name="id"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-unique-section-reference">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+    <xs:attribute name="unique-name"/>
+  </xs:attributeGroup>
+  <xs:element name="url" type="xs:string"/>
+  <xs:element name="description" type="xs:string"/>
+  <xs:element name="priority">
+    <xs:complexType>
+      <xs:attribute name="value" type="xs:int"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="directory" type="xs:string"/>
+  <xs:element name="delete">
+    <xs:complexType>
+      <xs:attribute name="recursive" default="false" type="xs:boolean"/>
+      <xs:attribute name="delete-content" default="false" type="xs:boolean"/>
+      <xs:attribute name="move-sections" default="false" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="field">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:choice>
+          <xs:group ref="import:any-text"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="import:field"/>
+          <xs:element minOccurs="0" maxOccurs="unbounded" ref="import:value"/>
+        </xs:choice>
+        <xs:element minOccurs="0" ref="import:options"/>
+      </xs:sequence>
+      <xs:attributeGroup ref="import:field-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="field-attributes">
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="expand-entities" default="false" type="xs:boolean"/>
+    <xs:attribute name="title"/>
+  </xs:attributeGroup>
+  <xs:attributeGroup name="attribute-publication-name">
+    <xs:attribute name="publication-name" use="required"/>
+  </xs:attributeGroup>
+  <xs:element name="value" type="xs:string"/>
+  <xs:group name="any">
+    <xs:sequence>
+      <xs:any processContents="skip"/>
+    </xs:sequence>
+  </xs:group>
+  <xs:group name="any-text">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:group ref="import:any"/>
+        <xs:group ref="import:relation_inline"/>
+      </xs:choice>
+    </xs:sequence>
+  </xs:group>
+  <xs:element name="options">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" ref="import:field"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

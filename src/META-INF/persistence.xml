@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="1.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd">
+	<persistence-unit name="DownloadContraArticlesJPA">
+		<class>com.news.ActiveKoupon</class>
+		<class>com.news.Ad</class>
+		<class>com.news.ArticleChange</class>
+		<class>com.news.ArticlePage</class>
+		<class>com.news.Article</class>
+		<class>com.news.Articles_Archives100_130000</class>
+		<class>com.news.Articles_Archives80000</class>
+		<class>com.news.AspNet_SqlCacheTablesForChangeNotification</class>
+		<class>com.news.Author</class>
+		<class>com.news.BetPageOrder</class>
+		<class>com.news.Comment</class>
+		<class>com.news.Competition</class>
+		<class>com.news.Editor</class>
+		<class>com.news.Event</class>
+		<class>com.news.F1Circuit</class>
+		<class>com.news.F1Constructor</class>
+		<class>com.news.F1Driver</class>
+		<class>com.news.F1RaceResult</class>
+		<class>com.news.F1RaceSchedule</class>
+		<class>com.news.FlashNew</class>
+		<class>com.news.HomePageOrder</class>
+		<class>com.news.Japan2006PageOrder</class>
+		<class>com.news.Koupon</class>
+		<class>com.news.KouponBasket</class>
+		<class>com.news.Log</class>
+		<class>com.news.MatchEvent</class>
+		<class>com.news.Match</class>
+		<class>com.news.NewsPaper</class>
+		<class>com.news.NewspaperSection</class>
+		<class>com.news.NovusBlogsHomeOrder</class>
+		<class>com.news.NovusPageOrder</class>
+		<class>com.news.PhotoStory</class>
+		<class>com.news.Photo</class>
+		<class>com.news.Place</class>
+		<class>com.news.PressRoom</class>
+		<class>com.news.Rating</class>
+		<class>com.news.Roster</class>
+		<class>com.news.RoundType</class>
+		<class>com.news.Round</class>
+		<class>com.news.Season</class>
+		<class>com.news.Section</class>
+		<class>com.news.SportTV</class>
+		<class>com.news.Sport</class>
+		<class>com.news.Stadium</class>
+		<class>com.news.SubSectionTag</class>
+		<class>com.news.SubSection</class>
+		<class>com.news.Tag</class>
+		<class>com.news.Team</class>
+		<class>com.news.TimesMailed</class>
+		<class>com.news.TimesRead</class>
+		<class>com.news.TopBetStoryLink</class>
+		<class>com.news.TopNovusStoryLink</class>
+		<class>com.news.TopStoryLink</class>
+		<class>com.news.User</class>
+		<class>com.news.VathExtra</class>
+		<class>com.news.VathTransfer</class>
+		<class>com.news.WC2006PageOrder</class>
+		<class>com.news.ConnXTrialCode</class>
+		<class>com.news.Dtproperty</class>
+		<class>com.news.DtpropertyPK</class>
+		<class>com.news.FgameSection</class>
+		<class>com.news.FlashGame</class>
+		<class>com.news.Ip2country</class>
+		<class>com.news.Video</class>
+		
+		
+		<properties>
+			<property name="eclipselink.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+			<property name="eclipselink.jdbc.url" value="jdbc:sqlserver://192.168.1.74:49186;databaseName=Godzilla" />
+			<property name="eclipselink.logging.level" value="ALL"/>
+			<property name="show_sql" value="true" />
+			<!-- I work in this example without user / password.-->
+			<property name="eclipselink.jdbc.user" value="contrasql" />
+			<property name="eclipselink.jdbc.password" value="c0ntr@sql" />
+		</properties>
+
+	</persistence-unit>
+</persistence>

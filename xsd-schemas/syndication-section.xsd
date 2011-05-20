@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="section">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:delete"/>
+        <xs:element ref="import:parent"/>
+        <xs:element ref="import:mirror-source"/>
+        <xs:element ref="import:unique-name"/>
+        <xs:element ref="import:directory"/>
+        <xs:element ref="import:section-layout"/>
+        <xs:element ref="import:article-layout"/>
+        <xs:element ref="import:priority"/>
+      </xs:choice>
+      <xs:attributeGroup ref="import:section-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="unique-name" type="xs:string"/>
+  <xs:element name="section-layout" type="xs:string"/>
+  <xs:element name="article-layout" type="xs:string"/>
+  <xs:attributeGroup name="section-attributes">
+    <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    <xs:attribute name="name"/>
+    <xs:attribute name="unique-name"/>
+    <xs:attribute name="mirror-source" default="false" type="xs:boolean"/>
+  </xs:attributeGroup>
+  <xs:element name="parent">
+    <xs:complexType>
+      <xs:attribute name="id-ref"/>
+      <xs:attribute name="source"/>
+      <xs:attribute name="sourceid"/>
+      <xs:attribute name="dbid"/>
+      <xs:attribute name="exported-dbid"/>
+      <xs:attribute name="unique-name"/>
+      <xs:attribute name="inherit-access-control-list" default="true" type="xs:boolean"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="mirror-source">
+    <xs:complexType>
+      <xs:attribute name="id-ref"/>
+      <xs:attribute name="source"/>
+      <xs:attribute name="sourceid"/>
+      <xs:attribute name="dbid"/>
+      <xs:attribute name="exported-dbid"/>
+      <xs:attribute name="unique-name"/>
+      <xs:attribute name="publication-name"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    <define name="html-cache">
+      <element name="html-cache">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+    
+        <optional>
+          <attribute name="enabled" a:defaultValue="false">
+            <doc:user-doc>
+              <db:para>To be supplied.</db:para>
+            </doc:user-doc>
+    
+            <data type="boolean"/>
+          </attribute>
+        </optional>
+      </element>
+    </define>
+  -->
+</xs:schema>

@@ -1,0 +1,1746 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="content">
+    <element name="content">
+      <doc:alt-name>content item</doc:alt-name>
+
+      <doc:user-doc>
+        <db:para>Represents an Escenic content item, which is a generic
+        container for content: it could be a text article, an image or a
+        multimedia object such as an audio or video object. The kind of
+        content item represented by a <db:literal>content</db:literal> element
+        is specified in the <db:literal>type</db:literal> attribute.</db:para>
+      </doc:user-doc>
+
+      <ref name="content-attributes"/>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="section-ref"/>
+        </zeroOrMore>
+
+        <!--
+        <zeroOrMore>
+          <ref name="category"/>
+        </zeroOrMore>
+-->
+
+        <zeroOrMore>
+          <ref name="relation"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="reference"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="field"/>
+        </zeroOrMore>
+        
+        <zeroOrMore>
+          <ref name="tag"/>
+        </zeroOrMore>
+
+        <!--
+        <zeroOrMore>
+          <ref name="event-instance"/>
+        </zeroOrMore>
+-->
+
+        <optional>
+          <ref name="update"/>
+        </optional>
+
+        <optional>
+          <ref name="uri"/>
+        </optional>
+
+        <zeroOrMore>
+          <ref name="author"/>
+        </zeroOrMore>
+
+        <optional>
+          <ref name="creator"/>
+        </optional>
+
+        <!--
+        <optional>
+          <ref name="origin"/>
+        </optional>
+-->
+
+        <optional>
+          <ref name="priority"/>
+        </optional>
+
+        <!--  
+        <optional>
+          <ref name="slug-name"/>
+        </optional>
+
+        <optional>
+          <ref name="running-head"/>
+        </optional>
+
+        <optional>
+          <ref name="title"/>
+        </optional>
+
+        <optional>
+          <ref name="ingress"/>
+        </optional>
+
+        <optional>
+          <ref name="subtitle"/>
+        </optional>
+
+        <optional>
+          <ref name="page-title"/>
+        </optional>
+
+        <optional>
+          <ref name="page-ingress"/>
+        </optional>
+
+        <optional>
+          <ref name="section-title"/>
+        </optional>
+
+        <optional>
+          <ref name="section-ingress"/>
+        </optional>
+
+        <optional>
+          <ref name="section-subtitle"/>
+        </optional>
+
+        <optional>
+          <ref name="body"/>
+        </optional>
+-->
+      </interleave>
+    </element>
+  </define>
+
+  <define name="content-attributes">
+    <ref name="attribute-unique-identifier"/>
+
+    <optional>
+      <ref name="attribute-state"/>
+    </optional>
+
+    <optional>
+      <attribute name="type">
+        <doc:user-doc>
+          <db:para>Defines the type of content item represented by this
+          <db:literal>content</db:literal> element. For import, the value
+          specified must be the name of a content type as defined in the
+          target publication's <db:literal>content-type</db:literal> resource.
+          The value you specify here will then determine what kind of
+          <doc:element name="field"/> elements the
+          <db:literal>content</db:literal> element may own.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="publishdate">
+        <doc:user-doc>
+          <db:para>The date/time this content item was published, specified in
+          the format:</db:para>
+
+          <db:programlisting><db:replaceable>yyyy</db:replaceable>-<db:replaceable>mm</db:replaceable>-<db:replaceable>dd</db:replaceable> <db:replaceable>hh</db:replaceable>:<db:replaceable>mm</db:replaceable>:<db:replaceable>ss</db:replaceable>.<db:replaceable>ffffffff</db:replaceable></db:programlisting>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="delete-relations">
+        <doc:user-doc>
+          <db:para>If this attribute is set to <db:literal>true</db:literal>
+          when re-importing an existing content item, then all the content
+          item's existing relations are deleted.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="activatedate">
+        <doc:user-doc>
+          <db:para>The date/time this content item was/is to be activated,
+          specified in the format:</db:para>
+
+          <db:programlisting><db:replaceable>yyyy</db:replaceable>-<db:replaceable>mm</db:replaceable>-<db:replaceable>dd</db:replaceable> <db:replaceable>hh</db:replaceable>:<db:replaceable>mm</db:replaceable>:<db:replaceable>ss</db:replaceable>.<db:replaceable>ffffffff</db:replaceable></db:programlisting>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="expiredate">
+        <doc:user-doc>
+          <db:para>The date/time this content item expired/is to expire,
+          specified in the format:</db:para>
+
+          <db:programlisting><db:replaceable>yyyy</db:replaceable>-<db:replaceable>mm</db:replaceable>-<db:replaceable>dd</db:replaceable> <db:replaceable>hh</db:replaceable>:<db:replaceable>mm</db:replaceable>:<db:replaceable>ss</db:replaceable>.<db:replaceable>ffffffff</db:replaceable></db:programlisting>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="creationdate">
+        <doc:user-doc>
+          <db:para>The date/time this content item was created, specified in
+          the format:</db:para>
+
+          <db:programlisting><db:replaceable>yyyy</db:replaceable>-<db:replaceable>mm</db:replaceable>-<db:replaceable>dd</db:replaceable> <db:replaceable>hh</db:replaceable>:<db:replaceable>mm</db:replaceable>:<db:replaceable>ss</db:replaceable>.<db:replaceable>ffffffff</db:replaceable></db:programlisting>
+
+          <db:para>If specified, this attribute is used when importing new
+          content items that do not already exist in the database. It is,
+          however, ignored when importing updates to content items that
+          already exist. If it is omitted when importing a new content item,
+          then the new content item's creation date is set to the current
+          date.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="attribute-state">
+    <attribute name="state" a:defaultValue="draft">
+      <doc:user-doc>
+        <db:para>The current state of this content item.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <value>draft</value>
+
+        <doc:user-doc>
+          <db:para>The content item is a draft. This is the default value when
+          importing.</db:para>
+        </doc:user-doc>
+
+        <value>submitted</value>
+
+        <doc:user-doc>
+          <db:para>The content item is submitted for approval.</db:para>
+        </doc:user-doc>
+
+        <value>approved</value>
+
+        <doc:user-doc>
+          <db:para>The content item is approved for publishing.</db:para>
+        </doc:user-doc>
+
+        <value>published</value>
+
+        <doc:user-doc>
+          <db:para>The content item is published.</db:para>
+        </doc:user-doc>
+
+        <value>deleted</value>
+
+        <doc:user-doc>
+          <db:para>The content item has been deleted.</db:para>
+        </doc:user-doc>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="section-ref">
+    <element name="section-ref">
+      <doc:user-doc>
+        <db:para>A reference to a section to which this element's owning
+        content item (<doc:element name="content"/> element) belongs. Since a
+        content item can belong to many sections, a
+        <db:literal>content</db:literal> element may contain many
+        <db:literal>section-ref</db:literal> elements. A section can be
+        referenced using any of the following attributes:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para><db:literal>id-ref</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>source</db:literal> and
+            <db:literal>source-id</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>dbid</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>unique-name</db:literal></db:para>
+          </db:listitem>
+        </db:itemizedlist>
+
+        <db:bridgehead>Import considerations</db:bridgehead>
+
+        <db:para>The referenced section must either be defined prior to this
+        element in the syndication file or else already exist in the target
+        publication.</db:para>
+
+        <!--
+        <db:para>If the section is not defined elsewhere and does not already
+        exist, you can create the section by specifying the following
+        attributes:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para><db:literal>create="true"</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>name</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>Optionally, one or more of
+            <db:literal>parent.id</db:literal>,
+            <db:literal>parent.source</db:literal>,
+            <db:literal>parent.sourceid</db:literal> and
+            <db:literal>parent.dbid</db:literal>. You can use these attributes
+            to identify the parent section under which the new section is to
+            be inserted. If you do not specify any of these attributes then
+            the new section will be inserted under the publication
+            root.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+-->
+      </doc:user-doc>
+
+      <ref name="section-ref-attributes"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="section-ref-attributes">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the section to which the
+          content item represented by the owning <doc:element name="content"/>
+          element belongs/is to be added. If this attribute is specified, a
+          <doc:element name="section"/> element with an
+          <db:literal>id</db:literal> attribute that matches this attribute
+          must appear somewhere <db:emphasis>before</db:emphasis> this
+          <doc:element/> element in the syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+	
+	<optional>
+      <ref name="attribute-publication-name"/>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the section to
+            which the content item represented by the owning <doc:element
+            name="content"/> element belongs/is to be added. If this attribute
+            is specified, then <db:literal>sourceid</db:literal> must also be
+            specified.<!-- If the <db:literal>create</db:literal>
+            attribute is not set to <db:literal>true</db:literal>, then o-->
+            One of the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the section to
+            which the content item represented by the owning <doc:element
+            name="content"/> element belongs/is to be added. If this attribute
+            is specified, then <db:literal>source</db:literal> must also be
+            specified.<!-- If the <db:literal>create</db:literal>
+            attribute is not set to <db:literal>true</db:literal>, then o-->
+            One of the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the section to which
+          the content item represented by the owning <doc:element
+          name="content"/> element belongs/is to be added. If this attribute
+          is specified<!-- and the <db:literal>create</db:literal> attribute is
+          not set to <db:literal>true</db:literal>,--> then one of the
+          following two conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="unique-name">
+        <doc:user-doc>
+          <db:para>The <db:literal>unique-name</db:literal> or
+          <db:literal>name</db:literal> of the section to which the content
+          item represented by the owning <doc:element name="content"/> element
+          belongs/is to be added. If this attribute is specified, then one of
+          the following conditions must be satisified:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>uniquename</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>unique-name</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If this is not the case, or if there is a matching
+          <db:literal>name</db:literal> attribute but it is not unique, then
+          import will fail.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id</db:literal> are
+          specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="todesk" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>If set to <db:literal>true</db:literal>, then content item
+          represented by the owning <doc:element name="content"/> element is
+          added to this section's default inbox
+          (<db:literal>INBOX</db:literal>).</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <!--<optional>
+      <attribute name="activatedate">
+        <doc:user-doc>
+          <db:para>The date on which the content item represented by the
+          owning <doc:element name="content"/> element was/is to be activated
+          in this section. Note that this is different from the content item's
+          own <db:literal>activatedate</db:literal>.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="expiredate">
+        <doc:user-doc>
+          <db:para>The date on which the content item represented by the
+          owning <doc:element name="content"/> element expired/is to expire
+          from this section. Note that this is different from the content
+          item's own <db:literal>expiredate</db:literal>.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>-->
+
+    <optional>
+      <attribute name="home-section" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>If set to <db:literal>true</db:literal> then this section
+          is the home section of the content item represented by the owning
+          <doc:element name="content"/> element.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <!--
+    <optional>
+      <attribute name="create" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>If set to <db:literal>true</db:literal>, then the section
+          will be created during import if necessary.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="parent.id">
+        <doc:user-doc>
+          <db:para>If a new section is to created during import
+          (<db:literal>create</db:literal> is set to
+          <db:literal>true</db:literal>) then this attribute can be used to
+          identify the parent section under which it is to be inserted. A
+          <doc:element name="section"/> element with an
+          <db:literal>id</db:literal> attribute that matches this attribute
+          must appear somewhere <db:emphasis>before</db:emphasis> this
+          <doc:element/> element in the syndication file.</db:para>
+
+          <db:para>If <db:literal>parent.dbid</db:literal> or
+          <db:literal>parent.source</db:literal> and
+          <db:literal>parent.sourceid</db:literal> are specified, then this
+          attribute is ignored. If none of the "parent" attributes are
+          specified, then the new section is inserted at the publication
+          root.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="parent.source">
+          <doc:user-doc>
+            <db:para>If a new section is to be created during import
+            (<db:literal>create</db:literal> is set to
+            <db:literal>true</db:literal>) then this attribute, together with
+            the <db:literal>parent.sourceid</db:literal> attribute, can be
+            used to identify the parent section under which it is to be
+            inserted. If you specify these attributes, then:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>parent.source</db:literal> and
+                <db:literal>parent.sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>parent.source</db:literal> and
+                <db:literal>parent.sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>parent.dbid</db:literal> is specified,
+            then <db:literal>parent.source</db:literal> and
+            <db:literal>parent.sourceid</db:literal> are ignored. If none of
+            the "parent" attributes are specified, then any new section will
+            be created at the publication root.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="parent.sourceid">
+          <doc:user-doc>
+            <db:para>If a new section is to be created during import
+            (<db:literal>create</db:literal> is set to
+            <db:literal>true</db:literal>) then this attribute, together with
+            the <db:literal>parent.source</db:literal> attribute, can be used
+            to identify the parent section under which it is to be inserted.
+            If you specify these attributes, then:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>parent.source</db:literal> and
+                <db:literal>parent.sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>parent.source</db:literal> and
+                <db:literal>parent.sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>parent.dbid</db:literal> is specified,
+            then <db:literal>parent.source</db:literal> and
+            <db:literal>parent.sourceid</db:literal> are ignored. If none of
+            the "parent" attributes are specified, then any new section will
+            be created at the publication root.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="parent.dbid">
+        <doc:user-doc>
+          <db:para>If a new section may be created during import
+          (<db:literal>create</db:literal> is set to
+          <db:literal>true</db:literal>) then this attribute can be used to
+          identify the parent section under which it is to be inserted. If you
+          specify this attribute, then:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para> If none of the "parent" attributes are specified, then any
+          new section will be created at the publication root.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="parent.name">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+-->
+  </define>
+
+  <!--
+  <define name="category">
+    <element name="category">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="category-attributes"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="category-attributes">
+    <ref name="attribute-unique-reference"/>
+
+    <optional>
+      <attribute name="field">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="path">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="separator">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+-->
+
+  <define name="relation">
+    <element name="relation">
+      <doc:alt-name>relation</doc:alt-name>
+
+      <doc:clone title-start="Typed" variants="typed-relation"/>
+
+      <doc:user-doc>
+        <db:para>Represents a relationship between the content item
+        represented by this element's owning <doc:element name="content"/>
+        element, and another content item. This form of the
+        <db:literal>relation</db:literal> element may only appear as a direct
+        child of a <db:literal>content</db:literal> element.
+        <db:literal>relation</db:literal> elements that appear in-line inside
+        <db:literal>field elements</db:literal> may not have a
+        <db:literal>type</db:literal> attribute.</db:para>
+      </doc:user-doc>
+
+      <ref name="common-relation-attributes"/>
+      
+      <optional>
+        <ref name="attribute-publication-name"/>
+      </optional>
+
+      <ref name="relation-attributes"/>
+
+      <zeroOrMore>
+        <ref name="field"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="relation_inline">
+    <element name="relation">
+      <doc:alt-name>relation</doc:alt-name>
+
+      <doc:clone title-start="In-line" variants="inline-relation"/>
+
+      <doc:user-doc>
+        <db:para>Represents a relationship between the content item
+        represented by this element's owning <doc:element name="content"/>
+        element, and another content item. This form of the
+        <db:literal>relation</db:literal> element may appear in-line in
+        <db:literal>field</db:literal>s with XHTML content.</db:para>
+      </doc:user-doc>
+
+      <ref name="common-relation-attributes"/>
+	
+	  <optional>
+	    <ref name="attribute-publication-name"/>
+	  </optional>
+
+      <zeroOrMore>
+        <ref name="field"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="relation-attributes">
+    <attribute name="type">
+      <doc:user-doc>
+        <db:para>Defines the type of relation represented by this
+        <db:literal>relation</db:literal> element. For import, the value
+        specified must be the name of a relation type as defined in the target
+        publication's <db:literal>content-type</db:literal> resource. The
+        value you specify here will determine how the relationship defined by
+        this element is presented both in the publication and in Content
+        Studio.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="common-relation-attributes">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the related content
+          item. If this attribute is specified, a <doc:element
+          name="content"/> element with an <db:literal>id</db:literal>
+          attribute that matches this attribute must appear somewhere
+          <db:emphasis>before</db:emphasis> this
+          <db:literal>relation</db:literal> element in the syndication
+          file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the related
+            content item. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this
+                <db:literal>relation</db:literal> element in the syndication
+                file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the related
+            content item. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this
+                <db:literal>relation</db:literal> element in the syndication
+                file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the related content
+          item. If this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a content
+              item with a <db:literal>dbid</db:literal> attribute that matches
+              this attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="content"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this
+              <db:literal>relation</db:literal> element in the syndication
+              file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:note>
+            <db:para>This attribute is never present in syndication files that
+            have been exported from a <xi:include
+            href="ece-global:global-variables.ebk" xpointer="g-engine"/>
+            database. <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/> IDs are always written to
+            <db:literal>exported-dbid</db:literal> attributes in exported
+            syndication files.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="exported-dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the related content
+          item.</db:para>
+
+          <db:note>
+            <db:para>This attribute is generated during export from the
+            <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/>, but ignored during import. It is provided
+            mainly for information and debugging purposes.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="reference">
+    <element name="reference">
+      <doc:deprecated/>
+
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="reference-attributes"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="reference-attributes">
+    <ref name="attribute-unique-identifier"/>
+
+    <optional>
+      <attribute name="type" a:defaultValue="image">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <choice>
+          <value>person</value>
+
+          <value>link.relatedArticle</value>
+
+          <value>link.relatedSite</value>
+
+          <value>image</value>
+
+          <value>media</value>
+
+          <value>profile</value>
+        </choice>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="duplicates" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="element">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="align">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="alttext">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="caption">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="version">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <!--
+  <define name="event-instance">
+    <element name="event-instance">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="event-instance-attributes"/>
+
+      <zeroOrMore>
+        <element name="instance-note">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="event-instance-attributes">
+    <attribute name="starttime">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <attribute name="endtime">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <attribute name="status">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <optional>
+      <attribute name="externalid">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="scheduleid">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+-->
+
+  <define name="update">
+    <element name="update">
+      <doc:user-doc>
+        <db:para>When importing a content item that already exists in the
+        target publication, you can use this element to update the content
+        item's source and source ID references.</db:para>
+      </doc:user-doc>
+
+      <ref name="update-attributes"/>
+    </element>
+  </define>
+
+  <define name="update-attributes">
+    <optional>
+      <attribute name="new-source">
+        <doc:user-doc>
+          <db:para>The new source name to be assigned to the content item in
+          the target publication.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="new-sourceid">
+        <doc:user-doc>
+          <db:para>The new source ID to be assigned to the content item in the
+          target publication.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="uri">
+    <element name="uri">
+      <doc:user-doc>
+        <db:para>The URI you want to be assigned to a content item. The
+        content item's URI will be formed by appending the value you specify
+        here to the URI of the content item's home section, so you must
+        specify a relative URI. If you do not specify this element, then the
+        content item will be assigned an automatically generated
+        URI.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="use-as-default">
+          <doc:user-doc>
+            <db:para>If use-as-default is set to false, then the uri
+            is added as an alias for the content item. The uri can
+            then be used to look up the content item but asking a
+            content item for its url will not return this value. There
+            can only be one default uri for a content item. Specifying
+            a new default will replace the old default uri. The old
+            default uri value will be kept as an alias.</db:para>
+          </doc:user-doc>
+          <text/>
+        </attribute>
+      </optional>
+      <text/>
+    </element>
+  </define>
+
+  <define name="author">
+    <element name="author">
+      <doc:user-doc>
+        <db:para>A reference to a content item author. Content item authors
+        are themselves represented by <db:emphasis>person</db:emphasis>
+        objects. A person object is a special type of content item containing
+        the fields needed to hold the usual kinds of personal details (name,
+        phone number, email address and so on).</db:para>
+
+        <db:para>An <db:literal>author</db:literal> element must therefore
+        contain a reference to a person object in the target publication or a
+        <doc:element name="person"/> element in the syndication
+        file.</db:para>
+      </doc:user-doc>
+
+      <ref name="author-creator-attributes"/>
+      <optional>
+         <ref name="attribute-publication-name"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="creator">
+    <element name="creator">
+      <doc:user-doc>
+        <db:para>A reference to the creator of a content item. Content item
+        authors are themselves represented by
+        <db:emphasis>person</db:emphasis> objects. A person object is a
+        special type of content item containing the fields needed to hold the
+        usual kinds of personal details (name, phone number, email address and
+        so on).</db:para>
+
+        <db:para>A <db:literal>creator</db:literal> element must therefore
+        contain a reference to a person object in the publication or a
+        <doc:element name="person"/> element in the syndication
+        file.</db:para>
+      </doc:user-doc>
+
+      <ref name="author-creator-attributes"/>
+      <optional>
+         <ref name="attribute-publication-name"/>
+      </optional>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="author-creator-attributes">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the <doc:element
+          alt-name="true"/>. If this attribute is specified, a <doc:element
+          name="person"/> element with an <db:literal>id</db:literal>
+          attribute that matches this attribute must appear somewhere
+          <db:emphasis>before</db:emphasis> this <doc:element/> element in the
+          syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the <doc:element
+            alt-name="true"/>. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                "person" or "user" content item with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="person"/> or <doc:element
+                name="user"/> element with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the <doc:element
+            alt-name="true"/>. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a
+                "person" or "user" content item with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="person"/> or <doc:element
+                name="user"/> element with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the <doc:element
+          alt-name="true"/>. If this attribute is specified, then one of the
+          following two conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with a <db:literal>dbid</db:literal>
+              attribute that matches this attribute,
+              <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="person"/> or <doc:element
+              name="user"/> element with a <db:literal>dbid</db:literal>
+              attribute that matches this attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="first-name">
+        <doc:user-doc>
+          <db:para>The first name of the this <doc:element alt-name="true"/>.
+          If this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with a
+              <db:literal>first-name</db:literal> field that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="person"/> or <doc:element
+              name="user"/> element with a <doc:element name="field"/> called
+              <db:literal>first-name</db:literal> that matches this attribute
+              must appear somewhere <db:emphasis>before</db:emphasis> this
+              <doc:element/> element in the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>Using the <db:literal>first-name</db:literal> attribute on
+          its own is not recommended; you should use it in combination with
+          the <db:literal>last-name</db:literal> attribute.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id-ref</db:literal>
+          are specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="last-name">
+        <doc:user-doc>
+          <db:para>The surname of the this <doc:element alt-name="true"/>. If
+          this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with a <db:literal>last-name</db:literal>
+              field that matches this attribute,
+              <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="person"/> or <doc:element
+              name="user"/> element with a <doc:element name="field"/> called
+              <db:literal>last-name</db:literal> that matches this attribute
+              must appear somewhere <db:emphasis>before</db:emphasis> this
+              <doc:element/> element in the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>Using the <db:literal>last-name</db:literal> attribute on
+          its own is not recommended; you should use it in combination with
+          the <db:literal>first-name</db:literal> attribute.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id-ref</db:literal>
+          are specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="username">
+        <doc:user-doc>
+          <db:para>The username of the this <doc:element alt-name="true"/>. If
+          this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with a <db:literal>username</db:literal>
+              field that matches this attribute,
+              <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="person"/> or <doc:element
+              name="user"/> element with a <doc:element name="field"/> called
+              <db:literal>username</db:literal> that matches this attribute
+              must appear somewhere <db:emphasis>before</db:emphasis> this
+              <doc:element/> element in the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id-ref</db:literal>
+          are specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="email-address">
+        <doc:user-doc>
+          <db:para>The email of the this <doc:element alt-name="true"/>. If
+          this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a "person"
+              or "user" content item with an
+              <db:literal>email-address</db:literal> field that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="person"/> or <doc:element
+              name="user"/> element with a <doc:element name="field"/> called
+              <db:literal>email-address</db:literal> that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id-ref</db:literal>
+          are specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="tag">
+    <element name="tag">
+      <doc:user-doc>
+        <db:para>A tag to be associated with the content item represented by this element's parent <doc:element name="content"/> element.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+  <!--
+  <define name="origin">
+    <element name="origin">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="origin-attributes"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="origin-attributes">
+    <attribute name="url">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <optional>
+      <attribute name="text">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="contents">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <choice>
+          <value>text</value>
+
+          <value>audio</value>
+
+          <value>video</value>
+
+          <value>all</value>
+        </choice>
+      </attribute>
+    </optional>
+
+    <optional>
+      <ref name="attribute-source"/>
+    </optional>
+  </define>
+
+  <define name="slug-name">
+    <element name="slug-name">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="running-head">
+    <element name="running-head">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="title">
+    <element name="title">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="subtitle">
+    <element name="subtitle">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="page-title">
+    <element name="frontpage-title">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="section-title">
+    <element name="section-title">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="section-subtitle">
+    <element name="section-subtitle">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="ingress">
+    <element name="ingress">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="page-ingress">
+    <element name="frontpage-ingress">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="section-ingress">
+    <element name="section-ingress">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+
+  <define name="body">
+    <element name="body">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="any-text"/>
+    </element>
+  </define>
+  
+-->
+</grammar>

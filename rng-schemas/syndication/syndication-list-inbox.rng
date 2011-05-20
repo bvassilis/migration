@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="list">
+    <element name="list">
+      <doc:user-doc>
+        <db:para>Represents an Escenic <db:emphasis>list</db:emphasis>. An
+        Escenic list is an ordered list of content items that are related in
+        some way (a list of articles related to an ongoing news issue, for
+        example). The content items in a list are represented by the
+        <db:literal>list</db:literal> element's child <doc:element
+        name="content-ref"/> elements.</db:para>
+      </doc:user-doc>
+      <interleave>
+        <ref name="attribute-name"/>
+
+        <ref name="attribute-unique-section-reference"/>
+
+        <optional>
+          <ref name="attribute-action"/>
+        </optional>
+      </interleave>
+
+      <ref name="list-inbox-common-elements"/>
+
+    </element>
+  </define>
+
+  <define name="inbox">
+    <element name="inbox">
+      <doc:user-doc>
+        <db:para>Represents an<db:emphasis> inbox</db:emphasis>. An inbox is a
+        list of content items. Inboxes belong to sections and are generally
+        used by section editors to organize publication work flow. A content
+        item may not belong to more than one inbox at a time The content items
+        in an inbox are represented by the <db:literal>inbox</db:literal>
+        element's child <doc:element name="content-ref"/> elements.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="name">
+          <doc:user-doc>
+            <db:para>The name of this inbox. To import content items to the default
+            inbox called "Inbox", either omit this attribute or specify 
+            <db:literal>name=""</db:literal>. Do <db:emphasis>not</db:emphasis> 
+            specify <db:literal>name="Inbox"</db:literal>, as this will create 
+            a second inbox with the name "Inbox".</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+
+      <ref name="attribute-unique-section-reference"/>
+
+      <optional>
+        <ref name="attribute-action"/>
+      </optional>
+
+      <ref name="list-inbox-common-elements"/>
+    </element>
+  </define>
+
+  <define name="list-inbox-common-elements">
+    <zeroOrMore>
+      <ref name="content-ref_list"/>
+    </zeroOrMore>
+  </define>
+
+  <define name="content-ref_list">
+    <element name="content-ref">
+      <doc:clone title-start="List/Inbox" variants="list-inbox-content-ref"/>
+      <doc:user-doc>
+        <db:para>A reference to a content item.</db:para>
+      </doc:user-doc>
+
+      <ref name="content-ref-attributes_list"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="content-ref-attributes_list">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the referenced content
+          item. If this attribute is specified, a <doc:element
+          name="content"/> element with an <db:literal>id</db:literal>
+          attribute that matches this attribute must appear somewhere
+          <db:emphasis>before</db:emphasis> this <doc:element/> element in the
+          syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+    
+    <optional>
+      <ref name="attribute-publication-name"/>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the referenced
+            content item. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the referenced
+            content item. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced content
+          item. If this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="content"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:note>
+            <db:para>This attribute is never present in syndication files that
+            have been exported from a <xi:include
+            href="ece-global:global-variables.ebk" xpointer="g-engine"/>
+            database. <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/> IDs are always written to
+            <db:literal>exported-dbid</db:literal> attributes in exported
+            syndication files.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="exported-dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced content
+          item.</db:para>
+
+          <db:note>
+            <db:para>This attribute is generated during export from the
+            <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/>, but ignored during import. It is provided
+            mainly for information and debugging purposes.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+</grammar>

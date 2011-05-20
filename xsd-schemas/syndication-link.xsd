@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="link">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="import:url"/>
+        <xs:element ref="import:text"/>
+        <xs:element ref="import:description"/>
+        <xs:element ref="import:content-type"/>
+        <xs:element ref="import:source"/>
+      </xs:choice>
+      <xs:attributeGroup ref="import:link-attributes"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:attributeGroup name="link-attributes">
+    <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    <xs:attribute name="catalog" type="xs:string"/>
+    <xs:attribute name="publishdate" type="xs:string"/>
+    <xs:attribute name="state" default="published">
+      <xs:simpleType>
+        <xs:restriction base="xs:token">
+          <xs:enumeration value="created"/>
+          <xs:enumeration value="published"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:attributeGroup>
+  <xs:element name="text" type="xs:string"/>
+  <xs:element name="source" type="xs:string"/>
+  <xs:element name="content-type">
+    <xs:complexType>
+      <xs:attribute name="type" default="text">
+        <xs:simpleType>
+          <xs:restriction base="xs:token">
+            <xs:enumeration value="text"/>
+            <xs:enumeration value="audio"/>
+            <xs:enumeration value="video"/>
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

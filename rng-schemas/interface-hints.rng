@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:svg="http://www.w3.org/2000/svg"
+         xmlns:set="http://exslt.org/sets"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ng="http://docbook.org/docbook-ng"
+         xmlns:math="http://www.w3.org/1998/Math/MathML"
+         xmlns:javadoc="http://www.io-pt.com/2001/javadoc/xmlref"
+         xmlns:ih="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:html="http://www.w3.org/1999/xhtml"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <doc:schema-name>interface-hints</doc:schema-name>
+
+  <doc:namespace-prefix>ih</doc:namespace-prefix>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>interface-hints</db:literal> schema defines
+    additional elements used by Escenic components such as Content Studio and
+    the Content Engine. They can be included at various points in Escenic
+    publication resources such as the <db:literal>content-type</db:literal>,
+    <db:literal>teaser-type</db:literal> and
+    <db:literal>layout-group</db:literal> files.</db:para>
+
+    <db:para>The purpose of the <db:literal>interface-hints</db:literal>
+    elements is to define labels, descriptions, icons and other user-interface
+    related items that can be used in application user interfaces and the
+    Escenic presentation layer.</db:para>
+
+    <db:para>These elements may be inserted in the publication resource files
+    at any location where the
+    <db:replaceable>ANY-FOREIGN-ELEMENT</db:replaceable> placeholder indicates
+    that foreign elements are allowed. However, not all elements are
+    meaningful in all locations. The descriptions in this chapter indicate the
+    locations in which each element is intended to be used.</db:para>
+  </doc:user-doc>
+
+  <define name="label">
+    <element name="label">
+      <doc:user-doc>
+        <db:para>Defines a label that can be used to identify this element's
+        parent element in applications. The parent element may contain several
+        <db:literal>label</db:literal>s in different languages. In this case,
+        the <db:literal>xml:lang</db:literal> attribute must be used to
+        specify the language of each label.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.lang"/>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="value-if-unset">
+    <element name="value-if-unset">
+      <doc:user-doc>
+        <db:para>Specifies a default value to be associated with this
+        element's parent <db:literal>field</db:literal> element.
+        <db:literal>value-if-unset</db:literal> must be the child of a
+        <db:literal>field</db:literal> element in a
+        <db:literal>content-type</db:literal> resource file. The contents of
+        the element must be a valid value for the parent
+        <db:literal>field</db:literal> (that is, it must be of the correct
+        type, and must fall within any constraints specified for the
+        <db:literal>field</db:literal>).</db:para>
+
+        <db:para>The following field types can have have this value
+        set:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>number</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>boolean</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>enumeration</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>uri</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>basic</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+
+        <db:para>The different formats will have the same <db:emphasis>Java
+        type</db:emphasis> as the stored value.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="description">
+    <element name="description">
+      <doc:user-doc>
+        <db:para>Defines text that can be used to describe this element's
+        parent element in applications. Text entered here may, for example, be
+        displayed as tootips where appropriate. The parent element may contain
+        several <db:literal>description</db:literal>s in different languages.
+        In this case, the <db:literal>xml:lang</db:literal> attribute must be
+        used to specify the language of each label.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.lang"/>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="editor-style">
+    <element name="editor-style">
+      <doc:user-doc>
+        <db:para>Determines how the item represented by the parent element
+        will be displayed in editing applications. Currently this element may
+        only appear as the child of a <db:literal>relation-type</db:literal>
+        element and may only have the value <db:literal>gallery</db:literal>:
+        it is ignored in any other location or if it has any other value. When
+        used as described above, it causes relations of the type defined by
+        the parent element to be treated like ordinary fields in Content
+        Studio. "Gallery" relations are:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>Displayed in the main area of the Content Studio content
+            editor together with fields, rather than on the right hand side
+            where relations are normally displayed.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>Not affected by Content Studio's
+            <db:guilabel>View</db:guilabel> &gt; <db:guilabel>Show
+            relations</db:guilabel> option.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="hidden">
+    <element name="hidden">
+      <doc:user-doc>
+        <db:para>If present, this element indicates that its parent should be
+        hidden in application user interfaces.</db:para>
+      </doc:user-doc>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="icon">
+    <element name="icon">
+      <doc:user-doc>
+        <db:para>Contains the name of an icon that can be used by application
+        user interfaces when displaying the content type represented by this
+        element's parent element. Currently, the icon is only used in
+        <xi:include href="ece-global:global-variables.ebk"
+        xpointer="g-studio"/>.</db:para>
+
+        <db:para>The value may either be the name of one of the following
+        predefined icons:</db:para>
+
+        <db:informaltable>
+          <db:tgroup cols="2">
+            <db:colspec colwidth="20*"/>
+
+            <db:colspec colwidth="80*"/>
+
+            <db:thead>
+              <db:row>
+                <db:entry>Name</db:entry>
+
+                <db:entry>Icon</db:entry>
+              </db:row>
+            </db:thead>
+
+            <db:tbody>
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>article</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-generic.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>attachment</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-attachments.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>audio</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/media-audio.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>generic</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-generic.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>graphic</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-graphic.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>image</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-image.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>image-series</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-image-series.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>inbox</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/inbox.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>link</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-link.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>list</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/list.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>map</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-map.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>media</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-attachments.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>news</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-generic.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>page</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/section.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>person</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/user.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>poll</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-poll.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>publication</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/content-type-publication.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>section</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/section.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+
+              <db:row>
+                <db:entry>
+                  <db:para><db:literal>video</db:literal></db:para>
+                </db:entry>
+
+                <db:entry>
+                  <db:para><db:inlinemediaobject>
+                      <db:imageobject>
+                        <db:imagedata fileref="graphics/media-video.png"/>
+                      </db:imageobject>
+                    </db:inlinemediaobject></db:para>
+                </db:entry>
+              </db:row>
+            </db:tbody>
+          </db:tgroup>
+        </db:informaltable>
+
+        <db:para>or the absolute URI of an image you want to use as an icon.
+        The referenced image must be accessible from all the machines on which
+        <xi:include href="ece-global:global-variables.ebk"
+        xpointer="g-studio"/> is used. It can be in any image format supported
+        by Java (but PNG is recommended). For best results you should use a
+        small (32*32), square image.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="style">
+    <element name="style">
+      <doc:user-doc>
+        <db:para>Contains a CSS style definition that can be applied to this
+        element's parent <db:literal>field</db:literal> element by application
+        user interfaces. Currently, it is used to style the content of rich
+        text fields (<db:literal>basic</db:literal> fields where
+        <db:literal>mime-type</db:literal> is set to
+        <db:literal>application/xhtml+xml</db:literal>) in <xi:include
+        href="ece-global:global-variables.ebk" xpointer="g-studio"/>. It is
+        not used by any other application, and has no effect if specified as
+        the child of any other kind of element.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="title-field">
+    <element name="title-field">
+      <doc:user-doc>
+        <db:para>Nominates one of the fields in a
+        <db:literal>content-type</db:literal> as its <db:emphasis>title
+        field</db:emphasis>. <doc:element/> must be the child of a
+        <db:literal>content-type</db:literal> element, and the value it
+        contains must be the name of one of the
+        <db:literal>field</db:literal>s in that
+        <db:literal>content-type</db:literal>.</db:para>
+
+        <db:para><db:emphasis>Title field</db:emphasis> is a legacy concept
+        required for backwards compatibility with earlier versions of the
+        Content Engine. If a title field is not defined in this way then the
+        <db:literal>PresentationArticle</db:literal> bean's (deprecated)
+        <db:literal>title</db:literal> property will not return a
+        value.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="unit">
+    <element name="unit">
+      <doc:user-doc>
+        <db:para>Defines a secondary label that can be used to identify the
+        unit of the values stored in this element's parent
+        <db:literal>field</db:literal> element. In Content Studio, the
+        contents of this element are displayed
+        <db:emphasis>after</db:emphasis> the <db:literal>field</db:literal> it
+        describes. It is typically used to hold a unit name such as
+        "centimetres", "cm." or "seconds".</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="parameter">
+    <element name="parameter">
+      <doc:user-doc>
+        <db:para>Defines a parameter (name/value pair) to be used by the
+        decorator defined in this element's parent <doc:element
+        name="decorator"/> element.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.parameter"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.parameter">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of the <doc:element/>.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <attribute name="value">
+      <doc:user-doc>
+        <db:para>The value of the <doc:element/>.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="boolean-label">
+    <element name="boolean-label">
+      <doc:user-doc>
+        <db:para>Defines a label that can be used instead of the value 'true'
+        or 'false' for this element's parent boolean
+        <db:literal>field</db:literal>. This element should normally appear in
+        pairs, one for each boolean value. The parent element may contain
+        several such pairs in different languages. In this case, the
+        <db:literal>xml:lang</db:literal> attribute must be used to specify
+        the language of each <doc:element/>.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.boolean-label"/>
+
+      <text/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.boolean-label">
+    <ref name="attlist.lang"/>
+
+    <attribute name="value">
+      <doc:user-doc>
+        <db:para>Indicates which of the boolean values this <doc:element/> is
+        to represent.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <value>true</value>
+
+        <doc:user-doc>
+          <db:para>This <doc:element/> represents
+          <db:literal>true</db:literal>.</db:para>
+        </doc:user-doc>
+
+        <value>false</value>
+
+        <doc:user-doc>
+          <db:para>This <doc:element/> represents
+          <db:literal>false</db:literal>.</db:para>
+        </doc:user-doc>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="decorator">
+    <element name="decorator">
+      <doc:user-doc>
+        <db:para>Defines a <db:emphasis>decorator</db:emphasis> for this
+        element's parent <db:literal>content-type</db:literal>. Decorators are
+        Java programming constructs that can be used by Escenic plugins and
+        third party code to simplify the development of complex templates.
+        This is done by allowing complex logic to be implemented in Java code
+        in a decorator, instead of in the templates. See the JavaDoc for
+        <db:literal>neo.xredsys.presentation</db:literal> for more information
+        on decorators.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.decorator"/>
+
+      <!-- Mogsie asks: is this OK?  <decorator>s may have <parameters> inside them (and names and descriptions) -->
+
+      <optional>
+        <ref name="parameter"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="group">
+    <element name="group">
+      <doc:user-doc>
+        <db:para>Defines a content type group. Content type groups are used by
+        Content Studio for two purposes:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>To group the content types displayed in the
+            <db:guilabel>File</db:guilabel> &gt;
+            <db:guilabel>New</db:guilabel> menu, making the menu easier to
+            navigate.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>To display buttons in the
+            <db:guilabel>Search</db:guilabel> panel that can be used to filter
+            search results. When one of the filter group buttons is selected
+            in Content Studio, search results are filtered to show only
+            content items of the types in the group.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+
+        <db:para>The <doc:element/>'s child
+        <db:literal>ref-content-type</db:literal> elements reference the
+        content types that belong to the group.</db:para>
+      </doc:user-doc>
+
+      <interleave>
+        <optional>
+          <ref name="label"/>
+        </optional>
+
+        <oneOrMore>
+          <ref name="ref-content-type"/>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="ref-content-type">
+    <element name="ref-content-type">
+      <doc:user-doc>
+        <db:para>Specifies the name of a <db:literal>content-type</db:literal>
+        that is to belong to this element's parent <doc:element
+        name="group"/>.</db:para>
+      </doc:user-doc>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="attlist.decorator">
+    <optional>
+      <attribute name="class">
+        <doc:user-doc>
+          <db:para>The name of the Java class that implements the decorator.
+          The decorator replaces the actual article in the presentation
+          layer.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+
+      <attribute name="name">
+        <doc:user-doc>
+          <db:para>For documentation purposes, the decorator may have a
+          name.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="attlist.lang">
+    <optional>
+      <attribute name="xml:lang">
+        <doc:user-doc>
+          <db:para>The language of the <doc:element/>. You should use ISO-639
+          format language IDs. For a complete list of these IDs see <db:link
+          xlink:href="http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt"/>.
+          Applications are responsible for using this attribute to select the
+          most appropriate language.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+</grammar>

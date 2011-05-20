@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2009/representations"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook">
+  <doc:schema-name>representations</doc:schema-name>
+
+  <doc:namespace-prefix>rep</doc:namespace-prefix>
+
+  <define name="representations">
+    <choice>
+      <ref name="image-version-representations"/>
+
+      <doc:clone base-element="representations" title-start="Image Version"
+                 variants="image-version-representations"/>
+
+      <ref name="custom-representations"/>
+
+      <doc:clone base-element="representations" title-start="Custom"
+                 variants="custom-representations"/>
+    </choice>
+  </define>
+
+  <define name="image-version-representations">
+    <element name="representations">
+      <doc:clone title-start="Image Version"
+                 variants="image-version-representations"/>
+
+      <doc:user-doc>
+        <db:para>Defines a set of different versions of an image that are
+        created and maintained using the standard Content Engine
+        <db:literal>image-versions</db:literal> mechanism. This mechanism
+        allows the Content Studio user to define different cropped and resized
+        versions of an image.</db:para>
+
+        <db:note>
+          <db:para>This element's parent <db:literal>field</db:literal>'s
+          <db:literal>mime-type</db:literal> attribute must be set to
+          <db:literal>application/json</db:literal>.</db:para>
+        </db:note>
+      </doc:user-doc>
+
+      <attribute name="type">
+        <doc:user-doc>
+          <db:para>Identifies the contents of this element as
+          "image-version"-style image representations.</db:para>
+        </doc:user-doc>
+
+        <value type="NCName">image-versions</value>
+      </attribute>
+
+      <oneOrMore>
+        <ref name="image-version-representation"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="custom-representations">
+    <element name="representations">
+      <doc:clone title-start="Custom" variants="custom-representations"/>
+
+      <doc:user-doc>
+        <db:para>Defines a set of different versions of an image that are
+        created and maintained using a custom mechanism.</db:para>
+      </doc:user-doc>
+
+      <attribute name="type">
+        <doc:user-doc>
+          <db:para>An identifier for the custom mechanism used to create image
+          representations.</db:para>
+        </doc:user-doc>
+
+        <data type="NCName">
+          <except>
+            <value>image-versions</value>
+          </except>
+        </data>
+      </attribute>
+
+      <oneOrMore>
+        <ref name="custom-representation"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="image-version-representation">
+    <element name="representation">
+      <doc:clone title-start="Image Version"
+                 variants="image-version-representation"/>
+
+      <doc:user-doc>
+        <db:para>Contains the parameters needed to define an
+        "image-version"-style image representation.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-name"/>
+
+      <interleave>
+        <optional>
+          <ref name="foreign-elements"/>
+        </optional>
+
+        <ref name="output"/>
+
+        <ref name="crop"/>
+
+        <ref name="resize"/>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="custom-representation">
+    <element name="representation">
+      <doc:clone title-start="Custom" variants="custom-representation"/>
+
+      <doc:user-doc>
+        <db:para>Contains the parameters needed to define an image
+        representation using a custom method. The contents of this element are
+        undefined. The attributes specified with this element must include a
+        <db:literal>name</db:literal> attribute.</db:para>
+      </doc:user-doc>
+
+      <ref name="anything"/>
+    </element>
+  </define>
+
+  <define name="output">
+    <element name="output">
+      <doc:user-doc>
+        <db:para>Defines the required characteristics of an
+        "image-version"-style image representation. One or both of the
+        <db:literal>width</db:literal>/<db:literal>height</db:literal>
+        attributes must be specified. If both are specified, then the crop
+        mask displayed in Content Studio for this representation will have a
+        fixed aspect ratio. If only <db:literal>width</db:literal> or
+        <db:literal>height</db:literal> is specified, then users will be able
+        to reshape the crop mask displayed in Content Studio as well as resize
+        it.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <ref name="attribute-width"/>
+        <ref name="attribute-height"/>
+        <ref name="attribute-width-height"/>
+      </choice>
+
+    </element>
+  </define>
+
+  <define name="crop">
+    <element name="crop">
+      <doc:user-doc>
+        <db:para>Indicates that the source image will be cropped if necessary
+        to meet the image representation's output requirements (that is, the
+        width:height ratio implied by the output element's width and height
+        attributes).</db:para>
+
+        <db:para>Note that this element is currently required (meaning that
+        image representations will always be cropped if necessary).</db:para>
+      </doc:user-doc>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="resize">
+    <element name="resize">
+      <doc:user-doc>
+        <db:para>Indicates that the cropped source image will be resized if
+        necessary to meet the image representation's output requirements (that
+        is, the exact width and height specified in the output element's width
+        and height attributes).</db:para>
+
+        <db:para>Note that this element is currently required (meaning that
+        image representations will always be resized if necessary).</db:para>
+      </doc:user-doc>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define name="attribute-width">
+    <attribute name="width">
+      <doc:user-doc>
+        <db:para>Specifies the required width of this image representation
+        in pixels.</db:para>
+      </doc:user-doc>
+
+      <data type="positiveInteger"/>
+    </attribute>
+  </define>
+
+  <define name="attribute-height">
+    <attribute name="height">
+      <doc:user-doc>
+        <db:para>Specifies the required height of this image
+        representation in pixels.</db:para>
+      </doc:user-doc>
+
+      <data type="positiveInteger"/>
+    </attribute>
+  </define>
+
+  <define name="attribute-width-height">
+    <group>
+      <ref name="attribute-width"/>
+      <ref name="attribute-height"/>
+    </group>
+  </define>
+
+</grammar>

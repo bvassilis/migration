@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="person">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="field">
+          <xs:complexType mixed="true">
+            <xs:attribute name="name" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="description"/>
+                  <xs:enumeration value="first-name"/>
+                  <xs:enumeration value="middle-name"/>
+                  <xs:enumeration value="last-name"/>
+                  <xs:enumeration value="occupation"/>
+                  <xs:enumeration value="address"/>
+                  <xs:enumeration value="email-address"/>
+                  <xs:enumeration value="phone-work-direct"/>
+                  <xs:enumeration value="phone-mobile"/>
+                  <xs:enumeration value="phone-private"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="user">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" maxOccurs="unbounded" name="field">
+          <xs:complexType mixed="true">
+            <xs:attribute name="name" use="required">
+              <xs:simpleType>
+                <xs:restriction base="xs:token">
+                  <xs:enumeration value="description"/>
+                  <xs:enumeration value="first-name"/>
+                  <xs:enumeration value="middle-name"/>
+                  <xs:enumeration value="last-name"/>
+                  <xs:enumeration value="occupation"/>
+                  <xs:enumeration value="address"/>
+                  <xs:enumeration value="email-address"/>
+                  <xs:enumeration value="phone-work-direct"/>
+                  <xs:enumeration value="phone-mobile"/>
+                  <xs:enumeration value="phone-private"/>
+                  <xs:enumeration value="username"/>
+                  <xs:enumeration value="password"/>
+                </xs:restriction>
+              </xs:simpleType>
+            </xs:attribute>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attributeGroup ref="import:attribute-unique-identifier"/>
+    </xs:complexType>
+  </xs:element>
+  <!--
+    <define name="person-attribute-values">
+      <group>
+        <value>description</value>
+    
+        <value>first-name</value>
+    
+        <value>middle-name</value>
+    
+        <value>last-name</value>
+    
+        <value>occupation</value>
+    
+        <value>address</value>
+    
+        <value>email-address</value>
+    
+        <value>phone-work-direct</value>
+    
+        <value>phone-mobile</value>
+    
+        <value>phone-private</value>
+      </group>
+    </define>
+    
+    <define name="user-attribute-values">
+      <ref name="person-attribute-values"/>
+    
+      <group>
+        <value>username</value>
+    
+        <value>password</value>
+      </group>
+    </define>
+  -->
+</xs:schema>

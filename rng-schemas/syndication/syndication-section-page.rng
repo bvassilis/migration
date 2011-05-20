@@ -1,0 +1,499 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="section-page">
+    <element name="section-page">
+      <doc:alt-name>section page</doc:alt-name>
+
+      <doc:user-doc>
+        <db:para>Represents a section page in an Escenic publication. A
+        section page contains links (called
+        <db:emphasis>content-refs</db:emphasis>) to a selection of the content
+        items in its owning section. The layout of the links on a section page
+        is determined by layout objects defined in the
+        <db:literal>layout-group</db:literal> publication resource. These
+        objects are called <db:emphasis>groups</db:emphasis> and
+        <db:emphasis>areas</db:emphasis>.</db:para>
+
+        <db:para>A section may have more than one section page, but only one
+        of them is active at any given time.</db:para>
+
+        <db:para>A syndication file <db:literal>section-page</db:literal>
+        element has a <db:literal>layout-name</db:literal> attribute that
+        references a <db:literal>group</db:literal> element in the
+        <db:literal>layout-group</db:literal> resource. This
+        <db:literal>group</db:literal> defines the page's root group, and thus
+        determine its layout. It also has child <doc:element name="area"/>
+        elements that are used to hold the <doc:element name="content-ref"/>
+        elements representing the links that are to appear on the page. The
+        value assigned to the <db:literal>layout-name</db:literal> attribute
+        determines what child <db:literal>area</db:literal> elements the
+        <db:literal>section-page</db:literal> element may contain.</db:para>
+      </doc:user-doc>
+
+      <ref name="section-page-attributes"/>
+
+      <oneOrMore>
+        <ref name="area"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <define name="section-page-attributes">
+    <interleave>
+      <optional>
+        <ref name="attribute-name"/>
+      </optional>
+
+      <ref name="attribute-unique-section-reference"/>
+
+      <optional>
+        <attribute name="action" a:defaultValue="replace">
+          <doc:user-doc>
+            <db:para>Determines what action is taken during import if the
+              section page already exists.
+            </db:para>
+          </doc:user-doc>
+
+          <choice>
+            <value>remove</value>
+
+            <doc:user-doc>
+              <db:para>All the section page's existing areas are removed and the
+                new areas imported.
+              </db:para>
+            </doc:user-doc>
+
+            <value>replace</value>
+
+            <doc:user-doc>
+              <db:para>Imported areas replace any existing areas with the same
+                name; other existing areas are not removed.
+              </db:para>
+            </doc:user-doc>
+          </choice>
+        </attribute>
+      </optional>
+
+      <!--
+          <optional>
+            <attribute name="mirrorable">
+              <doc:user-doc>
+                <db:para>If <db:literal>true</db:literal>, then this section page
+                may be mirrored. Setting this attribute to true only has any meaning
+                if the parent <doc:element name="section"/> element's
+                <db:literal>mirrorable</db:literal> attribute is also set to
+                <db:literal>true</db:literal>.??</db:para>
+              </doc:user-doc>
+
+              <data type="boolean"/>
+            </attribute>
+          </optional>
+      -->
+
+      <optional>
+        <attribute name="layout-name">
+          <doc:user-doc>
+            <db:para>The name of a group defined in the
+              <db:literal>layout-groups</db:literal>
+              resource. The selected group
+              will be the section page's root group and thus determine the layout
+              of the section page. The group you specify here determines what
+              <doc:element name="area"/>
+              elements this
+              <db:literal>section-page</db:literal>
+              element may contain.
+            </db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </optional>
+    </interleave>
+  </define>
+
+  <define name="content-ref">
+    <element name="content-ref">
+      <doc:clone title-start="Section Page" variants="section-page-content-ref"/>
+      <doc:user-doc>
+        <db:para>Represents a content-ref on an Escenic section page. The element
+        attributes are used to identify the content item that the content-ref
+        represents.</db:para>
+
+        <db:para>A <db:literal>content-ref</db:literal> element can contain child
+        <doc:element name="field"/> elements in order to override the default
+        contents of the summary fields displayed in the content-ref. The
+        <db:literal>name</db:literal>s of any child
+        <db:literal>field</db:literal>s must be valid summary fields for the
+        content item referenced by the content-ref. Summaries are defined in the
+        target publication's <db:literal>content-type</db:literal>
+        resource.</db:para>
+      </doc:user-doc>
+
+      <ref name="content-ref-attributes"/>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="field"/>
+        </zeroOrMore>
+
+        <optional>
+          <ref name="options"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="content-ref-attributes">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the referenced content
+          item. If this attribute is specified, a <doc:element
+          name="content"/> element with an <db:literal>id</db:literal>
+          attribute that matches this attribute must appear somewhere
+          <db:emphasis>before</db:emphasis> this <doc:element/> element in the
+          syndication file. If the referenced content item does not belong to
+          this <doc:element alt-name="true"/>'s owning section, the it is
+          automatically added during import.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+	<optional>
+      <ref name="attribute-publication-name"/>
+    </optional>
+    
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the referenced
+            content item. If this attribute is specified, then
+            <db:literal>sourceid</db:literal> must also be specified. One of
+            the following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If the referenced content item does not belong to this
+            <doc:element alt-name="true"/>'s owning section, the it is
+            automatically added during import.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the referenced
+            content item. If this attribute is specified, then
+            <db:literal>source</db:literal> must also be specified. One of the
+            following two conditions must be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a content
+                item with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match this
+                element's <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="content"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If the referenced content item does not belong to this
+            <doc:element alt-name="true"/>'s owning section, the it is
+            automatically added during import.</db:para>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced content
+          item. If this attribute is specified, then one of the following two
+          conditions must be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="content"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If the referenced content item does not belong to this
+          <doc:element alt-name="true"/>'s owning section, then it is
+          automatically added during import.</db:para>
+          <db:note>
+            <db:para>This attribute is never present in syndication files that
+            have been exported from a <xi:include
+            href="ece-global:global-variables.ebk" xpointer="g-engine"/>
+            database. <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/> IDs are always written to
+            <db:literal>exported-dbid</db:literal> attributes in exported
+            syndication files.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+    <optional>
+      <attribute name="exported-dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the referenced content
+          item.</db:para>
+
+          <db:note>
+            <db:para>This attribute is generated during export from the
+            <xi:include href="ece-global:global-variables.ebk"
+            xpointer="g-engine"/>, but ignored during import. It is provided
+            mainly for information and debugging purposes.</db:para>
+          </db:note>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="area">
+    <element name="area">
+      <doc:user-doc>
+        <db:para>Represents an area on an Escenic section page.</db:para>
+      </doc:user-doc>
+
+      <attribute name="name">
+        <doc:user-doc>
+          <db:para>The name of this area. This must be the name of an area
+          that is:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>Defined in the <db:literal>layout-groups</db:literal>
+              resource of the target publication.</db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>Allowed in the current context.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>"Allowed in the current context" means:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>If this <db:literal>area</db:literal> element is the
+              child of a <doc:element name="section-page"/> element, then it
+              must be the name of an area defined in the
+              <db:literal>layout-groups</db:literal> resource as a child of
+              the layout group specified with the
+              <db:literal>section-page</db:literal> element's
+              <db:literal>layout-name</db:literal> attribute.</db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>If this <db:literal>area</db:literal> element is the
+              child of a <doc:element name="group"/> element, then it must be
+              the name of an area defined in the
+              <db:literal>layout-groups</db:literal> resource as a child of
+              that group.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="content-ref"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="list-ref"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="group"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="list-ref">
+    <element name="list-ref">
+      <doc:user-doc>
+        <db:para>A reference to a list that appears in a section page
+        area.</db:para>
+      </doc:user-doc>
+
+      <ref name="list-ref-attributes"/>
+
+      <optional>
+        <ref name="options"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="list-ref-attributes">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of the list to which this <doc:element
+        alt-name="true"/> refers. A list is not uniquely referenced by its
+        name. You must therefore also identify the section to which the list
+        belongs by specifying one of:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para><db:literal>id-ref</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>dbid</db:literal></db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para><db:literal>unique-name</db:literal></db:para>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+    
+    <ref name="attribute-unique-section-reference"/>
+    
+    <optional>
+      <attribute name="number-of-items">
+        <doc:user-doc>
+          <db:para>The number of items from this list that are to appear in an
+          area. The specified number of items are taken from the top of the
+          list.</db:para>
+        </doc:user-doc>
+
+        <data type="int"/>
+      </attribute>
+    </optional>
+    
+    <optional>
+      <ref name="attribute-publication-name"/>
+    </optional>
+  </define>
+
+  <define name="group">
+    <element name="group">
+      <doc:user-doc>
+        <db:para>Represents a layout group (a group of areas) on an Escenic
+        section page.</db:para>
+      </doc:user-doc>
+
+      <attribute name="name">
+        <doc:user-doc>
+          <db:para>The name of this layout group. This must be the name of a
+          group that is:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>Defined in the <db:literal>layout-groups</db:literal>
+              resource of the target publication.</db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>Allowed in the current context.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>"Allowed in the current context" means that it must be one
+          of the groups defined in the <db:literal>layout-groups</db:literal>
+          resource as a child of the area with the same name as this element's
+          parent <doc:element name="area"/> element.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+
+      <interleave>
+        <optional>
+          <ref name="options"/>
+        </optional>
+
+        <oneOrMore>
+          <ref name="area"/>
+        </oneOrMore>
+      </interleave>
+    </element>
+  </define>
+ </grammar>

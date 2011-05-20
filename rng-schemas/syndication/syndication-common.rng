@@ -1,0 +1,802 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:tldinfo="http://xmlns.escenic.com/2008/tldinfo"
+         xmlns:tld="http://xmlns.escenic.com/2008/tld"
+         xmlns:set="http://exslt.org/sets"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/2000/svg"
+         xmlns:ns6="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ng="http://docbook.org/docbook-ng"
+         xmlns:javadoc="http://www.io-pt.com/2001/javadoc/xmlref"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="attribute-id">
+    <attribute name="id">
+      <doc:user-doc>
+        <db:para>A unique identifier for this <doc:element/> element. It is
+        only valid and unique within the current syndication file and can be
+        used to enable the establishment of relationships between elements in
+        the file. Other elements in the file have
+        <db:literal>id-ref</db:literal> attributes that can be used to
+        reference <doc:element/> elements. If a <doc:element/> element does
+        not have an <db:literal>id</db:literal> attribute then it must have
+        either a <db:literal>dbid</db:literal> attribute or both a
+        <db:literal>source</db:literal> and a
+        <db:literal>sourceid</db:literal> attribute. A <doc:element/> element
+        <db:emphasis>may</db:emphasis> have several or all of these
+        attributes, in which case any of them can be used for establishing
+        relationships.</db:para>
+
+        <db:para>The <db:literal>id</db:literal> attribute is not imported
+        along with <doc:element alt-name="true"/>s. Unless a
+        <db:literal>dbid</db:literal> attribute has been specified, all
+        imported <doc:element alt-name="true"/>s are assigned new internal IDs
+        during import.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-name">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of this <doc:element alt-name="true"/>.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-sourceid">
+    <attribute name="sourceid">
+      <doc:user-doc>
+        <db:para>The id of this <doc:element alt-name="true"/> in the system
+        from which it originates. Together with the
+        <db:literal>source</db:literal> attribute it forms a globally unique
+        external identifier for the <doc:element/> that can be used for
+        establishing relationships between elements in the syndication file.
+        Other elements in the file have <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> attributes that can be used for this
+        purpose. If this attribute is specified then a
+        <db:literal>source</db:literal> attribute must also be specified. If a
+        <doc:element/> element does not have a <db:literal>source</db:literal>
+        and <db:literal>sourceid</db:literal> attribute then it must have
+        either a <db:literal>dbid</db:literal> attribute or an
+        <db:literal>id</db:literal> attribute. A <doc:element/> element may
+        have several or all of these attributes, in which case any of them can
+        be used for establishing relationships.</db:para>
+
+        <db:para>If <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> are supplied and
+        <db:literal>dbid</db:literal> is not supplied, then they are used to
+        lookup an existing <doc:element alt-name="true"/>. If a <doc:element
+        alt-name="true"/> with matching <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> is found, then this <doc:element
+        alt-name="true"/> is updated; otherwise a new <doc:element
+        alt-name="true"/> is created.</db:para>
+
+        <db:para>If supplied, <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> are imported and stored when
+        creating new <doc:element alt-name="true"/>s, but not when updating
+        existing <doc:element alt-name="true"/>s.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-source">
+    <attribute name="source">
+      <doc:user-doc>
+        <db:para>The name of the system from which this <doc:element
+        alt-name="true"/> originates. Together with the
+        <db:literal>sourceid</db:literal> attribute it forms a globally unique
+        external identifier for the <doc:element alt-name="true"/> that can be
+        used for establishing relationships between elements in the
+        syndication file. Other elements in the file have
+        <db:literal>source</db:literal> and <db:literal>sourceid</db:literal>
+        attributes that can be used for this purpose. If this attribute is
+        specified then a <db:literal>sourceid</db:literal> attribute must also
+        be specified. If a <doc:element/> element does not have a
+        <db:literal>source</db:literal> and <db:literal>sourceid</db:literal>
+        attribute then it must have either a <db:literal>dbid</db:literal>
+        attribute or an <db:literal>id</db:literal> attribute. A
+        <doc:element/> element may have several or all of these attributes, in
+        which case any of them can be used for establishing
+        relationships.</db:para>
+
+        <db:para>If supplied, <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> are imported and stored with
+        <doc:element alt-name="true"/>s. If <db:literal>source</db:literal>
+        and <db:literal>sourceid</db:literal> are supplied and
+        <db:literal>dbid</db:literal> is not supplied, then they are used to
+        lookup an existing <doc:element alt-name="true"/>. If a <doc:element
+        alt-name="true"/> with matching <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> is found, then this <doc:element
+        alt-name="true"/> is updated; otherwise a new <doc:element
+        alt-name="true"/> is created.</db:para>
+
+        <db:para>If supplied, <db:literal>source</db:literal> and
+        <db:literal>sourceid</db:literal> are imported and stored when
+        creating new <doc:element alt-name="true"/>s, but not when updating
+        existing <doc:element alt-name="true"/>s.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-dbid">
+    <attribute name="dbid">
+      <doc:user-doc>
+        <db:para>The internal Content Engine ID of this <doc:element
+        alt-name="true"/>, which can be used when importing updated versions
+        of existing content items. It can also be used for establishing
+        relationships between elements in the syndication file. Other elements
+        in the file have <db:literal>dbid</db:literal> attributes that can be
+        used for this purpose. If a <doc:element/> element does not have a
+        <db:literal>dbid</db:literal> attribute then it must have either a
+        <db:literal>source</db:literal> and <db:literal>sourceid</db:literal>
+        attribute or an <db:literal>id</db:literal> attribute. A
+        <doc:element/> element may have several or all of these attributes, in
+        which case any of them can be used for establishing
+        relationships.</db:para>
+
+        <db:para>You should only use the <db:literal>dbid</db:literal>
+        attribute when importing updated versions of
+        <db:emphasis>existing</db:emphasis> <doc:element
+        alt-name="true"/>s.</db:para>
+
+        <db:note>
+          <db:para>This attribute is never present in syndication files that
+          have been exported from a <xi:include
+          href="ece-global:global-variables.ebk" xpointer="g-engine"/>
+          database. The <xi:include href="ece-global:global-variables.ebk"
+          xpointer="g-engine"/> ID is always written to the
+          <db:literal>exported-dbid</db:literal> attribute in exported
+          syndication files.</db:para>
+        </db:note>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-exported-dbid">
+    <attribute name="exported-dbid">
+      <doc:user-doc>
+        <db:para>The internal Content Engine ID of this <doc:element
+        alt-name="true"/>, which can be used to identify the <doc:element
+        alt-name="true"/> in the database from which it was
+        exported.</db:para>
+
+        <db:note>
+          <db:para>This attribute is generated during export from the
+          <xi:include href="ece-global:global-variables.ebk"
+          xpointer="g-engine"/>, but ignored during import. It is provided
+          mainly for information and debugging purposes.</db:para>
+        </db:note>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-description">
+    <attribute name="description">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-unique-name">
+    <attribute name="unique-name">
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="attribute-action">
+    <attribute name="action" a:defaultValue="insert">
+      <doc:user-doc>
+        <db:para>Determines what action is taken during import if the section
+        page already exists.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <value>remove</value>
+
+        <doc:user-doc>
+          <db:para>The <doc:element alt-name="true"/> is cleared before
+          import.</db:para>
+        </doc:user-doc>
+
+        <value>insert</value>
+
+        <doc:user-doc>
+          <db:para>The <doc:element alt-name="true"/> is not cleared before
+          import: new entries are simply appended to the <doc:element
+          alt-name="true"/>.</db:para>
+        </doc:user-doc>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="attribute-unique-identifier">
+    <optional>
+      <ref name="attribute-id"/>
+    </optional>
+
+    <optional>
+      <group>
+        <ref name="attribute-source"/>
+
+        <ref name="attribute-sourceid"/>
+      </group>
+    </optional>
+
+    <optional>
+      <ref name="attribute-dbid"/>
+    </optional>
+
+    <optional>
+      <ref name="attribute-exported-dbid"/>
+    </optional>
+  </define>
+
+  <define name="attribute-unique-section-reference">
+    <optional>
+      <attribute name="id-ref">
+        <doc:user-doc>
+          <db:para>The <db:literal>id</db:literal> of the section to which
+          this <doc:element alt-name="true"/> is to be added. If this
+          attribute is specified, a <doc:element name="section"/> element with
+          an <db:literal>id</db:literal> attribute that matches this attribute
+          must appear somewhere <db:emphasis>before</db:emphasis> this
+          <doc:element/> element in the syndication file.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> are specified, then this attribute
+          is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <group>
+        <attribute name="source">
+          <doc:user-doc>
+            <db:para>The <db:literal>source</db:literal> of the section to
+            which this <doc:element alt-name="true"/> is to be added. If this
+            attribute is specified, then <db:literal>sourceid</db:literal>
+            must also be specified. One of the following two conditions must
+            be satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+
+        <attribute name="sourceid">
+          <doc:user-doc>
+            <db:para>The <db:literal>sourceid</db:literal> of the section to
+            which this <doc:element alt-name="true"/> is to be added. If this
+            attribute is specified, then <db:literal>source</db:literal> must
+            also be specified. One of the following two conditions must be
+            satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>The target publication must already contain a section
+                with <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal>,
+                <db:emphasis>or</db:emphasis></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>A <doc:element name="section"/> element with
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> attributes that match
+                <db:literal>source</db:literal> and
+                <db:literal>sourceid</db:literal> must appear somewhere
+                <db:emphasis>before</db:emphasis> this <doc:element/> element
+                in the syndication file.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+
+            <db:para>If <db:literal>dbid</db:literal> is specified, then
+            <db:literal>source</db:literal> and
+            <db:literal>sourceid</db:literal> are ignored.</db:para>
+          </doc:user-doc>
+
+          <text/>
+        </attribute>
+      </group>
+    </optional>
+
+    <optional>
+      <attribute name="dbid">
+        <doc:user-doc>
+          <db:para>The <db:literal>dbid</db:literal> of the section to which
+          this <doc:element alt-name="true"/> is to be added. If this
+          attribute is specified then one of the following two conditions must
+          be satisfied:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>dbid</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>dbid</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="exported-dbid">
+        <text/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="unique-name">
+        <doc:user-doc>
+          <db:para>The <db:literal>unique-name</db:literal> or
+          <db:literal>name</db:literal> of the section to which this
+          <doc:element alt-name="true"/> is to be added. If this attribute is
+          specified, then one of the following conditions must be
+          satisified:</db:para>
+
+          <db:itemizedlist>
+            <db:listitem>
+              <db:para>The target publication must already contain a section
+              with a <db:literal>uniquename</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute, <db:emphasis>or</db:emphasis></db:para>
+            </db:listitem>
+
+            <db:listitem>
+              <db:para>A <doc:element name="section"/> element with a
+              <db:literal>unique-name</db:literal> or
+              <db:literal>name</db:literal> attribute that matches this
+              attribute must appear somewhere
+              <db:emphasis>before</db:emphasis> this <doc:element/> element in
+              the syndication file.</db:para>
+            </db:listitem>
+          </db:itemizedlist>
+
+          <db:para>If this is not the case, or if there is a matching
+          <db:literal>name</db:literal> attribute but it is not unique, then
+          import will fail.</db:para>
+
+          <db:para>If <db:literal>dbid</db:literal> or
+          <db:literal>source</db:literal> and
+          <db:literal>sourceid</db:literal> or <db:literal>id</db:literal> are
+          specified, then this attribute is ignored.</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="url">
+    <element name="url">
+      <doc:user-doc>
+        <db:para>A Uniform Resource Locator (URL) associated with the object
+        represented by this element's owning element. If the owning element is
+        <doc:element name="person"/>, for example, then it would probably be
+        the URL of the person's home page.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="description">
+    <element name="description">
+      <doc:user-doc>
+        <db:para>A description of the object represented by this element's
+        owning element.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="priority">
+    <element name="priority">
+      <doc:user-doc>
+        <db:para>Used to set section priority.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="value">
+          <doc:user-doc>
+            <db:para>Section priority.</db:para>
+          </doc:user-doc>
+
+          <data type="int"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <define name="directory">
+    <element name="directory">
+      <doc:user-doc>
+        <db:para>A section "directory name". It is not really used as a
+        directory name but is used as a component of the section
+        URL.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="delete">
+    <element name="delete">
+      <doc:user-doc>
+        <db:para>Used to specify that the section referenced by this element's
+        parent <doc:element name="section"/> is to be deleted from the target
+        publication. The section can only be deleted if either:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para><db:literal>recursive</db:literal> is set to
+            <db:literal>true</db:literal> or</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>Both of the following conditions are satisfied:</db:para>
+
+            <db:itemizedlist>
+              <db:listitem>
+                <db:para>It contains no child sections or
+                <db:literal>move-sections</db:literal> is set to
+                <db:literal>true.</db:literal></db:para>
+              </db:listitem>
+
+              <db:listitem>
+                <db:para>It is not the home section of any content items or
+                <db:literal>delete-content</db:literal> is set to
+                <db:literal>true</db:literal>.</db:para>
+              </db:listitem>
+            </db:itemizedlist>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="recursive" a:defaultValue="false">
+          <doc:user-doc>
+            <db:para>If <db:literal>true</db:literal>, then all of the
+            section's subsections and content items will be deleted with
+            it.</db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="delete-content" a:defaultValue="false">
+          <doc:user-doc>
+            <db:para>If <db:literal>true</db:literal>, then all of the
+            section's content items will be deleted with it.</db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+
+      <optional>
+        <attribute name="move-sections" a:defaultValue="false">
+          <doc:user-doc>
+            <db:para>If <db:literal>true</db:literal>, then all of the
+            section's subsections will be moved to this section's parent
+            section.</db:para>
+          </doc:user-doc>
+
+          <data type="boolean"/>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+
+  <define name="field">
+    <element name="field">
+      <doc:clone title-start="Standard" variants="standard-field"/>
+
+      <doc:user-doc>
+        <db:para>Represents one field in a content item or relation. The
+        element's content model <db:emphasis>appears</db:emphasis> to allow
+        almost anything, but in practice this is not the case. When importing,
+        the <db:literal>field</db:literal> element content is expected to
+        conform to a field definition identified by the
+        <db:literal>name</db:literal> attribute, and will fail to be imported
+        if this is not the case.</db:para>
+
+        <db:bridgehead>"Link" fields</db:bridgehead>
+
+        <db:para>If the field definition identified by the
+        <db:literal>name</db:literal> attribute has the
+        <db:literal>type</db:literal> <db:literal>"link"</db:literal>, then
+        the field is expected to contain the path of a binary file that is to
+        be uploaded (for example, an image or other multimedia file, a PDF
+        file, word processing document or spreadsheet). The referenced object
+        must be located somewhere on the server.</db:para>
+
+        <db:para>If you are using Web Studio to import the syndication file,
+        then the field must contain the absolute path of the binary file, for
+        example:</db:para>
+
+        <db:programlisting>&lt;field name="image" title="Def"&gt;/tmp/import/def.jpg&lt;/field&gt;</db:programlisting>
+
+        <db:para>If you are using the import service, however, then the field
+        can contain either an absolute or a relative path (relative to the
+        <db:literal>importDirectory</db:literal> as defined in the import task
+        configuration file):</db:para>
+
+        <db:programlisting>&lt;field name="image" title="Ghi"&gt;ghi.jpg&lt;/field&gt;</db:programlisting>
+
+        <db:para>For information about import task configuration files, see
+        <db:link linkend="t_Editing_Task_Configuration_Files"/>.</db:para>
+
+        <db:bridgehead>In-line relations</db:bridgehead>
+
+        <db:para>If the field definition identified by the
+        <db:literal>name</db:literal> attribute has the
+        <db:literal>type</db:literal> <db:literal>"basic"</db:literal>and the
+        <db:literal>mime-type</db:literal>
+        <db:literal>"application/xhmtl+xml"</db:literal>, then the field may
+        contain in-line relations to other content items such as images or
+        related articles. These in-line relations are represented by
+        <doc:element name="relation"/> elements included in the XHTML/XML
+        markup in the field.</db:para>
+      </doc:user-doc>
+
+      <ref name="field-attributes"/>
+
+      <choice>
+        <ref name="any-text"/>
+
+        <group>
+          <zeroOrMore>
+            <ref name="field"/>
+          </zeroOrMore>
+        </group>
+
+        <group>
+          <zeroOrMore>
+            <ref name="value"/>
+          </zeroOrMore>
+        </group>
+      </choice>
+
+      <optional>
+        <ref name="options"/>
+      </optional>
+    </element>
+  </define>
+
+  <define name="field-attributes">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>Identifies the content item/relation field represented by
+        this <db:literal>field</db:literal> element. For import, the value
+        specified must be the name of one of the fields defined for the
+        content item/relation in the target publication's
+        <db:literal>content-type</db:literal> resource. The value you specify
+        here will then determine what kind of content your
+        <db:literal>field</db:literal> element may have.</db:para>
+
+        <db:para>If, for example, your <db:literal>field</db:literal> element
+        has the <db:literal>name</db:literal>
+        <db:literal>"headline"</db:literal> and belongs to a
+        <db:literal>content</db:literal> element with the
+        <db:literal>type</db:literal> <db:literal>"news"</db:literal>,
+        then:</db:para>
+
+        <db:itemizedlist>
+          <db:listitem>
+            <db:para>The <db:literal>content-type</db:literal> resource of the
+            target publication must contain a
+            <db:literal>content-type</db:literal> element with the name
+            <db:literal>"news"</db:literal>.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>The <db:literal>"news"</db:literal>
+            <db:literal>content-type</db:literal> element must contain a
+            <db:literal>field</db:literal> element with the name
+            <db:literal>"headline"</db:literal>.</db:para>
+          </db:listitem>
+
+          <db:listitem>
+            <db:para>The content of your<db:literal> field</db:literal>
+            element must conform to the <db:literal>"headline"</db:literal>
+            field definition in the <db:literal>content-type</db:literal>
+            resource.</db:para>
+          </db:listitem>
+        </db:itemizedlist>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+
+    <optional>
+      <attribute name="expand-entities" a:defaultValue="false">
+        <doc:user-doc>
+          <db:para>If set to <db:literal>true</db:literal>, then any HTML
+          entities in the field content are expanded during import. If set to
+          <db:literal>false</db:literal>, any entities are retained.</db:para>
+        </doc:user-doc>
+
+        <data type="boolean"/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="title">
+        <doc:user-doc>
+          <db:para>A title associated with the field. This attribute is only
+          used for <db:emphasis>link</db:emphasis> fields (fields that are
+          defined in the <db:literal>content-type</db:literal> resource as
+          having the <db:literal>type</db:literal>
+          <db:literal>"link"</db:literal>). It is used to hold an alternative
+          name for the resource referenced in the field. It could be used, for
+          example, to contain a descriptive title (e.g <db:literal>"London
+          Bridge"</db:literal>) for a link field containing the URL of an
+          image file with a cryptic auto-generated name (e.g
+          <db:literal>image-store://places/img099345.jpg</db:literal>).</db:para>
+        </doc:user-doc>
+
+        <text/>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="attribute-publication-name">
+    <attribute name="publication-name">
+      <doc:user-doc>
+        <db:para>The name of the publication to which the referenced content
+        item or section belongs. This attribute may only be used in
+        combination with the <db:literal>source</db:literal> and
+        <db:literal>source-id</db:literal> attributes. It is needed to ensure
+        unique identification in situations where cross-publishing is in use
+        and the referenced content item or section does not belong to the
+        current publication.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </attribute>
+  </define>
+
+  <define name="value">
+    <element name="value">
+      <doc:user-doc>
+        <db:para>A single value within a <doc:element name="field"/>. A
+        <db:literal>field</db:literal> element may contain a series of
+        <db:literal>value</db:literal> elements if it is defined in the
+        <db:literal>content-type</db:literal> resource as having the type
+        <db:literal>array</db:literal> or
+        <db:literal>enumeration</db:literal>. If the field is an array, then
+        each <db:literal>value</db:literal> element represents an element of
+        the array. If the field is an enumeration, then each
+        <db:literal>value</db:literal> element represents one of the possible
+        values to which the field can be set.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="any">
+    <element>
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <anyName>
+        <except>
+          <name>relation</name>
+        </except>
+      </anyName>
+
+      <zeroOrMore>
+        <choice>
+          <attribute>
+            <doc:user-doc>
+              <db:para>To be supplied.</db:para>
+            </doc:user-doc>
+
+            <anyName/>
+          </attribute>
+
+          <text/>
+
+          <ref name="any-text"/>
+        </choice>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="any-text">
+    <zeroOrMore>
+      <choice>
+        <ref name="any"/>
+
+        <ref name="relation_inline"/>
+
+        <text/>
+      </choice>
+    </zeroOrMore>
+  </define>
+
+  <define name="options">
+    <element name="options">
+      <doc:user-doc>
+        <db:para>Represents a set of options (name-value pairs) stored in
+        fields.</db:para>
+      </doc:user-doc>
+
+      <zeroOrMore>
+        <ref name="field"/>
+      </zeroOrMore>
+    </element>
+  </define>
+</grammar>

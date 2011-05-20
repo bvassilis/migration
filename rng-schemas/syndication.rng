@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2009/import"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ui="http://xmlns.escenic.com/2008/interface-hints"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns6="http://www.w3.org/2000/svg"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:ct="http://xmlns.escenic.com/2008/content-type">
+  <doc:schema-name>escenic-syndication</doc:schema-name>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>escenic-syndication</db:literal> schema defines
+    the <db:emphasis>Escenic syndication format</db:emphasis>. The Escenic
+    syndication format is an open XML-based data format intended to simplify
+    the exchange of content between the Escenic Content Engine and other
+    systems. All content exported from Escenic Content Engine is exported to
+    the Escenic syndication format, and the Content Engine can import any
+    content that is presented in the form of a valid syndication format
+    file. The syndication format is well-defined, so you can quite easily
+    convert content between the syndication format and other XML-based formats
+    using XSLT or similar tools.</db:para>
+
+    <db:para>You can use the syndication format import/export all types of
+    content and metadata stored in an Escenic system. Note, however, that
+    binary data is not included directly in syndication files: images,
+    audio and video are imported from/exported to binary files, and are simply
+    referenced from the syndication file.</db:para>
+  </doc:user-doc>
+
+  <!-- Include all the files -->
+
+  <include href="syndication/syndication-common.rng"/>
+
+  <include href="syndication/syndication-content.rng"/>
+
+  <include href="syndication/syndication-link.rng"/>
+
+  <include href="syndication/syndication-person.rng"/>
+
+  <include href="syndication/syndication-acl.rng"/>
+
+  <include href="syndication/syndication-section.rng"/>
+
+  <include href="syndication/syndication-section-page.rng"/>
+
+  <include href="syndication/syndication-list-inbox.rng"/>
+
+  <!-- End of Include directives -->
+
+  <start>
+    <element name="escenic">
+      <doc:user-doc>
+        <db:para>The root element of an Escenic syndication format file.
+        The root element can contain any number of child elements, and the
+        allowed types of child element can appear in any order, making the
+        format very flexible. You can use it to import/export a complete
+        publication in a single file, a single content item or anything in
+        between.</db:para>
+      </doc:user-doc>
+
+      <attribute name="version">
+        <value>2.0</value>
+      </attribute>
+
+      <interleave>
+
+        <zeroOrMore>
+          <ref name="acl-global"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="acl-section"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="content"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="person"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="section"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="list"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="inbox"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="section-page"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="user"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="user-group"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </start>
+</grammar>

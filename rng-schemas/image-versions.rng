@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         ns="http://xmlns.escenic.com/2008/image-versions"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:ns72="http://www.w3.org/1999/xhtml"
+         xmlns:ns7="http://www.w3.org/1999/xlink"
+         xmlns:ns6="http://www.w3.org/2000/svg"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0"
+         xmlns:iv="http://xmlns.escenic.com/2008/image-versions">
+  <doc:schema-name>image-versions</doc:schema-name>
+  <doc:namespace-prefix>iv</doc:namespace-prefix>
+
+  <doc:user-doc>
+    <db:para>The <db:literal>image-versions</db:literal> schema defines the
+    content of the Escenic <db:literal>image-version</db:literal> publication
+    resource. The purpose of the <db:literal>image-version</db:literal>
+    resource is to define the <db:emphasis>image versions</db:emphasis> that
+    are to be used in a publication. It is often the case that several
+    versions of images are required for use in different contexts: thumbnails
+    in teasers and one or more larger versions in articles, for
+    example.</db:para>
+
+    <db:para>The image-versions contains an <doc:element
+    name="originalVersion"/> element that defines the <doc:element
+    name="label"/>s or names used to identify the original versions of images,
+    plus a number of <doc:element name="version"/> elements defining the
+    additional versions that are required. Each <doc:element name="version"/>
+    element defines the <doc:element name="label"/>s or names used to identify
+    the version plus other attributes such as size and format.</db:para>
+  </doc:user-doc>
+
+  <define name="fallback">
+    <element name="fallback">
+      <doc:user-doc>
+        <db:para>Version generation is based on the assumption that the
+        original version of an image is larger than the image size specified
+        with <doc:element name="maxHeight"/> and <doc:element
+        name="maxWidth"/>. <db:literal>fallback</db:literal> specifies what to
+        do when this is not the case: if, for example, the original image is
+        160x200 and the maximum size of this version is defined as
+        300x200.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.fallback"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.fallback">
+    <attribute name="operation" a:defaultValue="copy">
+      <doc:user-doc>
+        <db:para>Specifies the fallback action to be taken.</db:para>
+      </doc:user-doc>
+
+      <choice>
+        <value>copy</value>
+
+        <doc:user-doc>
+          <db:para>Use the original version with no scaling applied
+          (recommended).</db:para>
+        </doc:user-doc>
+
+        <value>skip</value>
+
+        <doc:user-doc>
+          <db:para>Do not generate this version of the image.</db:para>
+        </doc:user-doc>
+
+        <value>resize</value>
+
+        <doc:user-doc>
+          <db:para>Scale the image up to the required size. This may result
+          in a poor quality image.</db:para>
+        </doc:user-doc>
+      </choice>
+    </attribute>
+  </define>
+
+  <define name="format">
+    <element name="format">
+      <doc:user-doc>
+        <db:para>Specifies the format to use for this image version.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.format"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.format">
+    <optional>
+      <attribute name="name" a:defaultValue="jpeg">
+        <choice>
+          <value>jpeg</value>
+
+          <doc:user-doc>
+            <db:para>JPEG is a lossy compressed image format, mainly intended
+            for photographic images.</db:para>
+          </doc:user-doc>
+
+          <value>jpg</value>
+          
+          <doc:user-doc>
+            <db:para>A synonym for <db:literal>jpeg</db:literal>.</db:para>
+          </doc:user-doc>
+
+          <value>gif</value>
+
+          <doc:user-doc>
+            <db:para>GIF is a compact image format, mainly intended for
+            non-photographic images such as charts and diagrams).</db:para>
+          </doc:user-doc>
+
+          <value>png</value>
+
+          <doc:user-doc>
+            <db:para>PNG is a compact image format, mainly intended for
+            non-photographic images such as charts and diagrams.</db:para>
+          </doc:user-doc>
+
+          <value>wbmp</value>
+
+          <doc:user-doc>
+            <db:para>WBMP is a monochrome image format intended for
+            low-bandwidth mobile applications. WBMP is the standard image
+            format for use in WAP applications.</db:para>
+          </doc:user-doc>
+        </choice>
+      </attribute>
+    </optional>
+
+    <optional>
+      <choice>
+        <attribute name="quality">
+          <doc:user-doc>
+            <db:para>The image quality level to be applied when generating this
+            version. It is only used when <db:literal>format</db:literal> is set
+            to <db:literal>JPEG</db:literal>. The value specified must be a
+            number between <db:literal>0.0</db:literal> (lowest quality) and
+            <db:literal>1.0</db:literal> (highest quality). The default is
+            <db:literal>0.7</db:literal>.</db:para>
+          </doc:user-doc>
+        </attribute>
+        <attribute name="compression">
+          <doc:user-doc>
+            <db:note>
+              <db:para>Deprecated. This attribute is a synonym for
+              <db:literal>quality</db:literal>, but should not be used: use
+              <db:literal>quality</db:literal> instead.</db:para>
+            </db:note>
+          </doc:user-doc>
+        </attribute>
+      </choice>
+    </optional>
+
+    <optional>
+      <attribute name="sharpen">
+        <doc:user-doc>
+          <db:para>The <db:emphasis>sharpening</db:emphasis> level to be
+          applied when generating this version. Sharpening is an image
+          processing algorithm that can improve blurred or unclear images. The
+          value specified must be a number between
+          <db:literal>0.0</db:literal> (no sharpening) and
+          <db:literal>1.0</db:literal> (maximum sharpening). The default is
+          <db:literal>0.0</db:literal> (no sharpening).</db:para>
+        </doc:user-doc>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="parameter">
+    <element name="parameter">
+      <doc:user-doc>
+        <db:note>
+          <db:para>Not currently used.</db:para>
+        </db:note>
+      </doc:user-doc>
+
+      <ref name="attlist.parameter"/>
+
+      <doc:user-doc>
+        <db:para>A parameter for this <doc:element/>.</db:para>
+      </doc:user-doc>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.parameter">
+    <attribute name="name">
+      <doc:user-doc>
+        <db:para>The name of the <doc:element/>.</db:para>
+      </doc:user-doc>
+    </attribute>
+
+    <optional>
+      <attribute name="value">
+        <doc:user-doc>
+          <db:para>The value of the <doc:element/>.</db:para>
+        </doc:user-doc>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="pluginGenerator">
+    <element name="pluginGenerator">
+      <doc:user-doc>
+        <db:note>
+          <db:para>Not currently used.</db:para>
+        </db:note>
+      </doc:user-doc>
+
+      <attribute name="class">
+        <doc:user-doc>
+          <db:note>
+            <db:para>Not currently used.</db:para>
+          </db:note>
+        </doc:user-doc>
+      </attribute>
+
+      <zeroOrMore>
+        <ref name="parameter"/>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.imageDef">
+    <empty/>
+  </define>
+
+  <define name="maxHeight">
+    <element name="maxHeight">
+      <doc:user-doc>
+        <db:para>The maximum allowed height for this image version. If the
+        height of the original version of an image is greater than this value,
+        then the image will be scaled down to this height.  If <db:literal>maxWidth</db:literal> is also 
+        specified, then the height may be set to less than <db:literal>maxHeight</db:literal> in order to 
+        preserve the image's width-height ratio.</db:para>
+
+        <db:para>The <doc:element name="fallback"/> element specifies what
+        should happen if the height of the original version of an image is
+        <db:emphasis>smaller</db:emphasis> than this value.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.maxHeight"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.maxHeight">
+    <optional>
+      <attribute name="pix">
+        <doc:user-doc>
+          <db:para>The <doc:element/> value, specified in pixels. The value
+          you specify must be a whole number.</db:para>
+        </doc:user-doc>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="maxWidth">
+    <element name="maxWidth">
+      <doc:user-doc>
+        <db:para>The maximum allowed width for this image version. If the
+        width of the original version of an image is greater than this value,
+        then the image will be scaled down to this width. If <db:literal>maxHeight</db:literal> is also 
+        specified, then the width may be set to less than <db:literal>maxWidth</db:literal> in order to 
+        preserve the image's width-height ratio.</db:para>
+
+        <db:para>The <doc:element name="fallback"/> element specifies what
+        should happen if the width of the original version of an image is
+        <db:emphasis>smaller</db:emphasis> than this value.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.maxWidth"/>
+
+      <empty/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.maxWidth">
+    <optional>
+      <attribute name="pix">
+        <doc:user-doc>
+          <db:para>The <doc:element/> value, specified in pixels. The value
+          you specify must be a whole number.</db:para>
+        </doc:user-doc>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="label">
+    <element name="label">
+      <doc:user-doc>
+        <db:para>The label used to identify this image version in
+        applications. <doc:element/> may have several labels in different
+        languages. If so, the <db:literal>lang</db:literal> attribute must be
+        used to specify the language of the label.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.label"/>
+
+      <text/>
+    </element>
+  </define>
+
+  <define combine="interleave" name="attlist.label">
+    <optional>
+      <attribute name="lang">
+        <doc:user-doc>
+          <db:para>The language of the <doc:element/>. You should use ISO-639
+          format language IDs. For a complete list of these IDs see <db:link
+          ns7:href="http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt"/>.</db:para>
+        </doc:user-doc>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="version">
+    <element name="version">
+      <doc:user-doc>
+        <db:para>Defines one of the image versions required by the
+        publication.</db:para>
+      </doc:user-doc>
+
+      <ref name="id-attribute"/>
+
+      <interleave>
+        <oneOrMore>
+          <ref name="label"/>
+        </oneOrMore>
+
+        <choice>
+          <ref name="maxWidth"/>
+          <ref name="maxHeight"/>
+          <group>
+            <interleave>
+              <ref name="maxWidth"/>
+              <ref name="maxHeight"/>
+            </interleave>
+          </group>
+        </choice>
+
+        <optional>
+          <ref name="fallback"/>
+        </optional>
+
+        <optional>
+          <ref name="format"/>
+        </optional>
+
+        <optional>
+          <ref name="pluginGenerator"/>
+        </optional>
+      </interleave>
+    </element>
+  </define>
+
+  <define combine="interleave" name="id-attribute">
+    <attribute name="id">
+      <doc:user-doc>
+        <db:para>The internal identifier of the <doc:element/>. This is the
+        identifier used in JSP and Java code. It must be unique and must not
+        contain any spaces or special characters.</db:para>
+      </doc:user-doc>
+    </attribute>
+  </define>
+
+  <define name="originalVersion">
+    <element name="originalVersion">
+      <doc:user-doc>
+        <db:para>Holds the <db:literal>id</db:literal> and
+        <db:literal>label</db:literal>s used to identify the original
+        unscaled, uncompressed version of images.</db:para>
+      </doc:user-doc>
+
+      <ref name="id-attribute"/>
+
+      <oneOrMore>
+        <ref name="label"/>
+      </oneOrMore>
+    </element>
+  </define>
+
+  <start>
+    <element name="imageDef">
+      <doc:user-doc>
+        <db:para>The root element of the
+        <db:literal>image-versions</db:literal> file.</db:para>
+      </doc:user-doc>
+
+      <ref name="attlist.imageDef"/>
+
+      <interleave>
+        <ref name="originalVersion"/>
+
+        <zeroOrMore>
+          <ref name="version"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </start>
+</grammar>

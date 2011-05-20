@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/1999/xhtml"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="link">
+    <element name="link">
+      <doc:deprecated/>
+
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <ref name="link-attributes"/>
+
+      <interleave>
+        <zeroOrMore>
+          <ref name="url"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="text"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="description"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="content-type"/>
+        </zeroOrMore>
+
+        <zeroOrMore>
+          <ref name="source"/>
+        </zeroOrMore>
+      </interleave>
+    </element>
+  </define>
+
+  <define name="link-attributes">
+    <ref name="attribute-unique-identifier"/>
+
+    <optional>
+      <attribute name="catalog">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <data type="string"/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="publishdate">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <data type="string"/>
+      </attribute>
+    </optional>
+
+    <optional>
+      <attribute name="state" a:defaultValue="published">
+        <doc:user-doc>
+          <db:para>To be supplied.</db:para>
+        </doc:user-doc>
+
+        <choice>
+          <value>created</value>
+
+          <value>published</value>
+        </choice>
+      </attribute>
+    </optional>
+  </define>
+
+  <define name="text">
+    <element name="text">
+      <doc:deprecated/>
+
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="source">
+    <element name="source">
+      <doc:deprecated/>
+
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <text/>
+    </element>
+  </define>
+
+  <define name="content-type">
+    <element name="content-type">
+      <doc:deprecated/>
+
+      <doc:user-doc>
+        <db:para>To be supplied.</db:para>
+      </doc:user-doc>
+
+      <optional>
+        <attribute name="type" a:defaultValue="text">
+          <doc:user-doc>
+            <db:para>To be supplied.</db:para>
+          </doc:user-doc>
+
+          <choice>
+            <value>text</value>
+
+            <value>audio</value>
+
+            <value>video</value>
+          </choice>
+        </attribute>
+      </optional>
+    </element>
+  </define>
+</grammar>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" targetNamespace="http://xmlns.escenic.com/2009/import" xmlns:import="http://xmlns.escenic.com/2009/import">
+  <xs:element name="list">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="import:list-inbox-common-elements">
+          <xs:attributeGroup ref="import:attribute-name"/>
+          <xs:attributeGroup ref="import:attribute-unique-section-reference"/>
+          <xs:attribute name="action">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="remove"/>
+                <xs:enumeration value="insert"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="inbox">
+    <xs:complexType>
+      <xs:complexContent>
+        <xs:extension base="import:list-inbox-common-elements">
+          <xs:attribute name="name"/>
+          <xs:attributeGroup ref="import:attribute-unique-section-reference"/>
+          <xs:attribute name="action">
+            <xs:simpleType>
+              <xs:restriction base="xs:token">
+                <xs:enumeration value="remove"/>
+                <xs:enumeration value="insert"/>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:complexType name="list-inbox-common-elements">
+    <xs:group minOccurs="0" maxOccurs="unbounded" ref="import:content-ref_list"/>
+  </xs:complexType>
+  <xs:group name="content-ref_list">
+    <xs:sequence>
+      <xs:element name="content-ref">
+        <xs:complexType>
+          <xs:attributeGroup ref="import:content-ref-attributes_list"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+  </xs:group>
+  <xs:attributeGroup name="content-ref-attributes_list">
+    <xs:attribute name="id-ref"/>
+    <xs:attribute name="publication-name"/>
+    <xs:attribute name="source"/>
+    <xs:attribute name="sourceid"/>
+    <xs:attribute name="dbid"/>
+    <xs:attribute name="exported-dbid"/>
+  </xs:attributeGroup>
+</xs:schema>

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grammar datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"
+         xmlns="http://relaxng.org/ns/structure/1.0"
+         xmlns:tmp="http://xmlns.escenic.com/2008/temporary"
+         xmlns:ns8="http://www.w3.org/1999/xlink"
+         xmlns:ns7="http://www.w3.org/1999/xhtml"
+         xmlns:ns6="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns="http://relaxng.org/ns/structure/1.0"
+         xmlns:doc="http://xmlns.escenic.com/2008/documentation"
+         xmlns:db="http://docbook.org/ns/docbook"
+         xmlns:a="http://relaxng.org/ns/compatibility/annotations/1.0">
+  <define name="person">
+    <element name="person">
+      <doc:user-doc>
+        <db:para>Represents a special kind of content item used to store
+        personal information about persons related to a publication (mostly
+        contributors and editors of various kinds).</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-unique-identifier"/>
+
+      <zeroOrMore>
+        <element name="field">
+          <doc:clone title-start="Person" variants="person-field"/>
+          <doc:user-doc>
+            <db:para>Contains an item of personal information 
+            that will be added to the "person" content item.</db:para>
+          </doc:user-doc>
+          <interleave>
+            <attribute name="name">
+              <doc:user-doc>
+                <db:para>Indicates the type of information in this field.</db:para>
+              </doc:user-doc>
+              <choice>
+                <value>description</value>
+
+                <value>first-name</value>
+
+                <value>middle-name</value>
+
+                <value>last-name</value>
+
+                <value>occupation</value>
+
+                <value>address</value>
+
+                <value>email-address</value>
+
+                <value>phone-work-direct</value>
+
+                <value>phone-mobile</value>
+
+                <value>phone-private</value>
+              </choice>
+            </attribute>
+          </interleave>
+
+          <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+  <define name="user">
+    <element name="user">
+      <doc:user-doc>
+        <db:para>Represents a special kind of content item used to store user
+        information about users of a publication.</db:para>
+      </doc:user-doc>
+
+      <ref name="attribute-unique-identifier"/>
+
+      <zeroOrMore>
+        <element name="field">
+          <doc:clone title-start="User" variants="user-field"/>
+          <doc:user-doc>
+            <db:para>Contains an item of personal information 
+            that will be added to or replaced in the "user" content item.</db:para>
+          </doc:user-doc>
+          <interleave>
+            <attribute name="name">
+              <doc:user-doc>
+                <db:para>Indicates the type of information in this field. Note that you 
+                cannot modify the <db:literal>username</db:literal> of an existing user.</db:para>
+              </doc:user-doc>
+              <choice>
+                <value>description</value>
+
+                <value>first-name</value>
+
+                <value>middle-name</value>
+
+                <value>last-name</value>
+
+                <value>occupation</value>
+
+                <value>address</value>
+
+                <value>email-address</value>
+
+                <value>phone-work-direct</value>
+
+                <value>phone-mobile</value>
+
+                <value>phone-private</value>
+
+                <value>username</value>
+
+                <value>password</value>
+              </choice>
+            </attribute>
+          </interleave>
+
+          <text/>
+        </element>
+      </zeroOrMore>
+    </element>
+  </define>
+
+<!--
+  <define name="person-attribute-values">
+    <group>
+      <value>description</value>
+
+      <value>first-name</value>
+
+      <value>middle-name</value>
+
+      <value>last-name</value>
+
+      <value>occupation</value>
+
+      <value>address</value>
+
+      <value>email-address</value>
+
+      <value>phone-work-direct</value>
+
+      <value>phone-mobile</value>
+
+      <value>phone-private</value>
+    </group>
+  </define>
+
+  <define name="user-attribute-values">
+    <ref name="person-attribute-values"/>
+    
+    <group>
+      <value>username</value>
+
+      <value>password</value>
+    </group>
+  </define>
+-->
+</grammar>

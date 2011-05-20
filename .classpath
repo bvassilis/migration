@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="owner.project.facets" value="jst.java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="lib/EclipseLink1.1/javax.persistence_1.99.0.v200906021518.jar"/>
+	<classpathentry kind="lib" path="lib/EclipseLink1.1/org.eclipse.persistence.antlr_1.1.2.v20090612-r4475.jar"/>
+	<classpathentry kind="lib" path="lib/EclipseLink1.1/org.eclipse.persistence.asm_1.1.2.v20090612-r4475.jar"/>
+	<classpathentry kind="lib" path="lib/EclipseLink1.1/org.eclipse.persistence.core_1.1.2.v20090612-r4475.jar"/>
+	<classpathentry kind="lib" path="lib/EclipseLink1.1/org.eclipse.persistence.jpa_1.1.2.v20090612-r4475.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/jsr173_1.0_api.jar"/>
+	<classpathentry kind="lib" path="lib/jtidy-r938.jar"/>
+	<classpathentry kind="lib" path="lib/resolver.jar"/>
+	<classpathentry kind="lib" path="lib/tagsoup-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/xbean_xpath.jar"/>
+	<classpathentry kind="lib" path="lib/xbean.jar"/>
+	<classpathentry kind="lib" path="lib/xmlbeans-qname.jar"/>
+	<classpathentry kind="lib" path="lib/xmlpublic.jar"/>
+	<classpathentry kind="lib" path="lib/syndication.jar"/>
+	<classpathentry kind="lib" path="/home/vassilis/java-tools/sqljdbc_3.0/enu/sqljdbc4.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
