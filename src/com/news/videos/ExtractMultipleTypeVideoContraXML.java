@@ -30,7 +30,7 @@ import com.news.Video;
 
 public class ExtractMultipleTypeVideoContraXML {
 	
-	private static String queryString="SELECT a FROM Video a WHERE a.videoID in (SELECT distinct b.videoID FROM Video b WHERE b.videoThumb is not null AND b.subSection.section.sectionID=1 ) ORDER BY a.videoID DESC";
+	private static String queryString="SELECT a FROM Video a WHERE a.videoID in (SELECT distinct b.videoID FROM Video b WHERE b.videoThumb is not null AND (b.subSection.section.sectionID=1 OR b.subSection.section.sectionID=4) AND b.subSection.subSectionID not in (47,16) ) ORDER BY a.videoID DESC";
 	public static void main(String[] args) throws Exception {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
@@ -46,7 +46,7 @@ public class ExtractMultipleTypeVideoContraXML {
 		.setMaxResults(maxResults);
 		videos = q.getResultList();
 
-//		while (!videos.isEmpty()) {
+		while (!videos.isEmpty()) {
 			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
 			initializeEscenic(escenicDocument);
 			for (Video video : videos) {
@@ -106,11 +106,11 @@ public class ExtractMultipleTypeVideoContraXML {
 			File f = new File(outFileName);
 			escenicDocument.save(f);
 			
-//			q = em.createQuery(queryString)
-//			.setFirstResult(i*maxResults)
-//			.setMaxResults(maxResults);
-//			videos = q.getResultList();
-//		}
+			q = em.createQuery(queryString)
+			.setFirstResult(i*maxResults)
+			.setMaxResults(maxResults);
+			videos = q.getResultList();
+		}
 	}
 
 	private static void initializeEscenic(EscenicDocument escenicDocument) {

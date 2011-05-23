@@ -31,7 +31,7 @@ import com.news.PhotoStory;
 
 public class ExtractPhotostoriesContraXML {
 	
-	private static String queryString =" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND a.subSection.section.sectionID=1 ORDER BY a.photoStoryID DESC";
+	private static String queryString =" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.photoStoryID DESC";
 	public static List<PhotoStory> photostories = new ArrayList<PhotoStory>();
 	
 	public static void main(String[] args) throws Exception {
@@ -49,7 +49,7 @@ public class ExtractPhotostoriesContraXML {
 		.setMaxResults(maxResults);
 		List<PhotoStory> results = q.getResultList();
 
-//		while (!results.isEmpty()) {
+		while (!results.isEmpty()) {
 			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
 			initializeEscenic(escenicDocument);
 			for (PhotoStory photostory : results) {
@@ -124,11 +124,11 @@ public class ExtractPhotostoriesContraXML {
 			File f = new File(outFileName);
 			escenicDocument.save(f);
 			
-//			q = em.createQuery(queryString)
-//			.setFirstResult(i*maxResults)
-//			.setMaxResults(maxResults);
-//			results = q.getResultList();
-//		}
+			q = em.createQuery(queryString)
+			.setFirstResult(i*maxResults)
+			.setMaxResults(maxResults);
+			results = q.getResultList();
+		}
 	}
 
 	private static void initializeEscenic(EscenicDocument escenicDocument) {

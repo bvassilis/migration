@@ -343,7 +343,7 @@ public class Articles_Archives100_130000 implements Serializable {
 
 		a.setSubpath(subpath);
 
-		a.setSubSectionID(subSectionID);
+//		a.setSubSectionID(subSectionID);
 
 		a.setTags(tags);
 

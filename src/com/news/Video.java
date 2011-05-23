@@ -27,7 +27,7 @@ public class Video implements Serializable {
 
 	//bi-directional many-to-one association to SubSection
     @ManyToOne
-	@JoinColumn(name="videoSection", referencedColumnName="SectionID")
+	@JoinColumn(name="videoSection")
 	private SubSection subSection;
 
 	private String videoThumb;

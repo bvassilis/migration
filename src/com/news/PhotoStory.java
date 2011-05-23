@@ -20,7 +20,7 @@ public class PhotoStory implements Serializable {
 
 	//bi-directional many-to-one association to SubSection
     @ManyToOne
-	@JoinColumn(name="PhotoStorySubSectionID", referencedColumnName="SectionID")
+	@JoinColumn(name="PhotoStorySubSectionID")
 	private SubSection subSection;
 
 	@Column(name="PhotoStoryTitle")

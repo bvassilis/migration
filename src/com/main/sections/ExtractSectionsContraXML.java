@@ -20,6 +20,7 @@ import com.escenic.xmlns.x2009.ximport.SectionDocument.Section;
 import com.news.Competition;
 import com.news.Place;
 import com.news.Sport;
+import com.news.SubSection;
 
 public class ExtractSectionsContraXML {
 	
@@ -196,7 +197,41 @@ public class ExtractSectionsContraXML {
 			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
 		}
 		
+		// subsections columns + archives
+		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM Subsection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
+			String subSectionURLString = (String) subSectionURL;
+			Section section = escenicDocument.getEscenic().addNewSection();
+			section.addNewSource().setStringValue("ContraSections");
+			section.addNewSourceid().setStringValue(subSectionURLString);
+			section.addNewName().setStringValue(subSectionURLString);
+			section.setMirrorSource2(false);
+
+			Parent parent = section.addNewParent();
+			parent.addNewUniqueName().setStringValue("ece_frontpage");
+
+			section.addNewUniqueName().newCursor().setTextValue(subSectionURLString);
+			section.addNewDirectory().newCursor().setTextValue(subSectionURLString);
+			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+		}
 		
+		List<SubSection> results4 = em.createQuery("SELECT c FROM Subsection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
+		for(SubSection ss : results4){
+			Section section = escenicDocument.getEscenic().addNewSection();
+			section.addNewSource().setStringValue("ContraSections");
+			section.addNewSourceid().setStringValue(ss.getSubSectionName_url());
+			section.addNewName().setStringValue(ss.getSubSectionName());
+			section.setMirrorSource2(false);
+
+			Parent parent = section.addNewParent();
+			parent.addNewSource().setStringValue("ContraSections");
+			parent.addNewSourceid().setStringValue(ss.getSubSectionURL());
+
+			section.addNewUniqueName().newCursor().setTextValue(ss.getSubSectionName_url());
+			section.addNewDirectory().newCursor().setTextValue(ss.getSubSectionName_url());
+			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+		}
 		
 	    String outFileName = "import-sections/sections-contra.xml";
 	    File f = new File(outFileName);

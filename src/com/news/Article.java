@@ -76,8 +76,10 @@ public class Article implements Serializable {
 
 	private String subpath;
 
-	@Column(name="SubSectionID")
-	private int subSectionID;
+	//bi-directional many-to-one association to SubSection
+    @ManyToOne
+	@JoinColumn(name="SubSectionID")
+	private SubSection subSection;
 
 	@Column(name="SubSectionTagID")
 	private int subSectionTagID;
@@ -248,14 +250,6 @@ public class Article implements Serializable {
 		this.subpath = subpath;
 	}
 
-	public int getSubSectionID() {
-		return this.subSectionID;
-	}
-
-	public void setSubSectionID(int subSectionID) {
-		this.subSectionID = subSectionID;
-	}
-
 	public int getSubSectionTagID() {
 		return this.subSectionTagID;
 	}
@@ -342,6 +336,14 @@ public class Article implements Serializable {
 
 	public void setTeam2(Team team2) {
 		this.team2 = team2;
+	}
+
+	public SubSection getSubSection() {
+		return subSection;
+	}
+
+	public void setSubSection(SubSection subSection) {
+		this.subSection = subSection;
 	}
 	
 }

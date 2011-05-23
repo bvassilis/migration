@@ -43,7 +43,7 @@ public class ImageShellScript {
 
 			List<Object> objects = q.setFirstResult(i * maxResults).setMaxResults(maxResults).getResultList();
 
-//			while (!objects.isEmpty()) {
+			while (!objects.isEmpty()) {
 				if(dis == 0){
 					for (Object articleObj : objects) {
 						String photo = (String) articleObj;
@@ -72,8 +72,8 @@ public class ImageShellScript {
 				}
 				i++;
 				out.write("echo " + i*1000+"; \n");
-//				objects = q.setFirstResult(i * maxResults).setMaxResults(maxResults).getResultList();
-//			}
+				objects = q.setFirstResult(i * maxResults).setMaxResults(maxResults).getResultList();
+			}
 			// Close the output stream
 			out.close();
 		} catch (Exception e) {// Catch exception if any
@@ -83,13 +83,13 @@ public class ImageShellScript {
 	}
 	
 	private static int videoThumbs() {
-		q = em.createQuery(" SELECT distinct a.videoThumb FROM Video a WHERE a.videoThumb is not null AND a.subSection.section.sectionID=1 ORDER BY a.videoID DESC");
+		q = em.createQuery(" SELECT distinct a.videoThumb FROM Video a WHERE a.videoThumb is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.videoID DESC");
 		fileName = "video.sh";
 		return 2;
 	}
 
 	private static int photostoryScript() {
-		q = em.createQuery(" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND a.subSection.section.sectionID=1 ORDER BY a.photoStoryID DESC");
+		q = em.createQuery(" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.photoStoryID DESC");
 		fileName = "photostory.sh";
 		return 1;
 	}
@@ -102,7 +102,7 @@ public class ImageShellScript {
 	private static int imagesScript(){
 		Calendar cal = Calendar.getInstance();
 		cal.set(2007, 0, 1, 0, 0, 0);
-		q = em.createQuery(" SELECT distinct a.articlePhoto FROM Article a WHERE a.articlePhoto is not null AND a.sport.sportID <> 0 AND a.articleDate >= :articleDate ORDER BY a.articleID DESC")
+		q = em.createQuery(" SELECT distinct a.articlePhoto FROM Article a WHERE a.articlePhoto is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND a.articleDate >= :articleDate ORDER BY a.articleID DESC")
 		.setParameter("articleDate", cal.getTime() );
 		fileName = "images.sh";
 		return 0;

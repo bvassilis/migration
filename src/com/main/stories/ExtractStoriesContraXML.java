@@ -29,7 +29,7 @@ import com.news.Sport;
 
 public class ExtractStoriesContraXML {
 	
-	private static String queryString=" SELECT a FROM Article a WHERE a.sport.sportID <> 0 ORDER BY a.articleID DESC";
+	private static String queryString=" SELECT a FROM Article a WHERE (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.articleID DESC";
 	public static List<Competition> competitions = new ArrayList<Competition>();
 	public static List<Sport> sports = new ArrayList<Sport>();
 	public static XmlOptions opt;
@@ -56,7 +56,7 @@ public class ExtractStoriesContraXML {
 		.setMaxResults(maxResults);
 		List<Article> results = q.getResultList();
 
-//		while (!results.isEmpty()) {
+		while (!results.isEmpty()) {
 			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance(opt);
 			initializeEscenic(escenicDocument);
 			for (Article article : results) {
@@ -82,6 +82,11 @@ public class ExtractStoriesContraXML {
 				}catch (Exception e) {
 					System.out.println("No section found for article"+ article.getArticleID());
 					throw new Exception(e.getMessage());
+				}
+				
+				if(article.getSubSection().getSubSectionID()!=1){
+					sectionRef = content.addNewSectionRef();
+					sectionRef.addNewUniqueName().setStringValue(article.getSubSection().getSubSectionName_url());
 				}
 				sectionRef.setHomeSection(true);
 
@@ -196,11 +201,11 @@ public class ExtractStoriesContraXML {
 			File f = new File(outFileName);
 			escenicDocument.save(f);
 			
-//			q = em.createQuery(" SELECT a FROM Article a WHERE a.sport.sportID <> 0")
-//			.setFirstResult(i*maxResults)
-//			.setMaxResults(maxResults);
-//			results = q.getResultList();
-//		}
+			q = em.createQuery(queryString)
+			.setFirstResult(i*maxResults)
+			.setMaxResults(maxResults);
+			results = q.getResultList();
+		}
 		ReplaceCDATA.replace();
 	}
 	

@@ -114,19 +114,19 @@ public class ExtractImagesContraXML {
 	}
 	
 	private static int videoThumbs() {
-		q = em.createQuery(" SELECT distinct a.videoThumb, a.videoDate FROM Video a WHERE a.videoThumb is not null AND a.subSection.section.sectionID=1 ORDER BY a.videoID DESC");
+		q = em.createQuery(" SELECT distinct a.videoThumb, a.videoDate FROM Video a WHERE a.videoThumb is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.videoID DESC");
 		return 2;
 	}
 
 	private static int photostoryScript() {
-		q = em.createQuery(" SELECT distinct p.photo, p.photoStory.photoStoryID  FROM Photo p WHERE p.photoStory.photoStoryID >=151 AND p.photoStory.subSection.section.sectionID=1 ORDER BY p.photoStory.photoStoryID DESC");
+		q = em.createQuery(" SELECT distinct p.photo, p.photoStory.photoStoryID  FROM Photo p WHERE p.photoStory.photoStoryID >=151 AND (p.photoStory.subSection.section.sectionID=1 OR p.photoStory.subSection.section.sectionID=4) AND p.photoStory.subSection.subSectionID not in (47,16) ORDER BY p.photoStory.photoStoryID DESC");
 		return 1;
 	}
 	
 	private static int imagesScript(){
 		Calendar cal = Calendar.getInstance();
 		cal.set(2007, 0, 1, 0, 0, 0);
-		q = em.createQuery(" SELECT distinct a.articlePhoto, a.articleDate FROM Article a WHERE a.articlePhoto is not null AND a.sport.sportID <> 0 AND a.articleDate >= :articleDate ORDER BY a.articleID DESC")
+		q = em.createQuery(" SELECT distinct a.articlePhoto, a.articleDate FROM Article a WHERE a.articlePhoto is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND a.articleDate >= :articleDate ORDER BY a.articleID DESC")
 		.setParameter("articleDate", cal.getTime() );
 		return 0;
 	}
