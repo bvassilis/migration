@@ -39,8 +39,8 @@ public class ExtractImagesContraXML {
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		int i = 0;
 		int maxResults = 100;
-//		int imageFlag = photostoryScript();
-		int imageFlag = videoThumbs();
+		int imageFlag = photostoryScript();
+//		int imageFlag = videoThumbs();
 //		int imageFlag = imagesScript();
 		List<Object[]> results = q.setFirstResult(i*maxResults)
 		.setMaxResults(maxResults).getResultList();
@@ -53,7 +53,7 @@ public class ExtractImagesContraXML {
 				Date datePhoto = new Date(); 
 				if(phtObj[1] instanceof Integer){
 					int ddays = (Integer) phtObj[1];
-					long res = (long) (new Date().getTime() - (((4160-ddays)*0.001)*365*24*60*60*1000));
+					long res = (long) (new Date().getTime() - (((4347-ddays)*0.001)*365*24*60*60*1000));
 					datePhoto = new Date(res);
 				} else datePhoto = (Date) phtObj[1];
 				
@@ -89,9 +89,9 @@ public class ExtractImagesContraXML {
 				binaryField.addNewName().setStringValue("binary");
 				binaryField.addNewTitle().setStringValue(photo.replaceAll("[^\\.a-zA-Z0-9_-]", ""));
 				if(imageFlag == 2){
-					binaryField.newCursor().setTextValue("/opt/temp/contra/videos/"+photo);
+					binaryField.newCursor().setTextValue("/tmp/contra/videos/"+photo);
 				}else{
-					binaryField.newCursor().setTextValue("/opt/temp/contra/imgs/"+photo);
+					binaryField.newCursor().setTextValue("/tmp/contra/imgs/"+photo);
 				}
 			}
 			

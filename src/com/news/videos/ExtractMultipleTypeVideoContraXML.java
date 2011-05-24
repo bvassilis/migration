@@ -51,6 +51,12 @@ public class ExtractMultipleTypeVideoContraXML {
 			initializeEscenic(escenicDocument);
 			for (Video video : videos) {
 				
+				String fullPath = "/home/vassilis/Pictures/contravideos/"+video.getVideoThumb();
+
+				//check if file  
+				if(!new File(fullPath).exists())
+					continue;
+				
 				Content content = escenicDocument.getEscenic().addNewContent();
 				content.addNewSource().setStringValue("ContraVideos");
 				content.addNewSourceid().setStringValue(Integer.toString(video.getVideoID()));
@@ -63,12 +69,12 @@ public class ExtractMultipleTypeVideoContraXML {
 				sectionRef.addNewUniqueName().setStringValue("videos");
 				sectionRef.setHomeSection(true);
 //					// picture relation
-					Relation relation = content.addNewRelation();
-					relation.addNewType().setStringValue("TEASERREL");
-					relation.addNewSource().setStringValue("ContraImagesVideos");
-					relation.addNewSourceid().setStringValue(video.getVideoThumb());
+				Relation relation = content.addNewRelation();
+				relation.addNewType().setStringValue("TEASERREL");
+				relation.addNewSource().setStringValue("ContraImagesVideos");
+				relation.addNewSourceid().setStringValue(video.getVideoThumb());
 
-					Priority priority = content.addNewPriority();
+				Priority priority = content.addNewPriority();
 				priority.setValue(0);
 
 				Field titleField = content.addNewField();

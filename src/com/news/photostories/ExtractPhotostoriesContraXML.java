@@ -82,6 +82,12 @@ public class ExtractPhotostoriesContraXML {
 				sectionRef.setHomeSection(true);
 
 				for (Photo photo : photostory.getPhotos()) {
+					String fullPath = "/home/vassilis/Pictures/contra/"+photo.getPhoto().trim();
+
+					//check if file  
+					if(!new File(fullPath).exists())
+						continue;
+					
 					// picture relation
 					Relation relation = content.addNewRelation();
 					relation.addNewType().setStringValue("PICTUREREL");

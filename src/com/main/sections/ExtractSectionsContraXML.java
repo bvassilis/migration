@@ -198,7 +198,7 @@ public class ExtractSectionsContraXML {
 		}
 		
 		// subsections columns + archives
-		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM Subsection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
+		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
 			String subSectionURLString = (String) subSectionURL;
 			Section section = escenicDocument.getEscenic().addNewSection();
 			section.addNewSource().setStringValue("ContraSections");
@@ -215,7 +215,7 @@ public class ExtractSectionsContraXML {
 			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
 		}
 		
-		List<SubSection> results4 = em.createQuery("SELECT c FROM Subsection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
+		List<SubSection> results4 = em.createQuery("SELECT c FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
 		for(SubSection ss : results4){
 			Section section = escenicDocument.getEscenic().addNewSection();
 			section.addNewSource().setStringValue("ContraSections");

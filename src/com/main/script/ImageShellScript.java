@@ -39,7 +39,7 @@ public class ImageShellScript {
 			BufferedWriter out = new BufferedWriter(fstream);
 
 			int i = 0;
-			int maxResults = 100;
+			int maxResults = 1000;
 
 			List<Object> objects = q.setFirstResult(i * maxResults).setMaxResults(maxResults).getResultList();
 
@@ -49,7 +49,7 @@ public class ImageShellScript {
 						String photo = (String) articleObj;
 						if(photo.trim().isEmpty() || photo.indexOf('.')==-1)
 							continue;
-						out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.trim()+"' 'http://static.fsport.gr/images/"+ photo.trim() + "'; \n");
+						out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.trim()+"' 'http://static.fsport.gr/images/"+ photo.trim() + "' -a images.log ; \n");
 					}
 				}
 				if(dis == 1){
@@ -58,7 +58,7 @@ public class ImageShellScript {
 						for(Photo photo : photoStory.getPhotos()){
 							if(photo.getPhoto().trim().isEmpty() || photo.getPhoto().indexOf('.')==-1)
 								continue;
-							out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.getPhoto().trim()+"' 'http://static.fsport.gr/images/"+ photo.getPhoto().trim() + "'; \n");
+							out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.getPhoto().trim()+"' 'http://static.fsport.gr/images/"+ photo.getPhoto().trim() + "' -a photos.log ; \n");
 						}
 					}
 				}
@@ -67,7 +67,7 @@ public class ImageShellScript {
 						String photo = (String) videoObj;
 						if(photo.trim().isEmpty() || photo.indexOf('.')==-1)
 							continue;
-						out.write("wget -O '/home/vassilis/Pictures/contravideos/"+photo.trim()+"' 'http://www.cosmo.gr/videoThumbs/"+ photo.trim() + "'; \n");
+						out.write("wget -O '/home/vassilis/Pictures/contravideos/"+photo.trim()+"' 'http://www.cosmo.gr/videoThumbs/"+ photo.trim() + "' -a videos.log ; \n");
 					}
 				}
 				i++;

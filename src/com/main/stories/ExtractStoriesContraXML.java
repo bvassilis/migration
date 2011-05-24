@@ -29,7 +29,7 @@ import com.news.Sport;
 
 public class ExtractStoriesContraXML {
 	
-	private static String queryString=" SELECT a FROM Article a WHERE (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.articleID DESC";
+	private static String queryString=" SELECT a FROM Article a WHERE (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.articleID ASC";
 	public static List<Competition> competitions = new ArrayList<Competition>();
 	public static List<Sport> sports = new ArrayList<Sport>();
 	public static XmlOptions opt;
@@ -74,10 +74,15 @@ public class ExtractStoriesContraXML {
 				try {
 					if (article.getCompetition().getCompetitionID() != 0) {
 						sectionRef.addNewUniqueName().setStringValue(article.getCompetition().getCompetitionName_url());
-					} else if (article.getCompetition().getCompetitionID() == 0 && article.getPlace().getPlaceID() != 0 && existCompetition(article.getSport(), article.getPlace())) {
+					} else if (article.getCompetition().getCompetitionID() == 0 
+							&& article.getPlace().getPlaceID() != 0
+							&& article.getSport().getSportID() != 0
+							&& existCompetition(article.getSport(), article.getPlace())) {
 						sectionRef.addNewUniqueName().setStringValue(article.getPlace().getPlaceName_url() + "_" + article.getSport().getSportName_url());
-					} else {
+					} else if(article.getSport().getSportID() !=0){
 						sectionRef.addNewUniqueName().setStringValue(article.getSport().getSportName_url());
+					} else {
+						sectionRef.addNewUniqueName().setStringValue("ece_incoming");
 					}
 				}catch (Exception e) {
 					System.out.println("No section found for article"+ article.getArticleID());
@@ -94,10 +99,18 @@ public class ExtractStoriesContraXML {
 //				
 //				for (Image image : images) {
 //					// picture relation
-					Relation relation = content.addNewRelation();
-					relation.addNewType().setStringValue("PICTUREREL");
-					relation.addNewSource().setStringValue("ContraImages");
-					relation.addNewSourceid().setStringValue(article.getArticlePhoto());
+				
+				if(article.getArticlePhoto() !=null && !article.getArticlePhoto().trim().isEmpty()){
+					String fullPath = "/home/vassilis/Pictures/contra/"+article.getArticlePhoto().trim();
+	
+					//check if file  
+					if(new File(fullPath).exists()){
+						Relation relation = content.addNewRelation();
+						relation.addNewType().setStringValue("PICTUREREL");
+						relation.addNewSource().setStringValue("ContraImages");
+						relation.addNewSourceid().setStringValue(article.getArticlePhoto().trim());
+					}
+				}
 				
 			if (article.getLinks() != null) {
 				for (String articleId : article.getLinks().split(",")) {
@@ -107,14 +120,19 @@ public class ExtractStoriesContraXML {
 
 					if (articleId.startsWith("ph")) {
 						try {
-							em.createQuery("FROM PhotoStory WHERE photoStoryID = :photoStoryID").setParameter("photoStoryID", articleId.toLowerCase().replaceAll("ph", "")).getSingleResult();
+							em.createQuery("SELECT p.photoStoryID FROM PhotoStory p WHERE p.photoStoryID = :thePhotoStoryID ")
+							.setParameter("thePhotoStoryID", Integer.valueOf(articleId.toLowerCase().replaceAll("ph", "")))
+							.getSingleResult();
 							Relation relationStory = content.addNewRelation();
 							relationStory.addNewType().setStringValue("PHOTOSTORYREL");
 							relationStory.addNewSource().setStringValue("ContraPhotostory");
-							relationStory.addNewSourceid().setStringValue(article.getArticlePhoto());
+							relationStory.addNewSourceid().setStringValue(articleId.replaceAll("ph", ""));
 						} catch (Exception e) {
+							e.printStackTrace();
 							System.out.println("No PhotoStory found with id " + articleId.replaceAll("ph", ""));
 						}
+					} else if(!articleId.matches("[0-9]*")) {
+						continue;
 					} else {
 						Relation relationStory = content.addNewRelation();
 						relationStory.addNewType().setStringValue("STORYREL");
@@ -148,28 +166,29 @@ public class ExtractStoriesContraXML {
 				leadtextField.newCursor().setTextValue(article.getArticleSummary()==null?"":article.getArticleSummary().replaceAll("\\<.*?\\>", ""));
 //				Field quoteField = content.addNewField();
 //				quoteField.addNewName().setStringValue("quote");
-				Field bodyField = content.addNewField();
-				bodyField.addNewName().setStringValue("body");
 				
+				if(article.getArticleBody()!=null && !article.getArticleBody().trim().isEmpty()){
+					Field bodyField = content.addNewField();
+					bodyField.addNewName().setStringValue("body");
 //				//body
-				XmlCursor bodyCursor  = bodyField.newCursor();
-				bodyCursor.xmlText(opt);
-				String fixedBody = article.getArticleBody().trim();
-				if(!fixedBody.isEmpty())
+					XmlCursor bodyCursor  = bodyField.newCursor();
+					bodyCursor.xmlText(opt);
+					String fixedBody = article.getArticleBody().trim();
 					fixedBody = HTMLFilter.fixHtml(fixedBody);
-				bodyCursor.setTextValue(fixedBody);
+					bodyCursor.setTextValue(fixedBody);
+				}
 //				
 				Field bylineField = content.addNewField();
 				bylineField.addNewName().setStringValue("byline");
 				bylineField.newCursor().setTextValue( article.getArticleAuthor() == null ? "" : article.getArticleAuthor().trim());
 //				
 //				
-				if(article.getTeam1().getTeamID()!=0){
+				if(article.getTeam1()!=null && article.getTeam1().getTeamID()!=0){
 					Tag tag = content.addNewTag();
 					tag.newCursor().setTextValue(article.getTeam1().getTeamName_url());
 				}
 				
-				if(article.getTeam2().getTeamID()!=0){
+				if(article.getTeam2()!=null && article.getTeam2().getTeamID()!=0){
 					Tag tag = content.addNewTag();
 					tag.newCursor().setTextValue(article.getTeam2().getTeamName_url());
 				}
@@ -211,7 +230,7 @@ public class ExtractStoriesContraXML {
 	
 
 	private static boolean existCompetition(Sport sport, Place place) {
-			List c = em.createQuery("SELECT c FROM Competition c WHERE c.sport = :sport AND c.place = :place")
+			List c = em.createQuery("SELECT c FROM Competition c WHERE c.sport = :sport AND c.place = :place AND c.competitionID<>0 ")
 			.setParameter("sport", sport)
 			.setParameter("place", place)
 			.getResultList();
