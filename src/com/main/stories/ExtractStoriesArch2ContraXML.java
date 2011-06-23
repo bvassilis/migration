@@ -24,13 +24,14 @@ import com.escenic.xmlns.x2009.ximport.SectionRefDocument.SectionRef;
 import com.escenic.xmlns.x2009.ximport.TagDocument.Tag;
 import com.news.Article;
 import com.news.Articles_Archives100_130000;
+import com.news.Articles_Archives80000;
 import com.news.Competition;
 import com.news.Place;
 import com.news.Sport;
 
-public class ExtractStoriesContraXML {
+public class ExtractStoriesArch2ContraXML {
 	
-	private static String queryString=" SELECT a FROM Article a WHERE (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND (a.team1.teamID>0 OR a.team2.teamID>0 ) ORDER BY a.articleID ASC";
+	private static String queryString=" SELECT a FROM Articles_Archives80000 a WHERE (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.articleID ASC";
 	public static List<Competition> competitions = new ArrayList<Competition>();
 	public static List<Sport> sports = new ArrayList<Sport>();
 	public static XmlOptions opt;
@@ -41,7 +42,7 @@ public class ExtractStoriesContraXML {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
 		em = emf.createEntityManager();
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		String outfolder ="import-stories";
+		String outfolder ="import-stories-arch-2";
 		opt = new XmlOptions();
 		opt.setUseCDataBookmarks();
 		opt.setSaveCDataLengthThreshold(0);
@@ -56,12 +57,12 @@ public class ExtractStoriesContraXML {
 		Query q = em.createQuery(queryString)
 		.setFirstResult(i*maxResults)
 		.setMaxResults(maxResults);
-		List<Article> results = q.getResultList();
+		List<Articles_Archives80000> results = q.getResultList();
 
 		while (!results.isEmpty()) {
 			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance(opt);
 			initializeEscenic(escenicDocument);
-			for (Article article : results) {
+			for (Articles_Archives80000 article : results) {
 				
 				Content content = escenicDocument.getEscenic().addNewContent();
 				content.addNewSource().setStringValue("ContraNews");
@@ -102,17 +103,17 @@ public class ExtractStoriesContraXML {
 //				for (Image image : images) {
 //					// picture relation
 				
-				if(article.getArticlePhoto() !=null && !article.getArticlePhoto().trim().isEmpty()){
-					String fullPath = "/home/vassilis/Pictures/contra/"+article.getArticlePhoto().trim();
-	
-					//check if file  
-					if(new File(fullPath).exists()){
-						Relation relation = content.addNewRelation();
-						relation.addNewType().setStringValue("PICTUREREL");
-						relation.addNewSource().setStringValue("ContraImages");
-						relation.addNewSourceid().setStringValue(article.getArticlePhoto().trim());
-					}
-				}
+//				if(article.getArticlePhoto() !=null && !article.getArticlePhoto().trim().isEmpty()){
+//					String fullPath = "/home/vassilis/Pictures/contra/"+article.getArticlePhoto().trim();
+//	
+//					//check if file  
+//					if(new File(fullPath).exists()){
+//						Relation relation = content.addNewRelation();
+//						relation.addNewType().setStringValue("PICTUREREL");
+//						relation.addNewSource().setStringValue("ContraImages");
+//						relation.addNewSourceid().setStringValue(article.getArticlePhoto().trim());
+//					}
+//				}
 				
 			if (article.getLinks() != null) {
 				for (String articleId : article.getLinks().split(",")) {
@@ -121,18 +122,18 @@ public class ExtractStoriesContraXML {
 						continue;
 
 					if (articleId.startsWith("ph")) {
-						try {
-							em.createQuery("SELECT p.photoStoryID FROM PhotoStory p WHERE p.photoStoryID = :thePhotoStoryID ")
-							.setParameter("thePhotoStoryID", Integer.valueOf(articleId.toLowerCase().replaceAll("ph", "")))
-							.getSingleResult();
-							Relation relationStory = content.addNewRelation();
-							relationStory.addNewType().setStringValue("PHOTOSTORYREL");
-							relationStory.addNewSource().setStringValue("ContraPhotostory");
-							relationStory.addNewSourceid().setStringValue(articleId.replaceAll("ph", ""));
-						} catch (Exception e) {
-							e.printStackTrace();
-							System.out.println("No PhotoStory found with id " + articleId.replaceAll("ph", ""));
-						}
+//						try {
+//							em.createQuery("SELECT p.photoStoryID FROM PhotoStory p WHERE p.photoStoryID = :thePhotoStoryID ")
+//							.setParameter("thePhotoStoryID", Integer.valueOf(articleId.toLowerCase().replaceAll("ph", "")))
+//							.getSingleResult();
+//							Relation relationStory = content.addNewRelation();
+//							relationStory.addNewType().setStringValue("PHOTOSTORYREL");
+//							relationStory.addNewSource().setStringValue("ContraPhotostory");
+//							relationStory.addNewSourceid().setStringValue(articleId.replaceAll("ph", ""));
+//						} catch (Exception e) {
+//							e.printStackTrace();
+//							System.out.println("No PhotoStory found with id " + articleId.replaceAll("ph", ""));
+//						}
 					} else if(!articleId.matches("[0-9]*")) {
 						continue;
 					} else {
@@ -197,9 +198,8 @@ public class ExtractStoriesContraXML {
 				Field bylineField = content.addNewField();
 				bylineField.addNewName().setStringValue("byline");
 				bylineField.newCursor().setTextValue( article.getArticleAuthor() == null ? "" : article.getArticleAuthor().trim());
-				
-				
-				String tagFieldString = "";
+
+				String tagFieldString ="";
 				if(article.getTeam1() !=null && article.getTeam1().getTeamID()>0 && article.getTeam1().getTeamName_url() != null){
 					tagFieldString = "tagppo" +article.getTeam1().getTeamName_url().toLowerCase();
 				}
@@ -214,7 +214,7 @@ public class ExtractStoriesContraXML {
 					tagField.newCursor().setTextValue(tagFieldString);
 				}
 
-//				
+				//				
 //				
 //				if(article.getTeam1()!=null && article.getTeam1().getTeamID()!=0){
 //					Tag tag = content.addNewTag();
@@ -249,7 +249,7 @@ public class ExtractStoriesContraXML {
 			}
 			counterString = counterString+i;
 
-			String outFileName = outfolder+"/stories-team"+(counterString)+".xml";
+			String outFileName = outfolder+"/stories2-arch"+(counterString)+".xml";
 			File f = new File(outFileName);
 			escenicDocument.save(f);
 			

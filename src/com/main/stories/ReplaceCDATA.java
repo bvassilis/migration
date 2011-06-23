@@ -34,8 +34,8 @@ public class ReplaceCDATA {
 				// Read File Line By Line
 				while ((strLine = br.readLine()) != null) {
 					// Print the content on the console
-					strLine = strLine.replaceAll("\\<\\!\\[\\s*CDATA\\[\\<\\s*p\\>\\<\\s*p\\>", "");
-					strLine = strLine.replaceAll("\\<\\s*/p\\>\\<\\s*/p\\>\\]\\]\\>", "");
+					strLine = strLine.replaceAll("\\<\\!\\[\\s*CDATA\\[\\<\\s*div\\>\\<\\s*p\\>", "<div\\>");
+					strLine = strLine.replaceAll("\\<\\s*/p\\>\\<\\s*/div\\>\\]\\]\\>", "</div\\>");
 //					strLine = strLine.replaceAll("\\<embed.*?\\>", "");
 //					strLine = strLine.replaceAll("\\</embed\\>", "");
 //					strLine = strLine.replaceAll("\\<EMBED.*?\\>", "");
@@ -53,9 +53,9 @@ public class ReplaceCDATA {
 		}
 	}
 	
-	public static void replace() throws IOException {
+	public static void replace(String folderString) throws IOException {
 
-		File folder = new File("import-stories");
+		File folder = new File(folderString);
 		File[] listOfFiles = folder.listFiles();
 
 		for (int i = 0; i < listOfFiles.length; i++) {
@@ -73,8 +73,8 @@ public class ReplaceCDATA {
 				// Read File Line By Line
 				while ((strLine = br.readLine()) != null) {
 					// Print the content on the console
-					strLine = strLine.replaceAll("\\<\\!\\[\\s*CDATA\\[\\<\\s*div\\>\\<\\s*p\\>", "");
-					strLine = strLine.replaceAll("\\<\\s*/p\\>\\<\\s*/div\\>\\]\\]\\>", "");
+					strLine = strLine.replaceAll("\\<\\!\\[\\s*CDATA\\[\\<\\s*div\\>\\<\\s*p\\>", "<div\\>");
+					strLine = strLine.replaceAll("\\<\\s*/p\\>\\<\\s*/div\\>\\]\\]\\>", "</div\\>");
 //					strLine = strLine.replaceAll("\\<embed.*?\\>", "");
 //					strLine = strLine.replaceAll("\\</embed\\>", "");
 //					strLine = strLine.replaceAll("\\<EMBED.*?\\>", "");

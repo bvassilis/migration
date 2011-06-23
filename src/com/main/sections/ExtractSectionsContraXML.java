@@ -2,6 +2,7 @@ package com.main.sections;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -140,9 +141,9 @@ public class ExtractSectionsContraXML {
 		}
 		
 		//competitions table
-		Query q3 = em.createQuery("SELECT c FROM Competition c WHERE c.sport.sportID <> 0 AND c.competitionID<>0");
+		Query q3 = em.createQuery("SELECT c FROM Competition c WHERE c.competitionID<>0");
 		Place defaultPlace = (Place) em.createQuery("Select p FROM Place p WHERE p.placeID = 1").getSingleResult();
-		Sport defaultSport = (Sport) em.createQuery("Select p FROM Sport p WHERE p.sportID = 1").getSingleResult();
+		Sport defaultSport = (Sport) em.createQuery("Select p FROM Sport p WHERE p.sportID = 42").getSingleResult();
 		List<Competition> results3 = q3.getResultList();
 		
 		//sport -places
@@ -236,6 +237,72 @@ public class ExtractSectionsContraXML {
 	    String outFileName = "import-sections/sections-contra.xml";
 	    File f = new File(outFileName);
 	    escenicDocument.save(f);
+	}
+	
+	public static List<String> uniqueNames(){
+		List<String>uniqueNamesList = new ArrayList<String>();
+		
+		Query q = em.createQuery("SELECT p FROM Sport p WHERE p.sportID in (1,2,29,42)");
+		
+		List<Sport> results = q.getResultList();
+
+		Query q2 = em.createQuery("SELECT p FROM Sport p WHERE p.sportID not in (0,1,2,29,42)");
+		
+		List<Sport> results2 = q2.getResultList();
+		
+		results.addAll(results2);
+//		List<Integer> resultsCategoriesIds = q2.getResultList();
+//		resultsCategoriesIds.add(Integer.valueOf(12));
+		
+		for (Sport cat : results) {
+			uniqueNamesList.add(cat.getSportName_url());
+		}
+		
+		//competitions table
+		Query q3 = em.createQuery("SELECT c FROM Competition c WHERE c.competitionID<>0");
+		Place defaultPlace = (Place) em.createQuery("Select p FROM Place p WHERE p.placeID = 1").getSingleResult();
+		Sport defaultSport = (Sport) em.createQuery("Select p FROM Sport p WHERE p.sportID = 42").getSingleResult();
+		List<Competition> results3 = q3.getResultList();
+		
+		//sport -places
+		for (Competition cat : results3) {
+			Sport defSport = cat.getSport();
+			Place defPlace = cat.getPlace();
+			if(defPlace.getPlaceID()==0){
+				defPlace = defaultPlace;
+			}
+			if(defSport.getSportID()==0){
+				defSport = defaultSport;
+			}
+
+			uniqueNamesList.add(defPlace.getPlaceName_url()+"_"+defSport.getSportName_url());
+		}
+		
+		//places - competitions
+		for (Competition cat : results3) {
+			Sport defSport = cat.getSport();
+			Place defPlace = cat.getPlace();
+			if(defPlace.getPlaceID()==0){
+				defPlace = defaultPlace;
+			}
+			if(defSport.getSportID()==0){
+				defSport = defaultSport;
+			}
+			uniqueNamesList.add(cat.getCompetitionName_url());
+		}
+		
+		// subsections columns + archives
+		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
+			String subSectionURLString = (String) subSectionURL;
+			uniqueNamesList.add(subSectionURLString);
+		}
+		
+		List<SubSection> results4 = em.createQuery("SELECT c FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
+		for(SubSection ss : results4){
+			uniqueNamesList.add(ss.getSubSectionName_url());
+		}
+		return uniqueNamesList;
+	
 	}
 
 	private static void initializeEscenic(EscenicDocument escenicDocument) {

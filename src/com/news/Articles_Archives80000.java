@@ -73,16 +73,22 @@ public class Articles_Archives80000 implements Serializable {
 
 	private String subpath;
 
-	@Column(name="SubSectionID")
-	private int subSectionID;
+	//bi-directional many-to-one association to SubSection
+    @ManyToOne
+	@JoinColumn(name="SubSectionID")
+	private SubSection subSection;
 
 	private String tags;
 
-	@Column(name="Team2ID")
-	private int team2ID;
+	//bi-directional many-to-one association to Team
+    @ManyToOne
+	@JoinColumn(name="Team2ID")
+	private Team team1;
 
-	@Column(name="TeamID")
-	private int teamID;
+	//bi-directional many-to-one association to Team
+    @ManyToOne
+	@JoinColumn(name="TeamID")
+	private Team team2;
 
 	@Column(name="TimesRead")
 	private int timesRead;
@@ -226,36 +232,12 @@ public class Articles_Archives80000 implements Serializable {
 		this.subpath = subpath;
 	}
 
-	public int getSubSectionID() {
-		return this.subSectionID;
-	}
-
-	public void setSubSectionID(int subSectionID) {
-		this.subSectionID = subSectionID;
-	}
-
 	public String getTags() {
 		return this.tags;
 	}
 
 	public void setTags(String tags) {
 		this.tags = tags;
-	}
-
-	public int getTeam2ID() {
-		return this.team2ID;
-	}
-
-	public void setTeam2ID(int team2ID) {
-		this.team2ID = team2ID;
-	}
-
-	public int getTeamID() {
-		return this.teamID;
-	}
-
-	public void setTeamID(int teamID) {
-		this.teamID = teamID;
 	}
 
 	public int getTimesRead() {
@@ -343,6 +325,30 @@ public class Articles_Archives80000 implements Serializable {
 
 	public void setSport(Sport sport) {
 		this.sport = sport;
+	}
+
+	public SubSection getSubSection() {
+		return subSection;
+	}
+
+	public void setSubSection(SubSection subSection) {
+		this.subSection = subSection;
+	}
+
+	public Team getTeam1() {
+		return team1;
+	}
+
+	public void setTeam1(Team team1) {
+		this.team1 = team1;
+	}
+
+	public Team getTeam2() {
+		return team2;
+	}
+
+	public void setTeam2(Team team2) {
+		this.team2 = team2;
 	}
 
 }
