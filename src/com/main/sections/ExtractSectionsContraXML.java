@@ -1,12 +1,15 @@
 package com.main.sections;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
@@ -15,295 +18,123 @@ import com.escenic.xmlns.x2009.ximport.EscenicDocument;
 import com.escenic.xmlns.x2009.ximport.EscenicDocument.Escenic.Version;
 import com.escenic.xmlns.x2009.ximport.ParentDocument.Parent;
 import com.escenic.xmlns.x2009.ximport.SectionDocument.Section;
-//import com.news.Category;
-//import com.news.Newspaper;
-//import com.news.Newstype;
 import com.news.Competition;
 import com.news.Place;
 import com.news.Sport;
 import com.news.SubSection;
 
 public class ExtractSectionsContraXML {
-	
+
 	static EntityManager em;
 
 	public static void main(String[] args) throws IOException {
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
-		em = emf.createEntityManager();
-		
+//		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
+//		em = emf.createEntityManager();
+
 		exportCategoriesContraXML();
-//		exportNewspapersSectionsContraXML();
 	}
-	
-//	private static void exportNewspapersSectionsContraXML() throws IOException {
-//		EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
-//		initializeEscenic(escenicDocument);
-//		
-//		//newspapers section
-//		Section section = escenicDocument.getEscenic().addNewSection();
-//		section.addNewSource().setStringValue("ContraSections");
-//		section.addNewSourceid().setStringValue("newspapers");
-//		section.addNewName().setStringValue("Πρωτοσέλιδα");
-//		section.setMirrorSource2(false);
-//		
-//		Parent parent = section.addNewParent();
-//		parent.addNewUniqueName().setStringValue("ece_frontpage");
-//
-//		section.addNewUniqueName().newCursor().setTextValue("newspapers");
-//		section.addNewDirectory().newCursor().setTextValue("newspapers");
-//		section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-//		section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-//		//end newpapers sections
-//		
-//		Query q = em.createQuery("SELECT p FROM Newstype p ORDER BY p.priority");
-//		List<Newstype> resultsNewstype = q.getResultList();
-//		
-//		for (Newstype newstype : resultsNewstype) {
-//			section = escenicDocument.getEscenic().addNewSection();
-//			section.addNewSource().setStringValue("ContraSections");
-//			section.addNewSourceid().setStringValue(newstype.getName());
-//			section.addNewName().setStringValue(newstype.getDisplayName());
-//			section.setMirrorSource2(false);
-//			
-//			parent = section.addNewParent();
-//			parent.addNewSource().setStringValue("ContraSections");
-//			parent.addNewSourceid().setStringValue("newspapers");
-//
-//			section.addNewUniqueName().newCursor().setTextValue(newstype.getName());
-//			section.addNewDirectory().newCursor().setTextValue(newstype.getName());
-//			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-//			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-//		}
-//
-//		q = em.createQuery("SELECT n FROM Newspaper n ORDER BY n.priority");
-//		List<Newspaper> resultsNewspaper = q.getResultList();
-//		
-//		for (Newspaper newspaper : resultsNewspaper) {
-//			section = escenicDocument.getEscenic().addNewSection();
-//			section.addNewSource().setStringValue("ContraSections");
-//			String englishTitle = ELOT743Convertor.convert(newspaper.getTitle().toLowerCase());
-//			section.addNewSourceid().setStringValue(englishTitle);
-//			section.addNewName().setStringValue(newspaper.getTitle());
-//			section.setMirrorSource2(false);
-//			
-//			Newstype newstype = (Newstype) em.createQuery("SELECT p FROM Newstype p WHERE p.id = "+newspaper.getTypeId()).getSingleResult();
-//			parent = section.addNewParent();
-//			parent.addNewSource().setStringValue("ContraSections");
-//			parent.addNewSourceid().setStringValue(newstype.getName());
-//
-//			section.addNewUniqueName().newCursor().setTextValue(englishTitle);
-//			section.addNewDirectory().newCursor().setTextValue(englishTitle);
-//			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-//			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-//		}
-//		
-//	    String outFileName = "import-sections/newspapers-sections.xml";
-//	    File f = new File(outFileName);
-//	    escenicDocument.save(f);
-//	}
 
-	private static void exportCategoriesContraXML() throws IOException{
-		
-		
-		Query q = em.createQuery("SELECT p FROM Sport p WHERE p.sportID in (1,2,29,42)");
-		
-		List<Sport> results = q.getResultList();
 
-		Query q2 = em.createQuery("SELECT p FROM Sport p WHERE p.sportID not in (0,1,2,29,42)");
-		
-		List<Sport> results2 = q2.getResultList();
-		
-		results.addAll(results2);
-//		List<Integer> resultsCategoriesIds = q2.getResultList();
-//		resultsCategoriesIds.add(Integer.valueOf(12));
-		EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
-		initializeEscenic(escenicDocument);
-		
-		for (Sport cat : results) {
-			Section section = escenicDocument.getEscenic().addNewSection();
-			section.addNewSource().setStringValue("ContraSections");
-			section.addNewSourceid().setStringValue(Integer.toString(cat.getSportID()));
-			section.addNewName().setStringValue(cat.getSportName());
-			section.setMirrorSource2(false);
+	private static void exportCategoriesContraXML() throws IOException {
 
-			Parent parent = section.addNewParent();
-			if (cat.getSportID() != 1 && cat.getSportID() != 2 && cat.getSportID() != 29 && cat.getSportID() != 42) {
-				parent.addNewSource().setStringValue("ContraSections");
-				parent.addNewSourceid().setStringValue(Integer.toString(42));
-			} else {
-				parent.addNewUniqueName().setStringValue("ece_frontpage");
+		try {
+			// Open the file that is the first
+			// command line parameter
+			FileInputStream fstream = new FileInputStream("/home/vassilis/workspace/TransformContraArticlesJPA/sections.txt");
+			// Get the object of DataInputStream
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+//			BufferedReader br2 = new BufferedReader(new InputStreamReader(in));
+			
+			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
+			initializeEscenic(escenicDocument);
+			
+			String strLine;
+			
+			// Read File Line By Line
+			while ((strLine = br.readLine()) != null) {
+				// Print the content on the console
+				String[] strLineArray = strLine.split(",");
+				int i = 0;
+				while(i<5){
+					strLineArray[i] = strLineArray[i].replace('?', ' ').trim();
+					i++;
+				}
+				Section section = escenicDocument.getEscenic().addNewSection();
+				if(!strLineArray[4].isEmpty()){
+					section.addNewSource().setStringValue("CosmoSection");
+					section.addNewSourceid().setStringValue(strLineArray[4]);
+					String sectionName = strLineArray[2].isEmpty()?(strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1]):strLineArray[2];
+					section.addNewName().setStringValue(sectionName);
+					section.setMirrorSource2(false);
+					Parent parent = section.addNewParent();
+					String parentName = strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1];
+					parent.addNewUniqueName().setStringValue(ELOT743Convertor.convert(parentName));
+					section.addNewUniqueName().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewDirectory().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+					section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+				} else if(!strLineArray[3].isEmpty()){
+					section.addNewSource().setStringValue("CosmoTagSection");
+					section.addNewSourceid().setStringValue(strLineArray[3]);
+					String sectionName = strLineArray[2].isEmpty()?(strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1]):strLineArray[2];
+					section.addNewName().setStringValue(sectionName);
+					section.setMirrorSource2(false);
+					Parent parent = section.addNewParent();
+					String parentName = strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1];
+					parent.addNewUniqueName().setStringValue(ELOT743Convertor.convert(parentName));
+					section.addNewUniqueName().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewDirectory().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+					section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+				} else if(!strLineArray[2].isEmpty()){
+					String sectionName = strLineArray[2].isEmpty()?(strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1]):strLineArray[2];
+					section.addNewName().setStringValue(sectionName);
+					section.setMirrorSource2(false);
+					Parent parent = section.addNewParent();
+					String parentName = !strLineArray[1].isEmpty()?strLineArray[1]:strLineArray[0];
+					parent.addNewUniqueName().setStringValue(ELOT743Convertor.convert(parentName));
+					section.addNewUniqueName().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewDirectory().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+					section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+				} else if(!strLineArray[1].isEmpty()){
+					String sectionName = strLineArray[2].isEmpty()?(strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1]):strLineArray[2];
+					section.addNewName().setStringValue(sectionName);
+					section.setMirrorSource2(false);
+					Parent parent = section.addNewParent();
+					String parentName = strLineArray[0];
+					parent.addNewUniqueName().setStringValue(ELOT743Convertor.convert(parentName));
+					section.addNewUniqueName().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewDirectory().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+					section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+				} else if(!strLineArray[0].isEmpty()){
+					String sectionName = strLineArray[2].isEmpty()?(strLineArray[1].isEmpty()?strLineArray[0]:strLineArray[1]):strLineArray[2];
+					section.addNewName().setStringValue(sectionName);
+					section.setMirrorSource2(false);
+					Parent parent = section.addNewParent();
+					parent.addNewUniqueName().setStringValue("ece_frontpage");
+					section.addNewUniqueName().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewDirectory().newCursor().setTextValue(ELOT743Convertor.convert(sectionName));
+					section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
+					section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+				}
 			}
-
-			section.addNewUniqueName().newCursor().setTextValue(cat.getSportName_url());
-			section.addNewDirectory().newCursor().setTextValue(cat.getSportName_url());
-			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
+			// Close the input stream
+			String outFileName = "import-sections/sections-cosmo.xml";
+			File f = new File(outFileName);
+			escenicDocument.save(f);
+			in.close();
+		} catch (Exception e) {// Catch exception if any
+			System.err.println("Error: " + e.getMessage());
 		}
+
+
+
 		
-		//competitions table
-		Query q3 = em.createQuery("SELECT c FROM Competition c WHERE c.competitionID<>0");
-		Place defaultPlace = (Place) em.createQuery("Select p FROM Place p WHERE p.placeID = 1").getSingleResult();
-		Sport defaultSport = (Sport) em.createQuery("Select p FROM Sport p WHERE p.sportID = 42").getSingleResult();
-		List<Competition> results3 = q3.getResultList();
-		
-		//sport -places
-		for (Competition cat : results3) {
-			Sport defSport = cat.getSport();
-			Place defPlace = cat.getPlace();
-			if(defPlace.getPlaceID()==0){
-				defPlace = defaultPlace;
-			}
-			if(defSport.getSportID()==0){
-				defSport = defaultSport;
-			}
-			Section section = escenicDocument.getEscenic().addNewSection();
-			section.addNewSource().setStringValue("ContraSections");
-			section.addNewSourceid().setStringValue(Integer.toString(defSport.getSportID()) +"-"+Integer.toString(defPlace.getPlaceID()));
-			section.addNewName().setStringValue(defPlace.getPlaceName());
-			section.setMirrorSource2(false);
-
-			Parent parent = section.addNewParent();
-			parent.addNewSource().setStringValue("ContraSections");
-			parent.addNewSourceid().setStringValue(Integer.toString(defSport.getSportID()));
-
-			section.addNewUniqueName().newCursor().setTextValue(defPlace.getPlaceName_url()+"_"+defSport.getSportName_url());
-			section.addNewDirectory().newCursor().setTextValue(defPlace.getPlaceName_url());
-			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-		}
-		
-		//places - competitions
-		for (Competition cat : results3) {
-			Sport defSport = cat.getSport();
-			Place defPlace = cat.getPlace();
-			if(defPlace.getPlaceID()==0){
-				defPlace = defaultPlace;
-			}
-			if(defSport.getSportID()==0){
-				defSport = defaultSport;
-			}
-			Section section = escenicDocument.getEscenic().addNewSection();
-			section.addNewSource().setStringValue("ContraSections");
-			section.addNewSourceid().setStringValue(Integer.toString(defSport.getSportID()) +"-"+Integer.toString(defPlace.getPlaceID())+"-"+Integer.toString(cat.getCompetitionID()));
-			section.addNewName().setStringValue(cat.getCompetitionName());
-			section.setMirrorSource2(false);
-
-			Parent parent = section.addNewParent();
-			parent.addNewSource().setStringValue("ContraSections");
-			parent.addNewSourceid().setStringValue(Integer.toString(defSport.getSportID()) +"-"+Integer.toString(defPlace.getPlaceID()));
-
-			section.addNewUniqueName().newCursor().setTextValue(cat.getCompetitionName_url());
-			section.addNewDirectory().newCursor().setTextValue(cat.getCompetitionName_url());
-			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-		}
-		
-		// subsections columns + archives
-		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
-			String subSectionURLString = (String) subSectionURL;
-			Section section = escenicDocument.getEscenic().addNewSection();
-			section.addNewSource().setStringValue("ContraSections");
-			section.addNewSourceid().setStringValue(subSectionURLString);
-			section.addNewName().setStringValue(subSectionURLString);
-			section.setMirrorSource2(false);
-
-			Parent parent = section.addNewParent();
-			parent.addNewUniqueName().setStringValue("ece_frontpage");
-
-			section.addNewUniqueName().newCursor().setTextValue(subSectionURLString);
-			section.addNewDirectory().newCursor().setTextValue(subSectionURLString);
-			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-		}
-		
-		List<SubSection> results4 = em.createQuery("SELECT c FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
-		for(SubSection ss : results4){
-			Section section = escenicDocument.getEscenic().addNewSection();
-			section.addNewSource().setStringValue("ContraSections");
-			section.addNewSourceid().setStringValue(ss.getSubSectionName_url());
-			section.addNewName().setStringValue(ss.getSubSectionName());
-			section.setMirrorSource2(false);
-
-			Parent parent = section.addNewParent();
-			parent.addNewSource().setStringValue("ContraSections");
-			parent.addNewSourceid().setStringValue(ss.getSubSectionURL());
-
-			section.addNewUniqueName().newCursor().setTextValue(ss.getSubSectionName_url());
-			section.addNewDirectory().newCursor().setTextValue(ss.getSubSectionName_url());
-			section.addNewSectionLayout().newCursor().setTextValue("defaultsection");
-			section.addNewArticleLayout().newCursor().setTextValue("defaultarticle");
-		}
-		
-	    String outFileName = "import-sections/sections-contra.xml";
-	    File f = new File(outFileName);
-	    escenicDocument.save(f);
 	}
-	
-	public static List<String> uniqueNames(){
-		List<String>uniqueNamesList = new ArrayList<String>();
-		
-		Query q = em.createQuery("SELECT p FROM Sport p WHERE p.sportID in (1,2,29,42)");
-		
-		List<Sport> results = q.getResultList();
 
-		Query q2 = em.createQuery("SELECT p FROM Sport p WHERE p.sportID not in (0,1,2,29,42)");
-		
-		List<Sport> results2 = q2.getResultList();
-		
-		results.addAll(results2);
-//		List<Integer> resultsCategoriesIds = q2.getResultList();
-//		resultsCategoriesIds.add(Integer.valueOf(12));
-		
-		for (Sport cat : results) {
-			uniqueNamesList.add(cat.getSportName_url());
-		}
-		
-		//competitions table
-		Query q3 = em.createQuery("SELECT c FROM Competition c WHERE c.competitionID<>0");
-		Place defaultPlace = (Place) em.createQuery("Select p FROM Place p WHERE p.placeID = 1").getSingleResult();
-		Sport defaultSport = (Sport) em.createQuery("Select p FROM Sport p WHERE p.sportID = 42").getSingleResult();
-		List<Competition> results3 = q3.getResultList();
-		
-		//sport -places
-		for (Competition cat : results3) {
-			Sport defSport = cat.getSport();
-			Place defPlace = cat.getPlace();
-			if(defPlace.getPlaceID()==0){
-				defPlace = defaultPlace;
-			}
-			if(defSport.getSportID()==0){
-				defSport = defaultSport;
-			}
-
-			uniqueNamesList.add(defPlace.getPlaceName_url()+"_"+defSport.getSportName_url());
-		}
-		
-		//places - competitions
-		for (Competition cat : results3) {
-			Sport defSport = cat.getSport();
-			Place defPlace = cat.getPlace();
-			if(defPlace.getPlaceID()==0){
-				defPlace = defaultPlace;
-			}
-			if(defSport.getSportID()==0){
-				defSport = defaultSport;
-			}
-			uniqueNamesList.add(cat.getCompetitionName_url());
-		}
-		
-		// subsections columns + archives
-		for(Object subSectionURL : em.createQuery("SELECT DISTINCT c.subSectionURL FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList()){
-			String subSectionURLString = (String) subSectionURL;
-			uniqueNamesList.add(subSectionURLString);
-		}
-		
-		List<SubSection> results4 = em.createQuery("SELECT c FROM SubSection c WHERE (c.section.sectionID=1 OR c.section.sectionID=4) AND c.subSectionID not in (1,47,16)").getResultList();
-		for(SubSection ss : results4){
-			uniqueNamesList.add(ss.getSubSectionName_url());
-		}
-		return uniqueNamesList;
-	
-	}
 
 	private static void initializeEscenic(EscenicDocument escenicDocument) {
 		escenicDocument.addNewEscenic();

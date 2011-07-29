@@ -771,6 +771,7 @@ public class ELOT743Convertor {
 		y = y.replace("Ψ", "Ps");
 		y = y.replace("ω", "o");
 		y = y.replace("Ω", "O");
+		y = y.replaceAll("_+", "_");
 		return y;
 	}
 

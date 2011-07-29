@@ -30,7 +30,7 @@ import com.news.Video;
 
 public class ExtractMultipleTypeVideoContraXML {
 	
-	private static String queryString="SELECT a FROM Video a WHERE a.videoID in (SELECT distinct b.videoID FROM Video b WHERE b.videoThumb is not null AND (b.subSection.section.sectionID=1 OR b.subSection.section.sectionID=4) AND b.subSection.subSectionID not in (47,16) ) ORDER BY a.videoID DESC";
+	private static String queryString="SELECT a FROM Video a WHERE a.videoThumb is not null AND a.subSection.section.sectionID=3  ORDER BY a.videoID DESC";
 	public static void main(String[] args) throws Exception {
 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
@@ -38,7 +38,7 @@ public class ExtractMultipleTypeVideoContraXML {
 		SimpleDateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		int i = 0;
-		int maxResults = 100;
+		int maxResults = 300;
 		List<Video>videos = new ArrayList<Video>();
 		
 		Query q = em.createQuery(queryString)
@@ -46,12 +46,12 @@ public class ExtractMultipleTypeVideoContraXML {
 		.setMaxResults(maxResults);
 		videos = q.getResultList();
 
-		while (!videos.isEmpty()) {
+//		while (!videos.isEmpty()) {
 			EscenicDocument escenicDocument = EscenicDocument.Factory.newInstance();
 			initializeEscenic(escenicDocument);
 			for (Video video : videos) {
 				
-				String fullPath = "/home/vassilis/Pictures/contravideos/"+video.getVideoThumb();
+				String fullPath = "/home/vassilis/Pictures/cosmovideos/"+video.getVideoThumb();
 
 				//check if file  
 				if(!new File(fullPath).exists())
@@ -66,12 +66,12 @@ public class ExtractMultipleTypeVideoContraXML {
 				content.addNewCreationdate().setStringValue(dtf.format(video.getVideoDate()));
 
 				SectionRef sectionRef = content.addNewSectionRef();
-				sectionRef.addNewUniqueName().setStringValue("videos");
+				sectionRef.addNewUniqueName().setStringValue("multimedia");
 				sectionRef.setHomeSection(true);
 //					// picture relation
 				Relation relation = content.addNewRelation();
 				relation.addNewType().setStringValue("TEASERREL");
-				relation.addNewSource().setStringValue("ContraImagesVideos");
+				relation.addNewSource().setStringValue("CosmoImagesVideos");
 				relation.addNewSourceid().setStringValue(video.getVideoThumb());
 
 				Priority priority = content.addNewPriority();
@@ -112,11 +112,11 @@ public class ExtractMultipleTypeVideoContraXML {
 			File f = new File(outFileName);
 			escenicDocument.save(f);
 			
-			q = em.createQuery(queryString)
-			.setFirstResult(i*maxResults)
-			.setMaxResults(maxResults);
-			videos = q.getResultList();
-		}
+//			q = em.createQuery(queryString)
+//			.setFirstResult(i*maxResults)
+//			.setMaxResults(maxResults);
+//			videos = q.getResultList();
+//		}
 	}
 
 	private static void initializeEscenic(EscenicDocument escenicDocument) {

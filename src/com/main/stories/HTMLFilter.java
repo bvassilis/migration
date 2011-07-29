@@ -40,7 +40,9 @@ static private Namespace XHTML_NS = Namespace.getNamespace("http://www.w3.org/19
       Element element = document.getRootElement().getChild("body", XHTML_NS);
 
       XMLOutputter output = new XMLOutputter();
-      String fixed = output.outputString(element).substring(43).replace("</body>", "");
+      String fixed = "";
+      if (element != null)
+    	  fixed = output.outputString(element).substring(43).replace("</body>", "");
       
 //	  Tidy td = new Tidy();
 //	  byte[] bytes = fixed.getBytes("UTF-8");

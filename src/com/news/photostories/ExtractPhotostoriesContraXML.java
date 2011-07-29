@@ -31,7 +31,7 @@ import com.news.PhotoStory;
 
 public class ExtractPhotostoriesContraXML {
 	
-	private static String queryString =" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.photoStoryID DESC";
+	private static String queryString =" SELECT distinct a FROM PhotoStory a WHERE  a.photoStoryID>4347 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.photoStoryID DESC";
 	public static List<PhotoStory> photostories = new ArrayList<PhotoStory>();
 	
 	public static void main(String[] args) throws Exception {
@@ -82,7 +82,7 @@ public class ExtractPhotostoriesContraXML {
 				sectionRef.setHomeSection(true);
 
 				for (Photo photo : photostory.getPhotos()) {
-					String fullPath = "/home/vassilis/Pictures/contra/"+photo.getPhoto().trim();
+					String fullPath = "/home/vassilis/Pictures/contra2/"+photo.getPhoto().trim();
 
 					//check if file  
 					if(!new File(fullPath).exists())

@@ -29,9 +29,9 @@ public class ImageShellScript {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("DownloadContraArticlesJPA");
 		em = emf.createEntityManager();
 		
-//		int dis = imagesScript();
+		int dis = imagesScript();
 //		int dis =  photostoryScript();
-		int dis =  videoThumbs();
+//		int dis =  videoThumbs();
 		
 		try {
 			// Create file
@@ -49,7 +49,7 @@ public class ImageShellScript {
 						String photo = (String) articleObj;
 						if(photo.trim().isEmpty() || photo.indexOf('.')==-1)
 							continue;
-						out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.trim()+"' 'http://static.fsport.gr/images/"+ photo.trim() + "' -a images.log ; \n");
+						out.write("wget -O '/home/vassilis/Pictures/cosmo/"+photo.trim()+"' 'http://static.fsport.gr/images/"+ photo.trim() + "' -a images.log ; \n");
 					}
 				}
 				if(dis == 1){
@@ -58,7 +58,7 @@ public class ImageShellScript {
 						for(Photo photo : photoStory.getPhotos()){
 							if(photo.getPhoto().trim().isEmpty() || photo.getPhoto().indexOf('.')==-1)
 								continue;
-							out.write("wget -O '/home/vassilis/Pictures/contra/"+photo.getPhoto().trim()+"' 'http://static.fsport.gr/images/"+ photo.getPhoto().trim() + "' -a photos.log ; \n");
+							out.write("wget -O '/home/vassilis/Pictures/cosmo/"+photo.getPhoto().trim()+"' 'http://static.fsport.gr/images/"+ photo.getPhoto().trim() + "' -a photos.log ; \n");
 						}
 					}
 				}
@@ -67,7 +67,7 @@ public class ImageShellScript {
 						String photo = (String) videoObj;
 						if(photo.trim().isEmpty() || photo.indexOf('.')==-1)
 							continue;
-						out.write("wget -O '/home/vassilis/Pictures/contravideos/"+photo.trim()+"' 'http://www.cosmo.gr/videoThumbs/"+ photo.trim() + "' -a videos.log ; \n");
+						out.write("wget -O '/home/vassilis/Pictures/contravideos2/"+photo.trim()+"' 'http://www.cosmo.gr/videoThumbs/"+ photo.trim() + "' -a videos.log ; \n");
 					}
 				}
 				i++;
@@ -83,13 +83,13 @@ public class ImageShellScript {
 	}
 	
 	private static int videoThumbs() {
-		q = em.createQuery(" SELECT distinct a.videoThumb FROM Video a WHERE a.videoThumb is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.videoID DESC");
+		q = em.createQuery(" SELECT distinct a.videoThumb FROM Video a WHERE a.videoThumb is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND a.videoID>2969 ORDER BY a.videoID DESC");
 		fileName = "video.sh";
 		return 2;
 	}
 
 	private static int photostoryScript() {
-		q = em.createQuery(" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) ORDER BY a.photoStoryID DESC");
+		q = em.createQuery(" SELECT distinct a FROM PhotoStory a WHERE a.photoStoryID >=151 AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND a.photoStoryID>4347 ORDER BY a.photoStoryID DESC");
 		fileName = "photostory.sh";
 		return 1;
 	}
@@ -102,7 +102,7 @@ public class ImageShellScript {
 	private static int imagesScript(){
 		Calendar cal = Calendar.getInstance();
 		cal.set(2007, 0, 1, 0, 0, 0);
-		q = em.createQuery(" SELECT distinct a.articlePhoto FROM Article a WHERE a.articlePhoto is not null AND (a.subSection.section.sectionID=1 OR a.subSection.section.sectionID=4) AND a.subSection.subSectionID not in (47,16) AND a.articleDate >= :articleDate ORDER BY a.articleID DESC")
+		q = em.createQuery(" SELECT distinct a.articlePhoto FROM Article a WHERE a.articlePhoto is not null AND (a.subSection.subSectionID in (19,7,8) OR a.subSectionTagID in (20,7,15,22,24,12,13,14,1,2,3,5,11,4,25,19,18,16,6,17))  AND a.articleDate >= :articleDate AND a.articleID>333050 ORDER BY a.articleID DESC")
 		.setParameter("articleDate", cal.getTime() );
 		fileName = "images.sh";
 		return 0;
